@@ -37,6 +37,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     enum Tetromino {
         I, J, L, O, S, T, Z,
     }
+    // test
 
     EnumMap<Tetromino, Paint> paintMap = new EnumMap<>(Tetromino.class);
 
