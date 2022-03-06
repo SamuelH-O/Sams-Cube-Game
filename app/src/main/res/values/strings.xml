@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Sam\'s Cube Game</string>
+    <string name="button_start">Start</string>
+    <string name="icons_link">Icons created by Freepik - Flaticon</string>
+    <string name="content_desc_left_button">Left</string>
+    <string name="content_desc_right_button">Right</string>
+    <string name="content_desc_rotate_button">Rotate clockwise</string>
+    <string name="content_desc_fast_down_button">Fast down</string>
+    <string name="content_desc_down_button">Down</string>
+</resources>
