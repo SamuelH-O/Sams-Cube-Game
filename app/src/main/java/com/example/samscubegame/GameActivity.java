@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.EnumMap;
 import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
@@ -32,13 +31,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     Paint testPaint = new Paint();
 
-    float squareSize;
-
-    enum Tetromino {
-        I, J, L, O, S, T, Z,
-    }
-
-    EnumMap<Tetromino, Paint> paintMap = new EnumMap<>(Tetromino.class);
+    TetrominoTypes[][] grid = new TetrominoTypes[10][16];
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -58,34 +51,12 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         gameSurfaceView.getHolder().addCallback(this);
 
-        // Add paints to the EnumMap
-        paintMap.put(Tetromino.I, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.I)).setARGB(255,49, 199, 239);
-        Objects.requireNonNull(paintMap.get(Tetromino.I)).setBlendMode(BlendMode.SRC_OVER);
-
-        paintMap.put(Tetromino.J, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.J)).setARGB(255,90, 101, 173);
-        Objects.requireNonNull(paintMap.get(Tetromino.J)).setBlendMode(BlendMode.SRC_OVER);
-
-        paintMap.put(Tetromino.L, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.L)).setARGB(255,239, 121, 33);
-        Objects.requireNonNull(paintMap.get(Tetromino.L)).setBlendMode(BlendMode.SRC_OVER);
-
-        paintMap.put(Tetromino.O, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.O)).setARGB(255,247, 211, 8);
-        Objects.requireNonNull(paintMap.get(Tetromino.O)).setBlendMode(BlendMode.SRC_OVER);
-
-        paintMap.put(Tetromino.S, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.S)).setARGB(255,66, 182, 66);
-        Objects.requireNonNull(paintMap.get(Tetromino.S)).setBlendMode(BlendMode.SRC_OVER);
-
-        paintMap.put(Tetromino.T, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.T)).setARGB(255,173, 77, 156);
-        Objects.requireNonNull(paintMap.get(Tetromino.T)).setBlendMode(BlendMode.SRC_OVER);
-
-        paintMap.put(Tetromino.Z, new Paint());
-        Objects.requireNonNull(paintMap.get(Tetromino.Z)).setARGB(255,239, 32, 41);
-        Objects.requireNonNull(paintMap.get(Tetromino.Z)).setBlendMode(BlendMode.SRC_OVER);
+        // Fill the grid with NULL
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 16; j++) {
+                grid[i][j] = TetrominoTypes.NULL;
+            }
+        }
 
         testPaint.setColor(Color.rgb(255, 20, 255));
         testPaint.setStyle(Paint.Style.STROKE);
@@ -93,6 +64,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     // TODO: create a start game method and a running game method & find the correct way to do it
+    // TODO: find a way to erase squares & decide if I should redraw the whole grid every change or just update the changes
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
@@ -145,175 +117,45 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         canvas.drawPaint(greyPaint);
     }
 
+    private char tetrominoTypeToString(TetrominoTypes t) {
+        switch(t) {
+            case I:
+                return 'I';
+            case J:
+                return 'J';
+            case L:
+                return 'L';
+            case O:
+                return 'O';
+            case S:
+                return 'S';
+            case T:
+                return 'T';
+            case Z:
+                return 'Z';
+            case NULL:
+                return ' ';
+        }
+        return ' ';
+    }
+
+    private void printGridState() {
+        String str = "";
+        for(int i = 0; i < 16; i++) {
+            for(int j = 0; j < 10; j++) {
+                str = str + "|" + tetrominoTypeToString(grid[j][i]);
+            }
+            str = str + "|\n" + "#####################\n";
+        }
+        Log.i(TAG, "State of the grid :\n" + str);
+    }
+
     private void drawMyStuff(final Canvas canvas) {
         Log.i(TAG, "Drawing...");
 
-        // Get the size of the squares by the smaller side of the canvas
-        if(canvas.getWidth() < canvas.getHeight()) squareSize = (float) canvas.getWidth() / 10;
-        else squareSize = (float) canvas.getHeight() / 10;
-
-        //drawTetromino(2, 0, 2, canvas, Tetromino.Z);
-    }
-
-    // Draw from the top-left-most position
-    void drawSquare(int posX, int posY, Paint paint, final Canvas canvas) {
-        // Draw the square
-        canvas.drawRect(posX * squareSize, posY * squareSize, squareSize + posX * squareSize, squareSize + posY * squareSize, paint);
-
-        int borderSize = 5;
-
-        // Draw the light border
-        float[] colorLightHSV = new float[3];
-        Color.colorToHSV(paint.getColor(), colorLightHSV);
-        colorLightHSV[2] = colorLightHSV[2] + 0.6f;
-        Paint lightPaint = new Paint();
-        lightPaint.setColor(Color.HSVToColor(colorLightHSV));
-        lightPaint.setBlendMode(BlendMode.SRC_OVER);
-        canvas.drawRect(posX * squareSize, posY * squareSize, borderSize + posX * squareSize, squareSize + posY * squareSize, lightPaint);
-        canvas.drawRect(posX * squareSize, posY * squareSize, squareSize + posX * squareSize, borderSize + posY * squareSize, lightPaint);
-
-        // Draw the dark border
-        float[] colorDarkHSV = new float[3];
-        Color.colorToHSV(paint.getColor(), colorDarkHSV);
-        colorDarkHSV[2] = colorDarkHSV[2] - 0.6f;
-        Paint darkPaint = new Paint();
-        darkPaint.setColor(Color.HSVToColor(colorDarkHSV));
-        darkPaint.setBlendMode(BlendMode.SRC_OVER);
-        canvas.drawRect(squareSize + posX * squareSize, posY * squareSize, squareSize + posX * squareSize - borderSize, squareSize + posY * squareSize, darkPaint);
-        canvas.drawRect(posX * squareSize, squareSize + posY * squareSize, squareSize + posX * squareSize, squareSize + posY * squareSize - borderSize, darkPaint);
-    }
-
-    void drawTetromino(int posX, int posY, int rotation, final Canvas canvas, Tetromino piece) {
-        switch(piece) {
-            case I:
-                if(rotation % 2 == 0) {
-                    // Draw a line piece horizontally
-                    for (int i = posX; i < 8; i++) {
-                        drawSquare(i, posY, paintMap.get(Tetromino.I), canvas);
-                    }
-                } else {
-                    // Draw a line piece vertically
-                    for(int i = posY; i < 8; i++) {
-                        drawSquare(posX, i, paintMap.get(Tetromino.I), canvas);
-                    }
-                }
-                break;
-            case J:
-                switch(rotation) {
-                    case 0:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 2, posY + 1, paintMap.get(Tetromino.J), canvas);
-                        break;
-                    case 1:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 1, posY + 2, paintMap.get(Tetromino.J), canvas);
-                        break;
-                    case 2:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 2, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.J), canvas);
-                        break;
-                    case 3:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 2, posY, paintMap.get(Tetromino.J), canvas);
-                        drawSquare(posX + 2, posY + 1, paintMap.get(Tetromino.J), canvas);
-                        break;
-                }
-                break;
-            case L:
-                switch(rotation) {
-                    case 0:
-                        drawSquare(posX + 2, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX + 2, posY + 1, paintMap.get(Tetromino.L), canvas);
-                        break;
-                    case 1:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX, posY + 2, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX + 1, posY + 2, paintMap.get(Tetromino.L), canvas);
-                        break;
-                    case 2:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX + 2, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.L), canvas);
-                        break;
-                    case 3:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.L), canvas);
-                        drawSquare(posX, posY + 2, paintMap.get(Tetromino.L), canvas);
-                        break;
-                }
-                break;
-            case O:
-                drawSquare(posX, posY, paintMap.get(Tetromino.O), canvas);
-                drawSquare(posX + 1, posY, paintMap.get(Tetromino.O), canvas);
-                drawSquare(posX, posY + 1, paintMap.get(Tetromino.O), canvas);
-                drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.O), canvas);
-                break;
-            case S:
-                if(rotation % 2 == 0) {
-                    drawSquare(posX + 1, posY, paintMap.get(Tetromino.S), canvas);
-                    drawSquare(posX + 2, posY, paintMap.get(Tetromino.S), canvas);
-                    drawSquare(posX, posY + 1, paintMap.get(Tetromino.S), canvas);
-                    drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.S), canvas);
-                } else {
-                    drawSquare(posX, posY, paintMap.get(Tetromino.S), canvas);
-                    drawSquare(posX, posY + 1, paintMap.get(Tetromino.S), canvas);
-                    drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.S), canvas);
-                    drawSquare(posX + 1, posY + 2, paintMap.get(Tetromino.S), canvas);
-                }
-                break;
-            case T:
-                switch(rotation) {
-                    case 0:
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 2, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        break;
-                    case 1:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX, posY + 2, paintMap.get(Tetromino.T), canvas);
-                        break;
-                    case 2:
-                        drawSquare(posX, posY, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 2, posY, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        break;
-                    case 3:
-                        drawSquare(posX + 1, posY, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.T), canvas);
-                        drawSquare(posX + 1, posY + 2, paintMap.get(Tetromino.T), canvas);
-                        break;
-                }
-                break;
-            case Z:
-                if(rotation % 2 == 0) {
-                    drawSquare(posX, posY, paintMap.get(Tetromino.Z), canvas);
-                    drawSquare(posX + 1, posY, paintMap.get(Tetromino.Z), canvas);
-                    drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.Z), canvas);
-                    drawSquare(posX + 2, posY + 1, paintMap.get(Tetromino.Z), canvas);
-                } else {
-                    drawSquare(posX + 1, posY, paintMap.get(Tetromino.Z), canvas);
-                    drawSquare(posX, posY + 1, paintMap.get(Tetromino.Z), canvas);
-                    drawSquare(posX + 1, posY + 1, paintMap.get(Tetromino.Z), canvas);
-                    drawSquare(posX, posY + 2, paintMap.get(Tetromino.Z), canvas);
-                }
-                break;
-        }
+        Tetromino t = new Tetromino(TetrominoTypes.I, canvas);
+        t.draw(4, 0, 1, canvas);
+        t.placeInGrid(4, 0, 1, grid);
+        printGridState();
     }
 }
