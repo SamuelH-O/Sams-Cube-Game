@@ -11,38 +11,40 @@ import androidx.annotation.RequiresApi;
 @RequiresApi(api = Build.VERSION_CODES.Q)
 public class Tetromino {
 
-    Paint paint = new Paint();
+    Paint colorOfT = new Paint();
+
+    float squareSize;
 
     TetrominoTypes piece;
 
-    float squareSize;
+    int posX, posY, rotation;
 
     Tetromino(TetrominoTypes t, final Canvas canvas) {
         this.piece = t;
         switch(t) {
             case I:
-                this.paint.setARGB(255,49, 199, 239);
+                this.colorOfT.setARGB(255,49, 199, 239);
                 break;
             case J:
-                this.paint.setARGB(255,90, 101, 173);
+                this.colorOfT.setARGB(255,90, 101, 173);
                 break;
             case L:
-                this.paint.setARGB(255,239, 121, 33);
+                this.colorOfT.setARGB(255,239, 121, 33);
                 break;
             case O:
-                this.paint.setARGB(255,247, 211, 8);
+                this.colorOfT.setARGB(255,247, 211, 8);
                 break;
             case S:
-                this.paint.setARGB(255,66, 182, 66);
+                this.colorOfT.setARGB(255,66, 182, 66);
                 break;
             case T:
-                this.paint.setARGB(255,173, 77, 156);
+                this.colorOfT.setARGB(255,173, 77, 156);
                 break;
             case Z:
-                this.paint.setARGB(255,239, 32, 41);
+                this.colorOfT.setARGB(255,239, 32, 41);
                 break;
         }
-        this.paint.setBlendMode(BlendMode.SRC_OVER);
+        this.colorOfT.setBlendMode(BlendMode.SRC_OVER);
 
         // Get the size of the squares by the smaller side of the canvas
         if(canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
@@ -215,131 +217,134 @@ public class Tetromino {
                 if(rotation % 2 == 0) {
                     // Draw a line piece horizontally
                     for (int i = posX; i <= posX + 4; i++) {
-                        drawSquare(i, posY, paint, canvas);
+                        drawSquare(i, posY, colorOfT, canvas);
                     }
                 } else {
                     // Draw a line piece vertically
                     for(int i = posY; i <= posY + 4; i++) {
-                        drawSquare(posX, i, paint, canvas);
+                        drawSquare(posX, i, colorOfT, canvas);
                     }
                 }
                 break;
             case J:
                 switch(rotation) {
                     case 0:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
-                        drawSquare(posX + 2, posY + 1, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 2, posY + 1, colorOfT, canvas);
                         break;
                     case 1:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 2, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 2, colorOfT, canvas);
                         break;
                     case 2:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX + 2, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX + 2, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
                         break;
                     case 3:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX + 2, posY, paint, canvas);
-                        drawSquare(posX + 2, posY + 1, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX + 2, posY, colorOfT, canvas);
+                        drawSquare(posX + 2, posY + 1, colorOfT, canvas);
                         break;
                 }
                 break;
             case L:
                 switch(rotation) {
                     case 0:
-                        drawSquare(posX + 2, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
-                        drawSquare(posX + 2, posY + 1, paint, canvas);
+                        drawSquare(posX + 2, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 2, posY + 1, colorOfT, canvas);
                         break;
                     case 1:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX, posY + 2, paint, canvas);
-                        drawSquare(posX + 1, posY + 2, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX, posY + 2, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 2, colorOfT, canvas);
                         break;
                     case 2:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX + 2, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX + 2, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
                         break;
                     case 3:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX, posY + 2, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX, posY + 2, colorOfT, canvas);
                         break;
                 }
                 break;
             case O:
-                drawSquare(posX, posY, paint, canvas);
-                drawSquare(posX + 1, posY, paint, canvas);
-                drawSquare(posX, posY + 1, paint, canvas);
-                drawSquare(posX + 1, posY + 1, paint, canvas);
+                drawSquare(posX, posY, colorOfT, canvas);
+                drawSquare(posX + 1, posY, colorOfT, canvas);
+                drawSquare(posX, posY + 1, colorOfT, canvas);
+                drawSquare(posX + 1, posY + 1, colorOfT, canvas);
                 break;
             case S:
                 if(rotation % 2 == 0) {
-                    drawSquare(posX + 1, posY, paint, canvas);
-                    drawSquare(posX + 2, posY, paint, canvas);
-                    drawSquare(posX, posY + 1, paint, canvas);
-                    drawSquare(posX + 1, posY + 1, paint, canvas);
+                    drawSquare(posX + 1, posY, colorOfT, canvas);
+                    drawSquare(posX + 2, posY, colorOfT, canvas);
+                    drawSquare(posX, posY + 1, colorOfT, canvas);
+                    drawSquare(posX + 1, posY + 1, colorOfT, canvas);
                 } else {
-                    drawSquare(posX, posY, paint, canvas);
-                    drawSquare(posX, posY + 1, paint, canvas);
-                    drawSquare(posX + 1, posY + 1, paint, canvas);
-                    drawSquare(posX + 1, posY + 2, paint, canvas);
+                    drawSquare(posX, posY, colorOfT, canvas);
+                    drawSquare(posX, posY + 1, colorOfT, canvas);
+                    drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                    drawSquare(posX + 1, posY + 2, colorOfT, canvas);
                 }
                 break;
             case T:
                 switch(rotation) {
                     case 0:
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
-                        drawSquare(posX + 2, posY + 1, paint, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 2, posY + 1, colorOfT, canvas);
                         break;
                     case 1:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
-                        drawSquare(posX, posY + 2, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                        drawSquare(posX, posY + 2, colorOfT, canvas);
                         break;
                     case 2:
-                        drawSquare(posX, posY, paint, canvas);
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX + 2, posY, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
+                        drawSquare(posX, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX + 2, posY, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
                         break;
                     case 3:
-                        drawSquare(posX + 1, posY, paint, canvas);
-                        drawSquare(posX, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 1, paint, canvas);
-                        drawSquare(posX + 1, posY + 2, paint, canvas);
+                        drawSquare(posX + 1, posY, colorOfT, canvas);
+                        drawSquare(posX, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                        drawSquare(posX + 1, posY + 2, colorOfT, canvas);
                         break;
                 }
                 break;
             case Z:
                 if(rotation % 2 == 0) {
-                    drawSquare(posX, posY, paint, canvas);
-                    drawSquare(posX + 1, posY, paint, canvas);
-                    drawSquare(posX + 1, posY + 1, paint, canvas);
-                    drawSquare(posX + 2, posY + 1, paint, canvas);
+                    drawSquare(posX, posY, colorOfT, canvas);
+                    drawSquare(posX + 1, posY, colorOfT, canvas);
+                    drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                    drawSquare(posX + 2, posY + 1, colorOfT, canvas);
                 } else {
-                    drawSquare(posX + 1, posY, paint, canvas);
-                    drawSquare(posX, posY + 1, paint, canvas);
-                    drawSquare(posX + 1, posY + 1, paint, canvas);
-                    drawSquare(posX, posY + 2, paint, canvas);
+                    drawSquare(posX + 1, posY, colorOfT, canvas);
+                    drawSquare(posX, posY + 1, colorOfT, canvas);
+                    drawSquare(posX + 1, posY + 1, colorOfT, canvas);
+                    drawSquare(posX, posY + 2, colorOfT, canvas);
                 }
                 break;
         }
+        this.posX = posX;
+        this.posY = posY;
+        this.rotation = rotation;
     }
 }

@@ -7,14 +7,14 @@
     tools:context=".GameActivity">
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imageViewMoveLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/content_desc_left_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewMoveRight"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,33 +22,33 @@
         app:tint="?colorPrimary" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageViewMoveRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/content_desc_right_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewRotateRight"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView1"
+        app:layout_constraintStart_toEndOf="@+id/imageViewMoveLeft"
         app:srcCompat="@drawable/right_chevron"
         app:tint="?colorPrimary" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageViewRotateRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/content_desc_rotate_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewSnap"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageViewMoveRight"
         app:srcCompat="@drawable/rotating_arrow"
         app:tint="?colorPrimary" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imageViewSnap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -57,19 +57,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageViewRotateRight"
         app:srcCompat="@drawable/double_down_chevron"
         app:tint="?colorPrimary" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/imageViewMoveBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/content_desc_down_button"
-        app:layout_constraintBottom_toTopOf="@+id/imageView4"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewSnap"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewSnap"
+        app:layout_constraintStart_toStartOf="@+id/imageViewSnap"
         app:srcCompat="@drawable/down_chevron"
         app:tint="?colorPrimary" />
 
@@ -82,7 +82,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintDimensionRatio="H,10:16"
-        app:layout_constraintBottom_toTopOf="@+id/imageView5"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewMoveBottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
