@@ -38,7 +38,6 @@ class GridOfGame {
         for(byte i = 0; i < 10; i++) {
             for (byte j = 0; j < 16; j++) {
                 if (grid[i][j].type != TetrominoTypes.NULL) {
-                    Log.d("Debug", "i = " + i + " | j = " + j);
                     grid[i][j].draw(grid[i][j].posX, grid[i][j].posY, canvas);
                 }
             }

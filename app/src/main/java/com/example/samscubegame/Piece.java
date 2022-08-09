@@ -3,6 +3,7 @@ package com.example.samscubegame;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -29,7 +30,7 @@ public class Piece {
         }
     }
 
-    void draw(byte posX, byte posY, byte rotation, final Canvas canvas) {// TODO: make parameters optional (use current if not provided) (maybe, don't know if it's a good idea)
+    void draw(final Canvas canvas) {// TODO: make parameters optional (use current if not provided) (maybe, don't know if it's a good idea)
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
@@ -510,10 +511,11 @@ public class Piece {
                 }
                 break;
         }
+        Log.d("Highest Point", "" + highestPoint);
         return highestPoint;
     }
 
-    void drawNextRotation(final Canvas canvas) {
+    void figureOutNextRotation() {
         byte[] values = {posX, posY, rotation};
         switch (piece) {
             case I:
@@ -649,7 +651,13 @@ public class Piece {
                 }
                 break;
         }
-        draw(values[0], values[1], values[2], canvas);
+        setPosAndRot(values[0], values[1], values[2]);
+    }
+
+    void setPosAndRot(byte posX, byte posY, byte rotation) {
+        this.posX = posX;
+        this.posY = posY;
+        this.rotation = rotation;
     }
 
     byte getWidth() {

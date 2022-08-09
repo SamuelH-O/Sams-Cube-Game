@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
@@ -30,6 +29,8 @@ import java.util.Objects;
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     SurfaceView gameSurfaceView;
+
+    SurfaceHolder surfaceHolder;
 
     static final String TAG = "SurfaceView";
 
@@ -77,12 +78,13 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        this.surfaceHolder = surfaceHolder;
         Canvas canvas = surfaceHolder.lockCanvas();
         // Get the size of the squares by the smaller side of the canvas
         if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
         else this.squareSize = (float) canvas.getHeight() / 10;
         surfaceHolder.unlockCanvasAndPost(canvas);
-        startGame(surfaceHolder);
+        startGame();
     }
 
     @Override
@@ -92,10 +94,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {}
 
     @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
-    private void startGame(SurfaceHolder holder) {
-        Log.i(TAG, "Trying to draw test piece");
-        Canvas canvas = holder.lockCanvas();
-
+    private void startGame() {
         currentPiece = new Piece(TetrominoTypes.J, squareSize, getResources());
 
         // Get the radioGroup
@@ -114,17 +113,15 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         grid.setSquare(s2);
 
         // Draw first frame with background and piece
-        setBackground(canvas);
-        currentPiece.draw((byte) (4), (byte) (0), (byte) (0), canvas);
-        grid.draw(canvas);
-        holder.unlockCanvasAndPost(canvas);
+        currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
+        drawFrame();
+
 
         // If the radio button of the selected piece change, redraw the piece at the top (debug)
         radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
             RadioButton checkedRadioButton = (RadioButton) radioGroup1.findViewById(checkedId);
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
-                Canvas canvas1 = holder.lockCanvas();
                 switch (checkedRadioButton.getId()) {
                     case R.id.radioButton_I:
                         currentPiece = new Piece(TetrominoTypes.I, squareSize, getResources());
@@ -148,13 +145,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         currentPiece = new Piece(TetrominoTypes.Z, squareSize, getResources());
                         break;
                 }
-                if (canvas1 == null) {
-                    Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-                } else {
-                    setBackground(canvas1);
-                    currentPiece.draw((byte) (4), (byte) (0), (byte) (0), canvas1);
-                    holder.unlockCanvasAndPost(canvas1);
-                }
+                currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
+                drawFrame();
             }
         });
 
@@ -162,84 +154,60 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // Add OnClickListener to ImageViewMoveLeft (controls left)
         imgViewMoveLeft.setOnClickListener(view -> {
             this.animateImageView(imgViewMoveLeft);
-            Log.i(TAG, "Trying to move current piece to the left");
-            Canvas canvas1 = holder.lockCanvas();
-            if (canvas1 == null) {
-                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-            } else {
-                setBackground(canvas1);
-                if (currentPiece.posX - 1 >= 0) {
-                    currentPiece.draw((byte) (currentPiece.posX - 1), currentPiece.posY, currentPiece.rotation, canvas1);
-                } else {
-                    currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
-                }
-                holder.unlockCanvasAndPost(canvas1);
+
+            // Move piece to the left if possible
+            if (currentPiece.posX - 1 >= 0) {
+                currentPiece.posX = (byte) (currentPiece.posX - 1);
             }
+            drawFrame();
         });
 
         // Add OnClickListener to ImageViewMoveRight (controls right)
         imgViewMoveRight.setOnClickListener(view -> {
             this.animateImageView(imgViewMoveRight);
-            Log.i(TAG, "Trying to move current piece to the right");
-            Canvas canvas1 = holder.lockCanvas();
-            if (canvas1 == null) {
-                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-            } else {
-                setBackground(canvas1);
-                if (currentPiece.posX + currentPiece.getWidth() < 10) {
-                    currentPiece.draw((byte) (currentPiece.posX + 1), currentPiece.posY, currentPiece.rotation, canvas1);
-                } else {
-                    currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
-                }
-                holder.unlockCanvasAndPost(canvas1);
+
+            // Move piece to the right if possible
+            if (currentPiece.posX + currentPiece.getWidth() < 10) {
+                currentPiece.posX = (byte) (currentPiece.posX + 1);
             }
+            drawFrame();
         });
 
         // Add OnClickListener to ImageViewRotateRight (controls rotate)
         imgViewRotateRight.setOnClickListener(view -> {
             this.animateImageView(imgViewRotateRight);
-            Log.i(TAG, "Trying to rotate current piece to the right");
-            Canvas canvas1 = holder.lockCanvas();
-            if (canvas1 == null) {
-                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-            } else {
-                setBackground(canvas1);
-                currentPiece.drawNextRotation(canvas1);
-                holder.unlockCanvasAndPost(canvas1);
-            }
+
+            currentPiece.figureOutNextRotation();
+            drawFrame();
         });
 
         // Add OnClickListener to ImageViewSnap (controls snap)
         imgViewSnap.setOnClickListener(view -> {
             this.animateImageView(imgViewSnap);
-            Log.i(TAG, "Trying to snap current piece to the bottom");
-            Canvas canvas1 = holder.lockCanvas();
-            if (canvas1 == null) {
-                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-            } else {
-                setBackground(canvas1);
-                currentPiece.draw(currentPiece.posX, currentPiece.getRowToSnapTo(grid), currentPiece.rotation, canvas1);
-                holder.unlockCanvasAndPost(canvas1);
-            }
+
+            currentPiece.posY = currentPiece.getRowToSnapTo(grid);
+            drawFrame();
         });
 
         // Add OnClickListener to ImageViewMoveBottom (controls bottom)
         imgViewMoveBottom.setOnClickListener(view -> {
             this.animateImageView(imgViewMoveBottom);
-            Log.i(TAG, "Trying to move current piece to the bottom");
-            Canvas canvas1 = holder.lockCanvas();
-            if (canvas1 == null) {
-                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-            } else {
-                setBackground(canvas1);
-                if (currentPiece.posY + currentPiece.getHeight() < 16) {
-                    currentPiece.draw(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation, canvas1);
-                } else {
-                    currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
-                }
-                holder.unlockCanvasAndPost(canvas1);
+
+            // Move piece to the bottom if possible
+            if (currentPiece.posY + currentPiece.getHeight() < 16) {
+                currentPiece.posY = (byte) (currentPiece.posY + 1);
             }
+            drawFrame();
         });
+    }
+
+    private void drawFrame() {
+        Canvas canvas = surfaceHolder.lockCanvas();
+
+        setBackground(canvas);
+        grid.draw(canvas);
+        currentPiece.draw(canvas);
+        surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
     private void setBackground(final Canvas canvas) {
@@ -280,14 +248,5 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             matrixZoom.setScale(1f, 1f);
             imageView.animateTransform(matrixZoom);
         }, 100);
-    }
-
-    private void drawMyStuff(final Canvas canvas) {
-        Log.i(TAG, "Drawing...");
-
-        Piece t = new Piece(TetrominoTypes.I, squareSize, getResources());
-        t.draw((byte) (4), (byte) (0), (byte) (1), canvas);
-        t.placeInGrid(grid);
-        grid.printGridState();
     }
 }
