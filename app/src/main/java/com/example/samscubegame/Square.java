@@ -16,7 +16,7 @@ public class Square {
 
     TetrominoTypes type;
 
-    int posX, posY;
+    byte posX, posY;
 
     Square(float size, TetrominoTypes t, final Resources resources) {
         this.type = t;
@@ -47,7 +47,7 @@ public class Square {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    void draw(int posX, int posY, final Canvas canvas) {
+    void draw(byte posX, byte posY, final Canvas canvas) {
         this.posX = posX;
         this.posY = posY;
         this.paint.setBlendMode(BlendMode.SRC_OVER);

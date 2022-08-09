@@ -8,19 +8,19 @@ class GridOfGame {
     TetrominoTypes[][] grid = new TetrominoTypes[10][16];
 
     GridOfGame() {
-        for(int i = 0; i < 10; i++) {
-            for(int j = 0; j < 16; j++) {
+        for(byte i = 0; i < 10; i++) {
+            for(byte j = 0; j < 16; j++) {
                 grid[i][j] = TetrominoTypes.NULL;
             }
         }
     }
 
-    void setSquare(int x, int y, TetrominoTypes t) {
+    void setSquare(byte x, byte y, TetrominoTypes t) {
         grid[x][y] = t;
     }
 
-    int getOneAboveBottomSquareFromPos(int column, int posY) {
-        int i = posY;
+    byte getOneAboveBottomSquareFromPos(byte column, byte posY) {
+        byte i = posY;
         while(i < 15 && grid[column][i] == TetrominoTypes.NULL) {
             i++;
         }
@@ -52,8 +52,8 @@ class GridOfGame {
     @SuppressLint("InlinedApi")
     void printGridState() {
         StringBuilder str = new StringBuilder();
-        for(int i = 0; i < 10; i++) {
-            for(int j = 0; j < 16; j++) {
+        for(byte i = 0; i < 10; i++) {
+            for(byte j = 0; j < 16; j++) {
                 str.append("|").append(tetrominoTypeToString(grid[i][j]));
             }
             str.append("|\n").append("#####################\n");

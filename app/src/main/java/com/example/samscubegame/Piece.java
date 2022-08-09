@@ -12,7 +12,7 @@ public class Piece {
 
     TetrominoTypes piece;
 
-    int posX, posY, rotation;
+    byte posX, posY, rotation;
 
     Square[] squares;
 
@@ -24,24 +24,24 @@ public class Piece {
         else this.squareSize = (float) canvas.getHeight() / 10;
 
         squares = new Square[4];
-        for (int i = 0; i < 4; i++) {
+        for (byte i = 0; i < 4; i++) {
             squares[i] = new Square(squareSize, t, resources);
         }
     }
 
     void placeInGrid(GridOfGame grid) {
-        for (int i = 0; i < 4; i++) {
+        for (byte i = 0; i < 4; i++) {
             squares[i].setInGrid(grid);
         }
     }
 
-    void draw(int posX, int posY, int rotation, final Canvas canvas) {// TODO: make parameters optional (use current if not provided) (maybe, don't know if it's a good idea)
+    void draw(byte posX, byte posY, byte rotation, final Canvas canvas) {// TODO: make parameters optional (use current if not provided) (maybe, don't know if it's a good idea)
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
                     // I I I I I
-                    for (int i = 0; i < 4; i++) {
-                        squares[i].draw(posX + i, posY, canvas);
+                    for (byte i = 0; i < 4; i++) {
+                        squares[i].draw((byte) (posX + i), posY, canvas);
                     }
                 } else {
                     /*
@@ -51,8 +51,8 @@ public class Piece {
                      * I
                      * I
                      * */
-                    for (int i = 0; i < 4; i++) {
-                        squares[i].draw(posX, posY + i, canvas);
+                    for (byte i = 0; i < 4; i++) {
+                        squares[i].draw(posX, (byte) (posY + i), canvas);
                     }
                 }
                 break;
@@ -64,9 +64,9 @@ public class Piece {
                          *     J
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX + 1, posY, canvas);
-                        squares[2].draw(posX + 2, posY, canvas);
-                        squares[3].draw(posX + 2, posY + 1, canvas);
+                        squares[1].draw((byte) (posX + 1), posY, canvas);
+                        squares[2].draw((byte) (posX + 2), posY, canvas);
+                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
                         break;
                     case 1:
                         /*
@@ -74,10 +74,10 @@ public class Piece {
                          *   J
                          * J J
                          * */
-                        squares[0].draw(posX + 1, posY, canvas);
-                        squares[1].draw(posX + 1, posY + 1, canvas);
-                        squares[2].draw(posX, posY + 2, canvas);
-                        squares[3].draw(posX + 1, posY + 2, canvas);
+                        squares[0].draw((byte) (posX + 1), posY, canvas);
+                        squares[1].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[2].draw(posX, (byte) (posY + 2), canvas);
+                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
                         break;
                     case 2:
                         /*
@@ -85,9 +85,9 @@ public class Piece {
                          * J J J
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX, posY + 1, canvas);
-                        squares[2].draw(posX + 1, posY + 1, canvas);
-                        squares[3].draw(posX + 2, posY + 1, canvas);
+                        squares[1].draw(posX, (byte) (posY + 1), canvas);
+                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
                         break;
                     case 3:
                         /*
@@ -96,9 +96,9 @@ public class Piece {
                          * J
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX + 1, posY, canvas);
-                        squares[2].draw(posX, posY + 1, canvas);
-                        squares[3].draw(posX, posY + 2, canvas);
+                        squares[1].draw((byte) (posX + 1), posY, canvas);
+                        squares[2].draw(posX, (byte) (posY + 1), canvas);
+                        squares[3].draw(posX, (byte) (posY + 2), canvas);
                         break;
                 }
                 break;
@@ -109,10 +109,10 @@ public class Piece {
                          *     L
                          * L L L
                          * */
-                        squares[0].draw(posX + 2, posY, canvas);
-                        squares[1].draw(posX, posY + 1, canvas);
-                        squares[2].draw(posX + 1, posY + 1, canvas);
-                        squares[3].draw(posX + 2, posY + 1, canvas);
+                        squares[0].draw((byte) (posX + 2), posY, canvas);
+                        squares[1].draw(posX, (byte) (posY + 1), canvas);
+                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
                         break;
                     case 1:
                         /*
@@ -121,9 +121,9 @@ public class Piece {
                          * L L
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX, posY + 1, canvas);
-                        squares[2].draw(posX, posY + 2, canvas);
-                        squares[3].draw(posX + 1, posY + 2, canvas);
+                        squares[1].draw(posX, (byte) (posY + 1), canvas);
+                        squares[2].draw(posX, (byte) (posY + 2), canvas);
+                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
                         break;
                     case 2:
                         /*
@@ -131,9 +131,9 @@ public class Piece {
                          * L
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX + 1, posY, canvas);
-                        squares[2].draw(posX + 2, posY, canvas);
-                        squares[3].draw(posX, posY + 1, canvas);
+                        squares[1].draw((byte) (posX + 1), posY, canvas);
+                        squares[2].draw((byte) (posX + 2), posY, canvas);
+                        squares[3].draw(posX, (byte) (posY + 1), canvas);
                         break;
                     case 3:
                         /*
@@ -142,9 +142,9 @@ public class Piece {
                          *   L
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX + 1, posY, canvas);
-                        squares[2].draw(posX + 1, posY + 1, canvas);
-                        squares[3].draw(posX + 1, posY + 2, canvas);
+                        squares[1].draw((byte) (posX + 1), posY, canvas);
+                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
                         break;
                 }
                 break;
@@ -154,9 +154,9 @@ public class Piece {
                  * O O
                  * */
                 squares[0].draw(posX, posY, canvas);
-                squares[1].draw(posX + 1, posY, canvas);
-                squares[2].draw(posX, posY + 1, canvas);
-                squares[3].draw(posX + 1, posY + 1, canvas);
+                squares[1].draw((byte) (posX + 1), posY, canvas);
+                squares[2].draw(posX, (byte) (posY + 1), canvas);
+                squares[3].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
                 break;
             case S:
                 if (rotation % 2 == 0) {
@@ -164,10 +164,10 @@ public class Piece {
                      *   S S
                      * S S
                      * */
-                    squares[0].draw(posX + 1, posY, canvas);
-                    squares[1].draw(posX + 2, posY, canvas);
-                    squares[2].draw(posX, posY + 1, canvas);
-                    squares[3].draw(posX + 1, posY + 1, canvas);
+                    squares[0].draw((byte) (posX + 1), posY, canvas);
+                    squares[1].draw((byte) (posX + 2), posY, canvas);
+                    squares[2].draw(posX, (byte) (posY + 1), canvas);
+                    squares[3].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
                 } else {
                     /*
                      * S
@@ -175,9 +175,9 @@ public class Piece {
                      *   S
                      * */
                     squares[0].draw(posX, posY, canvas);
-                    squares[1].draw(posX, posY + 1, canvas);
-                    squares[2].draw(posX + 1, posY + 1, canvas);
-                    squares[3].draw(posX + 1, posY + 2, canvas);
+                    squares[1].draw(posX, (byte) (posY + 1), canvas);
+                    squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                    squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
                 }
                 break;
             case T:
@@ -187,10 +187,10 @@ public class Piece {
                          *   T
                          * T T T
                          * */
-                        squares[0].draw(posX + 1, posY, canvas);
-                        squares[1].draw(posX, posY + 1, canvas);
-                        squares[2].draw(posX + 1, posY + 1, canvas);
-                        squares[3].draw(posX + 2, posY + 1, canvas);
+                        squares[0].draw((byte) (posX + 1), posY, canvas);
+                        squares[1].draw(posX, (byte) (posY + 1), canvas);
+                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
                         break;
                     case 1:
                         /*
@@ -199,9 +199,9 @@ public class Piece {
                          * T
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX, posY + 1, canvas);
-                        squares[2].draw(posX + 1, posY + 1, canvas);
-                        squares[3].draw(posX, posY + 2, canvas);
+                        squares[1].draw(posX, (byte) (posY + 1), canvas);
+                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[3].draw(posX, (byte) (posY + 2), canvas);
                         break;
                     case 2:
                         /*
@@ -209,9 +209,9 @@ public class Piece {
                          *   T
                          * */
                         squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX + 1, posY, canvas);
-                        squares[2].draw(posX + 2, posY, canvas);
-                        squares[3].draw(posX + 1, posY + 1, canvas);
+                        squares[1].draw((byte) (posX + 1), posY, canvas);
+                        squares[2].draw((byte) (posX + 2), posY, canvas);
+                        squares[3].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
                         break;
                     case 3:
                         /*
@@ -219,10 +219,10 @@ public class Piece {
                          * T T
                          *   T
                          * */
-                        squares[0].draw(posX + 1, posY, canvas);
-                        squares[1].draw(posX, posY + 1, canvas);
-                        squares[2].draw(posX + 1, posY + 1, canvas);
-                        squares[3].draw(posX + 1, posY + 2, canvas);
+                        squares[0].draw((byte) (posX + 1), posY, canvas);
+                        squares[1].draw(posX, (byte) (posY + 1), canvas);
+                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
                         break;
                 }
                 break;
@@ -233,19 +233,19 @@ public class Piece {
                      *   Z Z
                      * */
                     squares[0].draw(posX, posY, canvas);
-                    squares[1].draw(posX + 1, posY, canvas);
-                    squares[2].draw(posX + 1, posY + 1, canvas);
-                    squares[3].draw(posX + 2, posY + 1, canvas);
+                    squares[1].draw((byte) (posX + 1), posY, canvas);
+                    squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                    squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
                 } else {
                     /*
                      *   Z
                      * Z Z
                      * Z
                      * */
-                    squares[0].draw(posX + 1, posY, canvas);
-                    squares[1].draw(posX, posY + 1, canvas);
-                    squares[2].draw(posX + 1, posY + 1, canvas);
-                    squares[3].draw(posX, posY + 2, canvas);
+                    squares[0].draw((byte) (posX + 1), posY, canvas);
+                    squares[1].draw(posX, (byte) (posY + 1), canvas);
+                    squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
+                    squares[3].draw(posX, (byte) (posY + 2), canvas);
                 }
                 break;
         }
@@ -254,14 +254,14 @@ public class Piece {
         this.rotation = rotation;
     }
 
-    int getRowToSnapTo(GridOfGame grid) {// TODO: change return type to unsigned short
-        int highestPoint = 15;
-        int tmp;
+    byte getRowToSnapTo(GridOfGame grid) {
+        byte highestPoint = 15;
+        byte tmp;
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
                     // I I I I I
-                    for (int i = posX; i <= posX + 4; i++) {
+                    for (byte i = posX; i <= posX + 4; i++) {
                         if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, posY))) {
                             highestPoint = tmp;
                         }
@@ -274,7 +274,7 @@ public class Piece {
                      * I
                      * I
                      * */
-                    highestPoint = grid.getOneAboveBottomSquareFromPos(posX, posY + 4) - 5;
+                    highestPoint = (byte) (grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 4)) - 5);
                 }
                 break;
             case J:
@@ -287,11 +287,11 @@ public class Piece {
                         if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY))) {
                             highestPoint = tmp;
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY))) {
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), posY))) {
                             highestPoint = tmp;
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 2, posY + 1))) {
-                            highestPoint = tmp - 1;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 2), (byte) (posY + 1)))) {
+                            highestPoint = (byte) (tmp - 1);
                         }
                         break;
                     case 1:
@@ -300,11 +300,11 @@ public class Piece {
                          *   J
                          * J J
                          * */
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
                         break;
                     case 2:
@@ -312,9 +312,9 @@ public class Piece {
                          * J
                          * J J J
                          * */
-                        for (int i = posX; i <= posX + 2; i++) {
-                            if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, posY + 1))) {
-                                highestPoint = tmp - 1;
+                        for (byte i = posX; i <= posX + 2; i++) {
+                            if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, (byte) (posY + 1)))) {
+                                highestPoint = (byte) (tmp - 1);
                             }
                         }
                         break;
@@ -324,10 +324,10 @@ public class Piece {
                          * J
                          * J
                          * */
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY))) {
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), posY))) {
                             highestPoint = tmp;
                         }
                         break;
@@ -340,9 +340,9 @@ public class Piece {
                          *     L
                          * L L L
                          * */
-                        for (int i = posX; i <= posX + 2; i++) {
-                            if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, posY + 1))) {
-                                highestPoint = tmp - 1;
+                        for (byte i = posX; i <= posX + 2; i++) {
+                            if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, (byte) (posY + 1)))) {
+                                highestPoint = (byte) (tmp - 1);
                             }
                         }
                         break;
@@ -352,11 +352,11 @@ public class Piece {
                          * L
                          * L L
                          * */
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
                         break;
                     case 2:
@@ -364,13 +364,13 @@ public class Piece {
                          * L L L
                          * L
                          * */
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 1))) {
-                            highestPoint = tmp - 1;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 1)))) {
+                            highestPoint = (byte) (tmp - 1);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY))) {
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), posY))) {
                             highestPoint = tmp;
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY))) {
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), posY))) {
                             highestPoint = tmp;
                         }
                         break;
@@ -383,8 +383,8 @@ public class Piece {
                         if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY))) {
                             highestPoint = tmp;
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
                         break;
                 }
@@ -394,11 +394,11 @@ public class Piece {
                  * O O
                  * O O
                  * */
-                if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 1))) {
-                    highestPoint = tmp - 1;
+                if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 1)))) {
+                    highestPoint = (byte) (tmp - 1);
                 }
-                if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 1))) {
-                    highestPoint = tmp - 1;
+                if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 1)))) {
+                    highestPoint = (byte) (tmp - 1);
                 }
                 break;
             case S:
@@ -407,13 +407,13 @@ public class Piece {
                      *   S S
                      * S S
                      * */
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 1))) {
-                        highestPoint = tmp - 1;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 1)))) {
+                        highestPoint = (byte) (tmp - 1);
                     }
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 1))) {
-                        highestPoint = tmp - 1;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 1)))) {
+                        highestPoint = (byte) (tmp - 1);
                     }
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 2, posY))) {
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 2), posY))) {
                         highestPoint = tmp;
                     }
                 } else {
@@ -422,11 +422,11 @@ public class Piece {
                      * S S
                      *   S
                      * */
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 1))) {
-                        highestPoint = tmp - 1;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 1)))) {
+                        highestPoint = (byte) (tmp - 1);
                     }
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 2))) {
-                        highestPoint = tmp - 2;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 2)))) {
+                        highestPoint = (byte) (tmp - 2);
                     }
                 }
                 break;
@@ -437,9 +437,9 @@ public class Piece {
                          *   T
                          * T T T
                          * */
-                        for (int i = posX; i <= posX + 2; i++) {
-                            if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, posY + 1))) {
-                                highestPoint = tmp - 1;
+                        for (byte i = posX; i <= posX + 2; i++) {
+                            if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, (byte) (posY + 1)))) {
+                                highestPoint = (byte) (tmp - 1);
                             }
                         }
                         break;
@@ -449,11 +449,11 @@ public class Piece {
                          * T T
                          * T
                          * */
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 1))) {
-                            highestPoint = tmp - 1;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 1)))) {
+                            highestPoint = (byte) (tmp - 1);
                         }
                         break;
                     case 2:
@@ -464,10 +464,10 @@ public class Piece {
                         if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY))) {
                             highestPoint = tmp;
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 1))) {
-                            highestPoint = tmp - 1;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 1)))) {
+                            highestPoint = (byte) (tmp - 1);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 2, posY))) {
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 2), posY))) {
                             highestPoint = tmp;
                         }
                         break;
@@ -477,11 +477,11 @@ public class Piece {
                          * T T
                          *   T
                          * */
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 1))) {
-                            highestPoint = tmp - 1;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 1)))) {
+                            highestPoint = (byte) (tmp - 1);
                         }
-                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 2))) {
-                            highestPoint = tmp - 2;
+                        if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 2)))) {
+                            highestPoint = (byte) (tmp - 2);
                         }
                         break;
                 }
@@ -495,11 +495,11 @@ public class Piece {
                     if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY))) {
                         highestPoint = tmp;
                     }
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 1))) {
-                        highestPoint = tmp - 1;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 1)))) {
+                        highestPoint = (byte) (tmp - 1);
                     }
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 2, posY + 1))) {
-                        highestPoint = tmp - 1;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 2), (byte) (posY + 1)))) {
+                        highestPoint = (byte) (tmp - 1);
                     }
                 } else {
                     /*
@@ -507,11 +507,11 @@ public class Piece {
                      * Z Z
                      * Z
                      * */
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, posY + 2))) {
-                        highestPoint = tmp - 2;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 2)))) {
+                        highestPoint = (byte) (tmp - 2);
                     }
-                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(posX + 1, posY + 1))) {
-                        highestPoint = tmp - 1;
+                    if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos((byte) (posX + 1), (byte) (posY + 1)))) {
+                        highestPoint = (byte) (tmp - 1);
                     }
                 }
                 break;
@@ -520,7 +520,7 @@ public class Piece {
     }
 
     void drawNextRotation(final Canvas canvas) {
-        int[] values = {posX, posY, rotation};
+        byte[] values = {posX, posY, rotation};
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
@@ -571,7 +571,7 @@ public class Piece {
                         if (posY + 2 >= 16) {
                             values[1] = 16 - 3;
                         }
-                        values[2] = values[2] + 1;
+                        values[2] = (byte) (values[2] + 1);
                         break;
                     case 1:
                         /*
@@ -590,7 +590,7 @@ public class Piece {
                         if (posX + 2 >= 10) {
                             values[0] = 10 - 3;
                         }
-                        values[2] = values[2] + 1;
+                        values[2] = (byte) (values[2] + 1);
                         break;
                     case 3:
                         /*
@@ -621,7 +621,7 @@ public class Piece {
                 if (rotation >= 3) {
                     values[2] = 0;
                 } else {
-                    values[2] = values[2] + 1;
+                    values[2] = (byte) (values[2] + 1);
                 }
                 break;
             case S:
@@ -637,7 +637,7 @@ public class Piece {
                     if (posY + 2 >= 16) {
                         values[1] = 16 - 3;
                     }
-                    values[2] = values[2] + 1;
+                    values[2] = (byte) (values[2] + 1);
                 } else {
                     /*
                      * S
@@ -658,8 +658,8 @@ public class Piece {
         draw(values[0], values[1], values[2], canvas);
     }
 
-    int getWidth() {
-        int width = 0;
+    byte getWidth() {
+        byte width = 0;
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
@@ -756,8 +756,8 @@ public class Piece {
         return width;
     }
 
-    int getHeight() {
-        int height = 0;
+    byte getHeight() {
+        byte height = 0;
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {

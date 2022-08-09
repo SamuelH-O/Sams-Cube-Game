@@ -121,7 +121,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         radioGroup.check(R.id.radioButton_J);
 
         setBackground(canvas);
-        currentPiece.draw(4, 0, 0, canvas);
+        currentPiece.draw((byte) (4), (byte) (0), (byte) (0), canvas);
         holder.unlockCanvasAndPost(canvas);
 
         // If the radio button of the selected piece change, redraw the piece at the top (debug)
@@ -157,7 +157,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
                 } else {
                     setBackground(canvas1);
-                    currentPiece.draw(4, 0, 0, canvas1);
+                    currentPiece.draw((byte) (4), (byte) (0), (byte) (0), canvas1);
                     holder.unlockCanvasAndPost(canvas1);
                 }
             }
@@ -173,7 +173,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             } else {
                 setBackground(canvas1);
                 if (currentPiece.posX - 1 >= 0) {
-                    currentPiece.draw(currentPiece.posX - 1, currentPiece.posY, currentPiece.rotation, canvas1);
+                    currentPiece.draw((byte) (currentPiece.posX - 1), currentPiece.posY, currentPiece.rotation, canvas1);
                 } else {
                     currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
                 }
@@ -190,7 +190,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             } else {
                 setBackground(canvas1);
                 if (currentPiece.posX + currentPiece.getWidth() < 10) {
-                    currentPiece.draw(currentPiece.posX + 1, currentPiece.posY, currentPiece.rotation, canvas1);
+                    currentPiece.draw((byte) (currentPiece.posX + 1), currentPiece.posY, currentPiece.rotation, canvas1);
                 } else {
                     currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
                 }
@@ -233,7 +233,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             } else {
                 setBackground(canvas1);
                 if (currentPiece.posY + currentPiece.getHeight() < 16) {
-                    currentPiece.draw(currentPiece.posX, currentPiece.posY + 1, currentPiece.rotation, canvas1);
+                    currentPiece.draw(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation, canvas1);
                 } else {
                     currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
                 }
@@ -246,7 +246,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         Log.i(TAG, "Drawing...");
 
         Piece t = new Piece(TetrominoTypes.I, canvas, getResources());
-        t.draw(4, 0, 1, canvas);
+        t.draw((byte) (4), (byte) (0), (byte) (1), canvas);
         t.placeInGrid(grid);
         grid.printGridState();
     }
