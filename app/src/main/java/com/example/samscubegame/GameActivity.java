@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.Build;
@@ -166,6 +167,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // TODO: Add boundary test with the grid of blocks
         // Add OnClickListener to ImageViewMoveLeft (controls left)
         imgViewMoveLeft.setOnClickListener(view -> {
+            this.animateImageView(imgViewMoveLeft);
             Log.i(TAG, "Trying to move current piece to the left");
             Canvas canvas1 = holder.lockCanvas();
             if (canvas1 == null) {
@@ -183,6 +185,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // Add OnClickListener to ImageViewMoveRight (controls right)
         imgViewMoveRight.setOnClickListener(view -> {
+            this.animateImageView(imgViewMoveRight);
             Log.i(TAG, "Trying to move current piece to the right");
             Canvas canvas1 = holder.lockCanvas();
             if (canvas1 == null) {
@@ -200,6 +203,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // Add OnClickListener to ImageViewRotateRight (controls rotate)
         imgViewRotateRight.setOnClickListener(view -> {
+            this.animateImageView(imgViewRotateRight);
             Log.i(TAG, "Trying to rotate current piece to the right");
             Canvas canvas1 = holder.lockCanvas();
             if (canvas1 == null) {
@@ -213,6 +217,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // Add OnClickListener to ImageViewSnap (controls snap)
         imgViewSnap.setOnClickListener(view -> {
+            this.animateImageView(imgViewSnap);
             Log.i(TAG, "Trying to snap current piece to the bottom");
             Canvas canvas1 = holder.lockCanvas();
             if (canvas1 == null) {
@@ -226,6 +231,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // Add OnClickListener to ImageViewMoveBottom (controls bottom)
         imgViewMoveBottom.setOnClickListener(view -> {
+            this.animateImageView(imgViewMoveBottom);
             Log.i(TAG, "Trying to move current piece to the bottom");
             Canvas canvas1 = holder.lockCanvas();
             if (canvas1 == null) {
@@ -240,6 +246,21 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 holder.unlockCanvasAndPost(canvas1);
             }
         });
+    }
+
+    private void animateImageView(ImageView imageView) {
+        // Create matrix to un-zoom inside the image
+        Matrix matrixZoom = new Matrix();
+        matrixZoom.setScale(0.9f, 0.9f);
+
+        // Apply the zoom
+        imageView.animateTransform(matrixZoom);
+
+        // After 100 milliseconds un-zoom
+        imageView.postDelayed(() -> {
+            matrixZoom.setScale(1f, 1f);
+            imageView.animateTransform(matrixZoom);
+        }, 100);
     }
 
     private void drawMyStuff(final Canvas canvas) {
