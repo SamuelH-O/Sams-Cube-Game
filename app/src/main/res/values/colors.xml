@@ -8,4 +8,11 @@
     <color name="eerie_black">#212121</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="I_color">#31C7EF</color>
+    <color name="J_color">#5A65AD</color>
+    <color name="L_color">#EF7921</color>
+    <color name="O_color">#F7D308</color>
+    <color name="S_color">#42B642</color>
+    <color name="T_color">#AD4D9C</color>
+    <color name="Z_color">#EF2029</color>
 </resources>

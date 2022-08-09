@@ -2,10 +2,6 @@ package com.example.samscubegame;
 
 import static android.graphics.Color.pack;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.graphics.BlendMode;
@@ -18,8 +14,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
@@ -28,15 +29,17 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     SurfaceView gameSurfaceView;
 
-    private static final String TAG = "SurfaceView";
+    static final String TAG = "SurfaceView";
 
-    TetrominoTypes[][] grid = new TetrominoTypes[10][16];
+    GridOfGame grid;
 
     ImageView imgViewMoveLeft;
     ImageView imgViewMoveRight;
     ImageView imgViewRotateRight;
     ImageView imgViewSnap;
     ImageView imgViewMoveBottom;
+
+    Piece currentPiece;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -63,12 +66,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         imgViewSnap = findViewById(R.id.imageViewSnap);
         imgViewMoveBottom = findViewById(R.id.imageViewMoveBottom);
 
-        // Fill the grid with NULL
-        for(int i = 0; i < 10; i++) {
-            for(int j = 0; j < 16; j++) {
-                grid[i][j] = TetrominoTypes.NULL;
-            }
-        }
+        grid = new GridOfGame();
     }
 
     // TODO: create a start game method and a running game method & find the correct way to do it
@@ -111,99 +109,145 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         canvas.drawPaint(greyPaint);
     }
 
-    private char tetrominoTypeToString(TetrominoTypes t) {
-        switch(t) {
-            case I:
-                return 'I';
-            case J:
-                return 'J';
-            case L:
-                return 'L';
-            case O:
-                return 'O';
-            case S:
-                return 'S';
-            case T:
-                return 'T';
-            case Z:
-                return 'Z';
-            case NULL:
-                return ' ';
-        }
-        return ' ';
-    }
-
-    private void printGridState() {
-        StringBuilder str = new StringBuilder();
-        for(int i = 0; i < 16; i++) {
-            for(int j = 0; j < 10; j++) {
-                str.append("|").append(tetrominoTypeToString(grid[j][i]));
-            }
-            str.append("|\n").append("#####################\n");
-        }
-        Log.i(TAG, "State of the grid :\n" + str);
-    }
-
+    @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
     private void startGame(SurfaceHolder holder) {
         Log.i(TAG, "Trying to draw test piece");
         Canvas canvas = holder.lockCanvas();
-        Tetromino t = new Tetromino(TetrominoTypes.I, canvas);
-        if (canvas == null) {
-            Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
-        } else {
-            setBackground(canvas);
-            t.draw(4, 0, 1, canvas);
-            holder.unlockCanvasAndPost(canvas);
-        }
 
-        // Add OnClickListener to ImageViews (controls)
+        currentPiece = new Piece(TetrominoTypes.J, canvas, getResources());
+
+        // Get the radioGroup
+        RadioGroup radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
+        radioGroup.check(R.id.radioButton_J);
+
+        setBackground(canvas);
+        currentPiece.draw(4, 0, 0, canvas);
+        holder.unlockCanvasAndPost(canvas);
+
+        // If the radio button of the selected piece change, redraw the piece at the top (debug)
+        radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
+            RadioButton checkedRadioButton = (RadioButton) radioGroup1.findViewById(checkedId);
+            boolean isChecked = checkedRadioButton.isChecked();
+            if (isChecked) {
+                Canvas canvas1 = holder.lockCanvas();
+                switch (checkedRadioButton.getId()) {
+                    case R.id.radioButton_I:
+                        currentPiece = new Piece(TetrominoTypes.I, canvas1, getResources());
+                        break;
+                    case R.id.radioButton_J:
+                        currentPiece = new Piece(TetrominoTypes.J, canvas1, getResources());
+                        break;
+                    case R.id.radioButton_L:
+                        currentPiece = new Piece(TetrominoTypes.L, canvas1, getResources());
+                        break;
+                    case R.id.radioButton_O:
+                        currentPiece = new Piece(TetrominoTypes.O, canvas1, getResources());
+                        break;
+                    case R.id.radioButton_S:
+                        currentPiece = new Piece(TetrominoTypes.S, canvas1, getResources());
+                        break;
+                    case R.id.radioButton_T:
+                        currentPiece = new Piece(TetrominoTypes.T, canvas1, getResources());
+                        break;
+                    case R.id.radioButton_Z:
+                        currentPiece = new Piece(TetrominoTypes.Z, canvas1, getResources());
+                        break;
+                }
+                if (canvas1 == null) {
+                    Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
+                } else {
+                    setBackground(canvas1);
+                    currentPiece.draw(4, 0, 0, canvas1);
+                    holder.unlockCanvasAndPost(canvas1);
+                }
+            }
+        });
+
+        // TODO: Add boundary test with the grid of blocks
+        // Add OnClickListener to ImageViewMoveLeft (controls left)
         imgViewMoveLeft.setOnClickListener(view -> {
-            Log.i(TAG, "Trying to move test piece to the left");
+            Log.i(TAG, "Trying to move current piece to the left");
             Canvas canvas1 = holder.lockCanvas();
             if (canvas1 == null) {
                 Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
             } else {
                 setBackground(canvas1);
-                if (t.posX - 1 >= 0) {
-                    t.draw(t.posX - 1, 0, 1, canvas1);
+                if (currentPiece.posX - 1 >= 0) {
+                    currentPiece.draw(currentPiece.posX - 1, currentPiece.posY, currentPiece.rotation, canvas1);
                 } else {
-                    t.draw(t.posX, 0, 1, canvas1);
+                    currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
                 }
                 holder.unlockCanvasAndPost(canvas1);
             }
         });
+
+        // Add OnClickListener to ImageViewMoveRight (controls right)
         imgViewMoveRight.setOnClickListener(view -> {
-            Log.i(TAG, "Trying to move test piece to the right");
-            Canvas canvas12 = holder.lockCanvas();
-            if (canvas12 == null) {
+            Log.i(TAG, "Trying to move current piece to the right");
+            Canvas canvas1 = holder.lockCanvas();
+            if (canvas1 == null) {
                 Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
             } else {
-                setBackground(canvas12);
-                if (t.posX + 1 <= 9) {
-                    t.draw(t.posX + 1, 0, 1, canvas12);
+                setBackground(canvas1);
+                if (currentPiece.posX + currentPiece.getWidth() < 10) {
+                    currentPiece.draw(currentPiece.posX + 1, currentPiece.posY, currentPiece.rotation, canvas1);
                 } else {
-                    t.draw(t.posX, 0, 1, canvas12);
+                    currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
                 }
-                holder.unlockCanvasAndPost(canvas12);
+                holder.unlockCanvasAndPost(canvas1);
             }
         });
+
+        // Add OnClickListener to ImageViewRotateRight (controls rotate)
         imgViewRotateRight.setOnClickListener(view -> {
-
+            Log.i(TAG, "Trying to rotate current piece to the right");
+            Canvas canvas1 = holder.lockCanvas();
+            if (canvas1 == null) {
+                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
+            } else {
+                setBackground(canvas1);
+                currentPiece.drawNextRotation(canvas1);
+                holder.unlockCanvasAndPost(canvas1);
+            }
         });
+
+        // Add OnClickListener to ImageViewSnap (controls snap)
         imgViewSnap.setOnClickListener(view -> {
-
+            Log.i(TAG, "Trying to snap current piece to the bottom");
+            Canvas canvas1 = holder.lockCanvas();
+            if (canvas1 == null) {
+                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
+            } else {
+                setBackground(canvas1);
+                currentPiece.draw(currentPiece.posX, currentPiece.getRowToSnapTo(grid), currentPiece.rotation, canvas1);
+                holder.unlockCanvasAndPost(canvas1);
+            }
         });
-        imgViewMoveBottom.setOnClickListener(view -> {
 
+        // Add OnClickListener to ImageViewMoveBottom (controls bottom)
+        imgViewMoveBottom.setOnClickListener(view -> {
+            Log.i(TAG, "Trying to move current piece to the bottom");
+            Canvas canvas1 = holder.lockCanvas();
+            if (canvas1 == null) {
+                Log.e(TAG, "Cannot draw onto the canvas as it's null (being drawn on)");
+            } else {
+                setBackground(canvas1);
+                if (currentPiece.posY + currentPiece.getHeight() < 16) {
+                    currentPiece.draw(currentPiece.posX, currentPiece.posY + 1, currentPiece.rotation, canvas1);
+                } else {
+                    currentPiece.draw(currentPiece.posX, currentPiece.posY, currentPiece.rotation, canvas1);
+                }
+                holder.unlockCanvasAndPost(canvas1);
+            }
         });
     }
 
     private void drawMyStuff(final Canvas canvas) {
         Log.i(TAG, "Drawing...");
 
-        Tetromino t = new Tetromino(TetrominoTypes.I, canvas);
+        Piece t = new Piece(TetrominoTypes.I, canvas, getResources());
         t.draw(4, 0, 1, canvas);
-        t.placeInGrid(4, 0, 1, grid);
-        printGridState();
+        t.placeInGrid(grid);
+        grid.printGridState();
     }
 }

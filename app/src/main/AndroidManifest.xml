@@ -15,10 +15,10 @@
         android:theme="@style/Theme.SamsCubeGame">
         <activity
             android:name=".GameActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
