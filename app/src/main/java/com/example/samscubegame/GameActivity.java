@@ -25,12 +25,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
+// TODO : Find out what's the deal with all those warn messages
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     SurfaceView gameSurfaceView;
 
     static final String TAG = "SurfaceView";
+
+    float squareSize;
 
     GridOfGame grid;
 
@@ -67,62 +70,53 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         imgViewSnap = findViewById(R.id.imageViewSnap);
         imgViewMoveBottom = findViewById(R.id.imageViewMoveBottom);
 
-        grid = new GridOfGame();
+        grid = new GridOfGame(squareSize, getResources());
     }
 
     // TODO: create a start game method and a running game method & find the correct way to do it
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        Canvas canvas = surfaceHolder.lockCanvas();
+        // Get the size of the squares by the smaller side of the canvas
+        if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
+        else this.squareSize = (float) canvas.getHeight() / 10;
+        surfaceHolder.unlockCanvasAndPost(canvas);
         startGame(surfaceHolder);
     }
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        //startGame(surfaceHolder);
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {}
-
-    private void setBackground(final Canvas canvas) {
-        // Create the colors for the gradient (TODO: add the option to modify them)
-        long[] bgColors = new long[3];
-        bgColors[0] = pack(0.847f, 0.035f, 0.494f, 1.0f);
-        bgColors[1] = pack(0.549f, 0.341f, 0.611f,1.0f);
-        bgColors[2] =  pack(0.141f, 0.274f, 0.556f,1.0f);
-
-        // Create the gradient from the top left to the bottom right (TODO: add the option to modify the direction)
-        LinearGradient bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
-
-        // Add the gradient to a paint with the right parameters
-        Paint gradientPaint = new Paint();
-        gradientPaint.setDither(true);
-        gradientPaint.setShader(bgGradient);
-
-        // Add a fancy background
-        canvas.drawPaint(gradientPaint);
-
-        // Add a semi-transparent grey paint to help focus (TODO: add the ability to modify this)
-        Paint greyPaint = new Paint();
-        greyPaint.setARGB(63, 61, 61, 61);
-        greyPaint.setBlendMode(BlendMode.DARKEN);
-        canvas.drawPaint(greyPaint);
-    }
 
     @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
     private void startGame(SurfaceHolder holder) {
         Log.i(TAG, "Trying to draw test piece");
         Canvas canvas = holder.lockCanvas();
 
-        currentPiece = new Piece(TetrominoTypes.J, canvas, getResources());
+        currentPiece = new Piece(TetrominoTypes.J, squareSize, getResources());
 
         // Get the radioGroup
         RadioGroup radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
         radioGroup.check(R.id.radioButton_J);
 
+        // Setup debug grid
+        Square s0 = new Square(squareSize, TetrominoTypes.O, getResources());
+        s0.setPos((byte) (0), (byte) (15));
+        grid.setSquare(s0);
+        Square s1 = new Square(squareSize, TetrominoTypes.O, getResources());
+        s1.setPos((byte) (1), (byte) (15));
+        grid.setSquare(s1);
+        Square s2 = new Square(squareSize, TetrominoTypes.I, getResources());
+        s2.setPos((byte) (0), (byte) (14));
+        grid.setSquare(s2);
+
+        // Draw first frame with background and piece
         setBackground(canvas);
         currentPiece.draw((byte) (4), (byte) (0), (byte) (0), canvas);
+        grid.draw(canvas);
         holder.unlockCanvasAndPost(canvas);
 
         // If the radio button of the selected piece change, redraw the piece at the top (debug)
@@ -133,25 +127,25 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 Canvas canvas1 = holder.lockCanvas();
                 switch (checkedRadioButton.getId()) {
                     case R.id.radioButton_I:
-                        currentPiece = new Piece(TetrominoTypes.I, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.I, squareSize, getResources());
                         break;
                     case R.id.radioButton_J:
-                        currentPiece = new Piece(TetrominoTypes.J, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.J, squareSize, getResources());
                         break;
                     case R.id.radioButton_L:
-                        currentPiece = new Piece(TetrominoTypes.L, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.L, squareSize, getResources());
                         break;
                     case R.id.radioButton_O:
-                        currentPiece = new Piece(TetrominoTypes.O, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.O, squareSize, getResources());
                         break;
                     case R.id.radioButton_S:
-                        currentPiece = new Piece(TetrominoTypes.S, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.S, squareSize, getResources());
                         break;
                     case R.id.radioButton_T:
-                        currentPiece = new Piece(TetrominoTypes.T, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.T, squareSize, getResources());
                         break;
                     case R.id.radioButton_Z:
-                        currentPiece = new Piece(TetrominoTypes.Z, canvas1, getResources());
+                        currentPiece = new Piece(TetrominoTypes.Z, squareSize, getResources());
                         break;
                 }
                 if (canvas1 == null) {
@@ -248,6 +242,31 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         });
     }
 
+    private void setBackground(final Canvas canvas) {
+        // Create the colors for the gradient (TODO: add the option to modify them)
+        long[] bgColors = new long[3];
+        bgColors[0] = pack(0.847f, 0.035f, 0.494f, 1.0f);
+        bgColors[1] = pack(0.549f, 0.341f, 0.611f,1.0f);
+        bgColors[2] =  pack(0.141f, 0.274f, 0.556f,1.0f);
+
+        // Create the gradient from the top left to the bottom right (TODO: add the option to modify the direction)
+        LinearGradient bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
+
+        // Add the gradient to a paint with the right parameters
+        Paint gradientPaint = new Paint();
+        gradientPaint.setDither(true);
+        gradientPaint.setShader(bgGradient);
+
+        // Add a fancy background
+        canvas.drawPaint(gradientPaint);
+
+        // Add a semi-transparent grey paint to help focus (TODO: add the ability to modify this)
+        Paint greyPaint = new Paint();
+        greyPaint.setARGB(63, 61, 61, 61);
+        greyPaint.setBlendMode(BlendMode.DARKEN);
+        canvas.drawPaint(greyPaint);
+    }
+
     private void animateImageView(ImageView imageView) {
         // Create matrix to un-zoom inside the image
         Matrix matrixZoom = new Matrix();
@@ -266,7 +285,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private void drawMyStuff(final Canvas canvas) {
         Log.i(TAG, "Drawing...");
 
-        Piece t = new Piece(TetrominoTypes.I, canvas, getResources());
+        Piece t = new Piece(TetrominoTypes.I, squareSize, getResources());
         t.draw((byte) (4), (byte) (0), (byte) (1), canvas);
         t.placeInGrid(grid);
         grid.printGridState();

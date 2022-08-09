@@ -8,20 +8,14 @@ import androidx.annotation.RequiresApi;
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
 public class Piece {
-    float squareSize;
-
     TetrominoTypes piece;
 
     byte posX, posY, rotation;
 
     Square[] squares;
 
-    Piece(TetrominoTypes t, final Canvas canvas, final Resources resources) {
+    Piece(TetrominoTypes t, float squareSize, final Resources resources) {
         this.piece = t;
-
-        // Get the size of the squares by the smaller side of the canvas
-        if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
-        else this.squareSize = (float) canvas.getHeight() / 10;
 
         squares = new Square[4];
         for (byte i = 0; i < 4; i++) {
@@ -31,7 +25,7 @@ public class Piece {
 
     void placeInGrid(GridOfGame grid) {
         for (byte i = 0; i < 4; i++) {
-            squares[i].setInGrid(grid);
+            grid.setSquare(squares[i]);
         }
     }
 
