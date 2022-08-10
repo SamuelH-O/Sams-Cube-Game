@@ -94,21 +94,21 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
     private void startGame() {
-        currentPiece = new Piece(TetrominoTypes.J, squareSize, getResources());
+        currentPiece = new Piece(PieceTypes.J, squareSize, getResources());
 
         // Get the radioGroup
-        RadioGroup radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.check(R.id.radioButton_J);
 
         // Setup debug grid
-        Square s0 = new Square(squareSize, TetrominoTypes.O, getResources());
-        s0.setPos((byte) (0), (byte) (15));
+        Square s0 = new Square(squareSize, PieceTypes.O, getResources());
+        s0.setPos((byte) (9), (byte) (15));
         grid.setSquare(s0);
-        Square s1 = new Square(squareSize, TetrominoTypes.O, getResources());
-        s1.setPos((byte) (1), (byte) (15));
+        Square s1 = new Square(squareSize, PieceTypes.O, getResources());
+        s1.setPos((byte) (8), (byte) (15));
         grid.setSquare(s1);
-        Square s2 = new Square(squareSize, TetrominoTypes.I, getResources());
-        s2.setPos((byte) (0), (byte) (14));
+        Square s2 = new Square(squareSize, PieceTypes.I, getResources());
+        s2.setPos((byte) (9), (byte) (14));
         grid.setSquare(s2);
 
         // Draw first frame with background and piece
@@ -118,30 +118,30 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // If the radio button of the selected piece change, redraw the piece at the top (debug)
         radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
-            RadioButton checkedRadioButton = (RadioButton) radioGroup1.findViewById(checkedId);
+            RadioButton checkedRadioButton = radioGroup1.findViewById(checkedId);
             boolean isChecked = checkedRadioButton.isChecked();
             if (isChecked) {
                 switch (checkedRadioButton.getId()) {
                     case R.id.radioButton_I:
-                        currentPiece = new Piece(TetrominoTypes.I, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.I, squareSize, getResources());
                         break;
                     case R.id.radioButton_J:
-                        currentPiece = new Piece(TetrominoTypes.J, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.J, squareSize, getResources());
                         break;
                     case R.id.radioButton_L:
-                        currentPiece = new Piece(TetrominoTypes.L, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.L, squareSize, getResources());
                         break;
                     case R.id.radioButton_O:
-                        currentPiece = new Piece(TetrominoTypes.O, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.O, squareSize, getResources());
                         break;
                     case R.id.radioButton_S:
-                        currentPiece = new Piece(TetrominoTypes.S, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.S, squareSize, getResources());
                         break;
                     case R.id.radioButton_T:
-                        currentPiece = new Piece(TetrominoTypes.T, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.T, squareSize, getResources());
                         break;
                     case R.id.radioButton_Z:
-                        currentPiece = new Piece(TetrominoTypes.Z, squareSize, getResources());
+                        currentPiece = new Piece(PieceTypes.Z, squareSize, getResources());
                         break;
                 }
                 currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
@@ -156,7 +156,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
             // Move piece to the left if possible
             if (currentPiece.canMoveLeft(grid)) {
-                currentPiece.posX = (byte) (currentPiece.posX - 1);
+                currentPiece.setPosAndRot((byte) (currentPiece.posX - 1), currentPiece.posY, currentPiece.rotation);
             }
             drawFrame();
         });
@@ -166,8 +166,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             this.animateImageView(imgViewMoveRight);
 
             // Move piece to the right if possible
-            if (currentPiece.posX + currentPiece.getWidth() < 10) {
-                currentPiece.posX = (byte) (currentPiece.posX + 1);
+            if (currentPiece.canMoveRight(grid)) {
+                currentPiece.setPosAndRot((byte) (currentPiece.posX + 1), currentPiece.posY, currentPiece.rotation);
             }
             drawFrame();
         });
@@ -184,7 +184,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         imgViewSnap.setOnClickListener(view -> {
             this.animateImageView(imgViewSnap);
 
-            currentPiece.posY = currentPiece.getRowToSnapTo(grid);
+            currentPiece.drop(grid);
             drawFrame();
         });
 
@@ -193,8 +193,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             this.animateImageView(imgViewMoveBottom);
 
             // Move piece to the bottom if possible
-            if (currentPiece.posY + currentPiece.getHeight() < 16) {
-                currentPiece.posY = (byte) (currentPiece.posY + 1);
+            if (currentPiece.canMoveBottom(grid)) {
+                currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
             }
             drawFrame();
         });

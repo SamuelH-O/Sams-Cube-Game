@@ -15,7 +15,7 @@ class GridOfGame {
     GridOfGame(float size, final Resources resources) {
         for(byte i = 0; i < 10; i++) {
             for(byte j = 0; j < 16; j++) {
-                grid[i][j] = new Square(size, TetrominoTypes.NULL, resources);
+                grid[i][j] = new Square(size, PieceTypes.NULL, resources);
             }
         }
     }
@@ -24,31 +24,31 @@ class GridOfGame {
     void draw(final Canvas canvas) {
         for(byte i = 0; i < 10; i++) {
             for (byte j = 0; j < 16; j++) {
-                if (grid[i][j].type != TetrominoTypes.NULL) {
+                if (grid[i][j].type != PieceTypes.NULL) {
                     grid[i][j].draw(grid[i][j].posX, grid[i][j].posY, canvas);
                 }
             }
         }
     }
 
-    boolean isFreeAt(byte posX, byte posY) {
-        Log.d("Type", "" + posX + " " + posY + " = " + grid[posX][posY].type);
-        return (grid[posX][posY].type == TetrominoTypes.NULL);
+    boolean isFilledAt(byte posX, byte posY) {
+        return (grid[posX][posY].type != PieceTypes.NULL);
     }
 
     void setSquare(Square square) {
         grid[square.posX][square.posY] = square;
     }
 
-    byte getOneAboveBottomSquareFromPos(byte column, byte posY) {
-        byte i = posY;
-        while(i < 15 && grid[column][i].type == TetrominoTypes.NULL) {
-            i++;
+    byte getFilledSquareBelow(byte posX, byte posY) {
+        for (byte i = posY; i < 16; i++) {
+            if (grid[posX][i].type != PieceTypes.NULL) {
+                return i;
+            }
         }
-        return i;
+        return (byte) (16);
     }
 
-    private char tetrominoTypeToString(TetrominoTypes t) {
+    private char tetrominoTypeToString(PieceTypes t) {
         switch(t) {
             case I:
                 return 'I';

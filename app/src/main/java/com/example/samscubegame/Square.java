@@ -14,11 +14,11 @@ public class Square {
 
     float size;
 
-    TetrominoTypes type;
+    PieceTypes type;
 
     byte posX, posY;
 
-    Square(float size, TetrominoTypes t, final Resources resources) {
+    Square(float size, PieceTypes t, final Resources resources) {
         this.type = t;
         switch (t) {
             case I:
