@@ -10,8 +10,7 @@ import androidx.annotation.RequiresApi;
 
 class GridOfGame {
     // First number = columns | Second number = rows
-    // TODO: See if it can be final
-    Square[][] grid = new Square[10][16];
+    private final Square[][] grid = new Square[10][16];
 
     GridOfGame(float size, final Resources resources) {
         for(byte i = 0; i < 10; i++) {
@@ -19,6 +18,22 @@ class GridOfGame {
                 grid[i][j] = new Square(size, TetrominoTypes.NULL, resources);
             }
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    void draw(final Canvas canvas) {
+        for(byte i = 0; i < 10; i++) {
+            for (byte j = 0; j < 16; j++) {
+                if (grid[i][j].type != TetrominoTypes.NULL) {
+                    grid[i][j].draw(grid[i][j].posX, grid[i][j].posY, canvas);
+                }
+            }
+        }
+    }
+
+    boolean isFreeAt(byte posX, byte posY) {
+        Log.d("Type", "" + posX + " " + posY + " = " + grid[posX][posY].type);
+        return (grid[posX][posY].type == TetrominoTypes.NULL);
     }
 
     void setSquare(Square square) {
@@ -31,17 +46,6 @@ class GridOfGame {
             i++;
         }
         return i;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    void draw(final Canvas canvas) {
-        for(byte i = 0; i < 10; i++) {
-            for (byte j = 0; j < 16; j++) {
-                if (grid[i][j].type != TetrominoTypes.NULL) {
-                    grid[i][j].draw(grid[i][j].posX, grid[i][j].posY, canvas);
-                }
-            }
-        }
     }
 
     private char tetrominoTypeToString(TetrominoTypes t) {

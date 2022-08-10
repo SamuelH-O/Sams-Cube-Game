@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
-// TODO : Find out what's the deal with all those warn messages
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
@@ -156,7 +155,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             this.animateImageView(imgViewMoveLeft);
 
             // Move piece to the left if possible
-            if (currentPiece.posX - 1 >= 0) {
+            if (currentPiece.canMoveLeft(grid)) {
                 currentPiece.posX = (byte) (currentPiece.posX - 1);
             }
             drawFrame();
@@ -207,6 +206,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         setBackground(canvas);
         grid.draw(canvas);
         currentPiece.draw(canvas);
+
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 

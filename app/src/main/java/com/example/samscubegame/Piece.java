@@ -24,23 +24,16 @@ public class Piece {
         }
     }
 
-    void placeInGrid(GridOfGame grid) {
-        for (byte i = 0; i < 4; i++) {
-            grid.setSquare(squares[i]);
-        }
-    }
-
     void draw(final Canvas canvas) {// TODO: make parameters optional (use current if not provided) (maybe, don't know if it's a good idea)
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
-                    // I I I I I
+                    // I I I I
                     for (byte i = 0; i < 4; i++) {
                         squares[i].draw((byte) (posX + i), posY, canvas);
                     }
                 } else {
                     /*
-                     * I
                      * I
                      * I
                      * I
@@ -244,9 +237,199 @@ public class Piece {
                 }
                 break;
         }
-        this.posX = posX;
-        this.posY = posY;
-        this.rotation = rotation;
+    }
+
+    // TODO: Figure out a way to check boundary with squares instead of switch+rotation
+    boolean canMoveLeft(GridOfGame grid) {
+        boolean ret = false;
+        if (posX - 1 >= 0) {
+            switch (piece) {
+                case I:
+                    if (rotation % 2 == 0) {
+                        // I I I I
+                        ret = grid.isFreeAt((byte) (posX - 1), posY);
+                    } else {
+                        /*
+                         * I
+                         * I
+                         * I
+                         * I
+                         * */
+                        ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 2))
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 3)));
+                    }
+                    break;
+                case J:
+                    switch (rotation) {
+                        case 0:
+                            /*
+                             * J J J
+                             *     J
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt((byte) (posX + 1), (byte) (posY + 1)));
+                            break;
+                        case 1:
+                            /*
+                             *   J
+                             *   J
+                             * J J
+                             * */
+                            ret = (grid.isFreeAt(posX, posY)
+                                    && grid.isFreeAt(posX, (byte) (posY - 1))
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 2)));
+                            break;
+                        case 2:
+                            /*
+                             * J
+                             * J J J
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1)));
+                            break;
+                        case 3:
+                            /*
+                             * J J
+                             * J
+                             * J
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 2)));
+                            break;
+                    }
+                    break;
+                case L:
+                    switch (rotation) {
+                        case 0:
+                            /*
+                             *     L
+                             * L L L
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX + 1), posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1)));
+                            break;
+                        case 1:
+                            /*
+                             * L
+                             * L
+                             * L L
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 2)));
+                            break;
+                        case 2:
+                            /*
+                             * L L L
+                             * L
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1)));
+                            break;
+                        case 3:
+                            /*
+                             * L L
+                             *   L
+                             *   L
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt(posX, (byte) (posY + 1))
+                                    && grid.isFreeAt(posX, (byte) (posY + 2)));
+                            break;
+                    }
+                    break;
+                case O:
+                    /*
+                     * O O
+                     * O O
+                     * */
+                    ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                            && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1)));
+                    break;
+                case S:
+                    if (rotation % 2 == 0) {
+                        /*
+                         *   S S
+                         * S S
+                         * */
+                        ret = (grid.isFreeAt(posX, posY)
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1)));
+                    } else {
+                        /*
+                         * S
+                         * S S
+                         *   S
+                         * */
+                        ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                && grid.isFreeAt(posX, (byte) (posY + 2)));
+                    }
+                    break;
+                case T:
+                    switch (rotation) {
+                        case 0:
+                            /*
+                             *   T
+                             * T T T
+                             * */
+                            ret = (grid.isFreeAt(posX, posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1)));
+                            break;
+                        case 1:
+                            /*
+                             * T
+                             * T T
+                             * T
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 2)));
+                            break;
+                        case 2:
+                            /*
+                             * T T T
+                             *   T
+                             * */
+                            ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                    && grid.isFreeAt(posX, (byte) (posY + 1)));
+                            break;
+                        case 3:
+                            /*
+                             *   T
+                             * T T
+                             *   T
+                             * */
+                            ret = (grid.isFreeAt(posX, posY)
+                                    && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                    && grid.isFreeAt(posX, (byte) (posY + 2)));
+                            break;
+                    }
+                    break;
+                case Z:
+                    if (rotation % 2 == 0) {
+                        /*
+                         * Z Z
+                         *   Z Z
+                         * */
+                        ret = (grid.isFreeAt((byte) (posX - 1), posY)
+                                && grid.isFreeAt(posX, (byte) (posY + 1)));
+                    } else {
+                        /*
+                         *   Z
+                         * Z Z
+                         * Z
+                         * */
+                        ret = (grid.isFreeAt(posX, posY)
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 1))
+                                && grid.isFreeAt((byte) (posX - 1), (byte) (posY + 2)));
+                    }
+                    break;
+            }
+        }
+        return ret;
     }
 
     byte getRowToSnapTo(GridOfGame grid) {
@@ -255,8 +438,8 @@ public class Piece {
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
-                    // I I I I I
-                    for (byte i = posX; i <= posX + 4; i++) {
+                    // I I I I
+                    for (byte i = posX; i < posX + 4; i++) {
                         if (highestPoint >= (tmp = grid.getOneAboveBottomSquareFromPos(i, posY))) {
                             highestPoint = tmp;
                         }
@@ -267,9 +450,8 @@ public class Piece {
                      * I
                      * I
                      * I
-                     * I
                      * */
-                    highestPoint = (byte) (grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 4)) - 5);
+                    highestPoint = (byte) (grid.getOneAboveBottomSquareFromPos(posX, (byte) (posY + 3)) - 3);
                 }
                 break;
             case J:
@@ -520,9 +702,9 @@ public class Piece {
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
-                    // I I I I I
-                    if (posY + 4 >= 16) {
-                        values[1] = 16 - 5;
+                    // I I I I
+                    if (posY + 3 >= 16) {
+                        values[1] = 16 - 4;
                     }
                     values[2] = 1;
                 } else {
@@ -531,10 +713,9 @@ public class Piece {
                      * I
                      * I
                      * I
-                     * I
                      * */
-                    if (posX + 4 >= 10) {
-                        values[0] = 10 - 5;
+                    if (posX + 3 >= 10) {
+                        values[0] = 10 - 4;
                     }
                     values[2] = 0;
                 }
@@ -660,16 +841,21 @@ public class Piece {
         this.rotation = rotation;
     }
 
+    void placeInGrid(GridOfGame grid) {
+        for (byte i = 0; i < 4; i++) {
+            grid.setSquare(squares[i]);
+        }
+    }
+
     byte getWidth() {
         byte width = 0;
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
-                    // I I I I I
-                    width = 5;
+                    // I I I I
+                    width = 4;
                 } else {
                     /*
-                     * I
                      * I
                      * I
                      * I
@@ -763,7 +949,7 @@ public class Piece {
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
-                    // I I I I I
+                    // I I I I
                     height = 1;
                 } else {
                     /*
@@ -771,9 +957,8 @@ public class Piece {
                      * I
                      * I
                      * I
-                     * I
                      * */
-                    height = 5;
+                    height = 4;
                 }
                 break;
             case J:

@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -52,7 +51,6 @@ public class Square {
         this.posX = posX;
         this.posY = posY;
         this.paint.setBlendMode(BlendMode.SRC_OVER);
-        Log.d("Debug", "posX = " + posX + " | posY = " + posY);
         // Draw the square
         canvas.drawRect(posX * size, posY * size, size + posX * size, size + posY * size, paint);
 
