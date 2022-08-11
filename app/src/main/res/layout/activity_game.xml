@@ -109,7 +109,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/I_color"
             android:text="I"
-            android:textColor="@color/I_color" />
+            android:textColor="@color/I_color"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_J"
@@ -117,7 +118,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/J_color"
             android:text="J"
-            android:textColor="@color/J_color" />
+            android:textColor="@color/J_color"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_L"
@@ -125,7 +127,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/L_color"
             android:text="L"
-            android:textColor="@color/L_color" />
+            android:textColor="@color/L_color"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_O"
@@ -133,7 +136,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/O_color"
             android:text="O"
-            android:textColor="@color/O_color" />
+            android:textColor="@color/O_color"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_S"
@@ -141,7 +145,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/S_color"
             android:text="S"
-            android:textColor="@color/S_color" />
+            android:textColor="@color/S_color"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_T"
@@ -149,7 +154,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/T_color"
             android:text="T"
-            android:textColor="@color/T_color" />
+            android:textColor="@color/T_color"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_Z"
@@ -157,7 +163,8 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/Z_color"
             android:text="Z"
-            android:textColor="@color/Z_color" />
+            android:textColor="@color/Z_color"
+            android:textStyle="bold" />
 
     </RadioGroup>
 

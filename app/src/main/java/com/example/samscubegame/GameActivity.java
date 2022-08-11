@@ -188,8 +188,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 drawFrame();
             }
         });
-
-        // TODO: Add boundary test with the grid of blocks
+        
         // Add OnClickListener to ImageViewMoveLeft (controls left)
         imgViewMoveLeft.setOnClickListener(view -> {
             this.animateImageView(imgViewMoveLeft);
