@@ -45,6 +45,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     Piece currentPiece;
 
+    private float[] gridPoints;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +81,52 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         Canvas canvas = surfaceHolder.lockCanvas();
+
         // Get the size of the squares by the smaller side of the canvas
         if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
         else this.squareSize = (float) canvas.getHeight() / 10;
+
+        // Measure debug grid points
+        gridPoints = new float[64 + 40];
+        float linesYOffset = 0f, columnsXOffset = 0f;
+        boolean isFirstPoint = true;
+        for (int i = 0; i < 64 + 40; i++) {
+            if (i < 64) {// Is points for lines
+                if (isFirstPoint) {// Is first point
+                    if (i % 2 == 0) {// Is x
+                        gridPoints[i] = 0f;
+                    } else {// Is y
+                        gridPoints[i] = linesYOffset + (canvas.getHeight() / 16f);
+                        linesYOffset = linesYOffset + (canvas.getHeight() / 16f);
+                        isFirstPoint = false;
+                    }
+                } else {// Is second point
+                    if (i % 2 == 0) {// Is x
+                        gridPoints[i] = canvas.getWidth();
+                    } else {// Is y
+                        gridPoints[i] = linesYOffset;
+                        isFirstPoint = true;
+                    }
+                }
+            } else {// Is points for columns
+                if (isFirstPoint) {// Is first point
+                    if (i % 2 == 0) {// Is x
+                        gridPoints[i] = columnsXOffset + (canvas.getWidth() / 10f);
+                        columnsXOffset = columnsXOffset + (canvas.getWidth() / 10f);
+                    } else {// Is y
+                        gridPoints[i] = 0f;
+                        isFirstPoint = false;
+                    }
+                } else {// Is second point
+                    if (i % 2 == 0) {// Is x
+                        gridPoints[i] = columnsXOffset;
+                    } else {// Is y
+                        gridPoints[i] = canvas.getHeight();
+                        isFirstPoint = true;
+                    }
+                }
+            }
+        }
         surfaceHolder.unlockCanvasAndPost(canvas);
         startGame();
     }
@@ -233,6 +278,25 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         greyPaint.setARGB(63, 61, 61, 61);
         greyPaint.setBlendMode(BlendMode.DARKEN);
         canvas.drawPaint(greyPaint);
+
+        // Add debug grid & it's text
+        Paint whitePaint = new Paint();
+        whitePaint.setARGB(255, 255, 255, 255);
+        whitePaint.setBlendMode(BlendMode.DIFFERENCE);
+        whitePaint.setTextSize(canvas.getHeight() / 16f / 3f);
+        whitePaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawLines(gridPoints, whitePaint);
+        String str;
+        float xOffset = canvas.getWidth() / 10f, yOffset = canvas.getHeight() / 16f;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 16; j++) {
+                str = ("" + i + " " + j);
+                // ((whitePaint.descent() - whitePaint.ascent()) / 2) is the distance from the baseline to the center.
+                canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
+            }
+        }
+
+
     }
 
     private void animateImageView(ImageView imageView) {
