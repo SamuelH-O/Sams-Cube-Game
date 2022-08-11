@@ -25,7 +25,8 @@ class GridOfGame {
         for(byte i = 0; i < 10; i++) {
             for (byte j = 0; j < 16; j++) {
                 if (grid[i][j].type != PieceTypes.NULL) {
-                    grid[i][j].draw(grid[i][j].posX, grid[i][j].posY, canvas);
+                    grid[i][j].setPos(grid[i][j].posX, grid[i][j].posY);
+                    grid[i][j].draw(canvas);
                 }
             }
         }

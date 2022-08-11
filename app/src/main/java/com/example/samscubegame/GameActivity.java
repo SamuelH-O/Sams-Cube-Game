@@ -221,7 +221,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         imgViewRotateRight.setOnClickListener(view -> {
             this.animateImageView(imgViewRotateRight);
 
-            currentPiece.figureOutNextRotation();
+            currentPiece.figureOutNextRotation(grid);
             drawFrame();
         });
 
@@ -295,8 +295,6 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
             }
         }
-
-
     }
 
     private void animateImageView(ImageView imageView) {

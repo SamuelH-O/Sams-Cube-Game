@@ -3,6 +3,7 @@ package com.example.samscubegame;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -27,223 +28,13 @@ public class Piece {
             squares[i] = new Square(squareSize, t, resources);
         }
     }
-
-    void draw(final Canvas canvas) {// TODO: make parameters optional (use current if not provided) (maybe, don't know if it's a good idea)
-        switch (piece) {
-            case I:
-                if (rotation % 2 == 0) {
-                    // I I I I
-                    for (byte i = 0; i < 4; i++) {
-                        squares[i].draw((byte) (posX + i), posY, canvas);
-                    }
-                } else {
-                    /*
-                     * I
-                     * I
-                     * I
-                     * I
-                     * */
-                    for (byte i = 0; i < 4; i++) {
-                        squares[i].draw(posX, (byte) (posY + i), canvas);
-                    }
-                }
-                break;
-            case J:
-                switch (rotation) {
-                    case 0:
-                        /*
-                         * J J J
-                         *     J
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw((byte) (posX + 1), posY, canvas);
-                        squares[2].draw((byte) (posX + 2), posY, canvas);
-                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
-                        break;
-                    case 1:
-                        /*
-                         *   J
-                         *   J
-                         * J J
-                         * */
-                        squares[0].draw((byte) (posX + 1), posY, canvas);
-                        squares[1].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[2].draw(posX, (byte) (posY + 2), canvas);
-                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
-                        break;
-                    case 2:
-                        /*
-                         * J
-                         * J J J
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX, (byte) (posY + 1), canvas);
-                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
-                        break;
-                    case 3:
-                        /*
-                         * J J
-                         * J
-                         * J
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw((byte) (posX + 1), posY, canvas);
-                        squares[2].draw(posX, (byte) (posY + 1), canvas);
-                        squares[3].draw(posX, (byte) (posY + 2), canvas);
-                        break;
-                }
-                break;
-            case L:
-                switch (rotation) {
-                    case 0:
-                        /*
-                         *     L
-                         * L L L
-                         * */
-                        squares[0].draw((byte) (posX + 2), posY, canvas);
-                        squares[1].draw(posX, (byte) (posY + 1), canvas);
-                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
-                        break;
-                    case 1:
-                        /*
-                         * L
-                         * L
-                         * L L
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX, (byte) (posY + 1), canvas);
-                        squares[2].draw(posX, (byte) (posY + 2), canvas);
-                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
-                        break;
-                    case 2:
-                        /*
-                         * L L L
-                         * L
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw((byte) (posX + 1), posY, canvas);
-                        squares[2].draw((byte) (posX + 2), posY, canvas);
-                        squares[3].draw(posX, (byte) (posY + 1), canvas);
-                        break;
-                    case 3:
-                        /*
-                         * L L
-                         *   L
-                         *   L
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw((byte) (posX + 1), posY, canvas);
-                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
-                        break;
-                }
-                break;
-            case O:
-                /*
-                 * O O
-                 * O O
-                 * */
-                squares[0].draw(posX, posY, canvas);
-                squares[1].draw((byte) (posX + 1), posY, canvas);
-                squares[2].draw(posX, (byte) (posY + 1), canvas);
-                squares[3].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                break;
-            case S:
-                if (rotation % 2 == 0) {
-                    /*
-                     *   S S
-                     * S S
-                     * */
-                    squares[0].draw((byte) (posX + 1), posY, canvas);
-                    squares[1].draw((byte) (posX + 2), posY, canvas);
-                    squares[2].draw(posX, (byte) (posY + 1), canvas);
-                    squares[3].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                } else {
-                    /*
-                     * S
-                     * S S
-                     *   S
-                     * */
-                    squares[0].draw(posX, posY, canvas);
-                    squares[1].draw(posX, (byte) (posY + 1), canvas);
-                    squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                    squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
-                }
-                break;
-            case T:
-                switch (rotation) {
-                    case 0:
-                        /*
-                         *   T
-                         * T T T
-                         * */
-                        squares[0].draw((byte) (posX + 1), posY, canvas);
-                        squares[1].draw(posX, (byte) (posY + 1), canvas);
-                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
-                        break;
-                    case 1:
-                        /*
-                         * T
-                         * T T
-                         * T
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw(posX, (byte) (posY + 1), canvas);
-                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[3].draw(posX, (byte) (posY + 2), canvas);
-                        break;
-                    case 2:
-                        /*
-                         * T T T
-                         *   T
-                         * */
-                        squares[0].draw(posX, posY, canvas);
-                        squares[1].draw((byte) (posX + 1), posY, canvas);
-                        squares[2].draw((byte) (posX + 2), posY, canvas);
-                        squares[3].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        break;
-                    case 3:
-                        /*
-                         *   T
-                         * T T
-                         *   T
-                         * */
-                        squares[0].draw((byte) (posX + 1), posY, canvas);
-                        squares[1].draw(posX, (byte) (posY + 1), canvas);
-                        squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                        squares[3].draw((byte) (posX + 1), (byte) (posY + 2), canvas);
-                        break;
-                }
-                break;
-            case Z:
-                if (rotation % 2 == 0) {
-                    /*
-                     * Z Z
-                     *   Z Z
-                     * */
-                    squares[0].draw(posX, posY, canvas);
-                    squares[1].draw((byte) (posX + 1), posY, canvas);
-                    squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                    squares[3].draw((byte) (posX + 2), (byte) (posY + 1), canvas);
-                } else {
-                    /*
-                     *   Z
-                     * Z Z
-                     * Z
-                     * */
-                    squares[0].draw((byte) (posX + 1), posY, canvas);
-                    squares[1].draw(posX, (byte) (posY + 1), canvas);
-                    squares[2].draw((byte) (posX + 1), (byte) (posY + 1), canvas);
-                    squares[3].draw(posX, (byte) (posY + 2), canvas);
-                }
-                break;
+    
+    void draw(final Canvas canvas) {
+        for (Square i : squares) {
+            i.draw(canvas);
         }
     }
-
-    // TODO: Figure out a way to check boundary with squares instead of switch piece + switch rotation
+    
     boolean canMoveLeft(GridOfGame grid) {
         boolean ret;
         if (posX - 1 >= 0) {
@@ -301,7 +92,7 @@ public class Piece {
         setPosAndRot(posX, posYOfPieceDropped, rotation);
     }
 
-    void figureOutNextRotation() {
+    void figureOutNextRotation(final GridOfGame grid) {// TODO: Make the piece stay centered during rotation
         byte[] values = {posX, posY, rotation};
         switch (piece) {
             case I:
@@ -434,7 +225,22 @@ public class Piece {
                 }
                 break;
         }
-        setPosAndRot(values[0], values[1], values[2]);
+        boolean shouldGoUp;
+        goUp: do {
+            shouldGoUp = false;
+            setPosAndRot(values[0], values[1], values[2]);
+            for (Square i : squares) {
+                if (grid.isFilledAt(i.posX, i.posY)) {
+                    shouldGoUp = true;
+                    if (values[1] - 1 >= 0) {
+                        values[1] = (byte) (values[1] - 1);
+                    } else {
+                        Log.e("End error", "A piece should go up but cant because it would go outside the canvas, would normally game over but there it's not implemented yet");
+                        break goUp;
+                    }
+                }
+            }
+        } while (shouldGoUp);
     }
 
     void setPosAndRot(byte posX, byte posY, byte rotation) {
@@ -448,6 +254,10 @@ public class Piece {
             case I:
                 if (rotation % 2 == 0) {
                     // I I I I
+                    for (byte i = 0; i < 4; i++) {
+                        squares[i].setPos((byte) (posX + i), posY);
+                    }
+                    
                     leftSide.add(squares[0]);
                     
                     rightSide.add(squares[3]);
@@ -460,6 +270,10 @@ public class Piece {
                      * I
                      * I
                      * */
+                    for (byte i = 0; i < 4; i++) {
+                        squares[i].setPos(posX, (byte) (posY + i));
+                    }
+                    
                     leftSide.addAll(Arrays.asList(squares));
                     
                     rightSide.addAll(Arrays.asList(squares));
@@ -474,6 +288,11 @@ public class Piece {
                          * J J J
                          *     J
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos((byte) (posX + 1), posY);
+                        squares[2].setPos((byte) (posX + 2), posY);
+                        squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[3]);
                         
@@ -490,6 +309,11 @@ public class Piece {
                          *   J
                          * J J
                          * */
+                        squares[0].setPos((byte) (posX + 1), posY);
+                        squares[1].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[2].setPos(posX, (byte) (posY + 2));
+                        squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[2]);
@@ -506,6 +330,11 @@ public class Piece {
                          * J
                          * J J J
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos(posX, (byte) (posY + 1));
+                        squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         
@@ -522,6 +351,11 @@ public class Piece {
                          * J
                          * J
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos((byte) (posX + 1), posY);
+                        squares[2].setPos(posX, (byte) (posY + 1));
+                        squares[3].setPos(posX, (byte) (posY + 2));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[2]);
                         leftSide.add(squares[3]);
@@ -542,6 +376,11 @@ public class Piece {
                          *     L
                          * L L L
                          * */
+                        squares[0].setPos((byte) (posX + 2), posY);
+                        squares[1].setPos(posX, (byte) (posY + 1));
+                        squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
 
@@ -558,6 +397,11 @@ public class Piece {
                          * L
                          * L L
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos(posX, (byte) (posY + 1));
+                        squares[2].setPos(posX, (byte) (posY + 2));
+                        squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[2]);
@@ -574,6 +418,11 @@ public class Piece {
                          * L L L
                          * L
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos((byte) (posX + 1), posY);
+                        squares[2].setPos((byte) (posX + 2), posY);
+                        squares[3].setPos(posX, (byte) (posY + 1));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[3]);
 
@@ -590,6 +439,11 @@ public class Piece {
                          *   L
                          *   L
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos((byte) (posX + 1), posY);
+                        squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[2]);
                         leftSide.add(squares[3]);
@@ -608,6 +462,11 @@ public class Piece {
                  * O O
                  * O O
                  * */
+                squares[0].setPos(posX, posY);
+                squares[1].setPos((byte) (posX + 1), posY);
+                squares[2].setPos(posX, (byte) (posY + 1));
+                squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
+                
                 leftSide.add(squares[0]);
                 leftSide.add(squares[2]);
 
@@ -623,6 +482,11 @@ public class Piece {
                      *   S S
                      * S S
                      * */
+                    squares[0].setPos((byte) (posX + 1), posY);
+                    squares[1].setPos((byte) (posX + 2), posY);
+                    squares[2].setPos(posX, (byte) (posY + 1));
+                    squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
+                    
                     leftSide.add(squares[0]);
                     leftSide.add(squares[2]);
 
@@ -638,6 +502,11 @@ public class Piece {
                      * S S
                      *   S
                      * */
+                    squares[0].setPos(posX, posY);
+                    squares[1].setPos(posX, (byte) (posY + 1));
+                    squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                    squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
+                    
                     leftSide.add(squares[0]);
                     leftSide.add(squares[1]);
                     leftSide.add(squares[3]);
@@ -657,6 +526,11 @@ public class Piece {
                          *   T
                          * T T T
                          * */
+                        squares[0].setPos((byte) (posX + 1), posY);
+                        squares[1].setPos(posX, (byte) (posY + 1));
+                        squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
 
@@ -672,6 +546,11 @@ public class Piece {
                          * T T
                          * T
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos(posX, (byte) (posY + 1));
+                        squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[3].setPos(posX, (byte) (posY + 2));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[3]);
@@ -688,6 +567,11 @@ public class Piece {
                          * T T T
                          *   T
                          * */
+                        squares[0].setPos(posX, posY);
+                        squares[1].setPos((byte) (posX + 1), posY);
+                        squares[2].setPos((byte) (posX + 2), posY);
+                        squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[3]);
 
@@ -704,6 +588,11 @@ public class Piece {
                          * T T
                          *   T
                          * */
+                        squares[0].setPos((byte) (posX + 1), posY);
+                        squares[1].setPos(posX, (byte) (posY + 1));
+                        squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                        squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
+                        
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[3]);
@@ -723,6 +612,11 @@ public class Piece {
                      * Z Z
                      *   Z Z
                      * */
+                    squares[0].setPos(posX, posY);
+                    squares[1].setPos((byte) (posX + 1), posY);
+                    squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                    squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
+                    
                     leftSide.add(squares[0]);
                     leftSide.add(squares[2]);
 
@@ -738,6 +632,11 @@ public class Piece {
                      * Z Z
                      * Z
                      * */
+                    squares[0].setPos((byte) (posX + 1), posY);
+                    squares[1].setPos(posX, (byte) (posY + 1));
+                    squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
+                    squares[3].setPos(posX, (byte) (posY + 2));
+                    
                     leftSide.add(squares[0]);
                     leftSide.add(squares[1]);
                     leftSide.add(squares[3]);

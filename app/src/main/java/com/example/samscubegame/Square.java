@@ -47,9 +47,7 @@ public class Square {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    void draw(byte posX, byte posY, final Canvas canvas) {
-        this.posX = posX;
-        this.posY = posY;
+    void draw(final Canvas canvas) {
         this.paint.setBlendMode(BlendMode.SRC_OVER);
         // Draw the square
         canvas.drawRect(posX * size, posY * size, size + posX * size, size + posY * size, paint);
