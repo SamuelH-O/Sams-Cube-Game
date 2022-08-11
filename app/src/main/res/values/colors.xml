@@ -1,13 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="charcoal">#264653</color>
-    <color name="persian_green">#2a9d8f</color>
-    <color name="maize_crayola">#e9c46a</color>
-    <color name="sandy_brown">#f4a261</color>
-    <color name="burnt_sienna">#e76f51</color>
-    <color name="eerie_black">#212121</color>
+    <!-- Primary brand color -->
+    <color name="primary100">#ffffff</color>
+    <color name="primary90">#c6e7ff</color>
+    <color name="primary80">#83cfff</color>
+    <color name="primary40">#00658d</color>
+    <color name="primary30">#004c6b</color>
+    <color name="primary20">#00344b</color>
+    <color name="primary10">#001e2d</color>
+    <!-- Secondary brand color -->
+    <color name="secondary100">#ffffff</color>
+    <color name="secondary90">#d2e5f4</color>
+    <color name="secondary80">#b6c9d8</color>
+    <color name="secondary40">#4f616e</color>
+    <color name="secondary30">#374955</color>
+    <color name="secondary20">#21323e</color>
+    <color name="secondary10">#0b1d28</color>
+    <!-- Tertiary brand color -->
+    <color name="tertiary100">#ffffff</color>
+    <color name="tertiary90">#e8ddff</color>
+    <color name="tertiary80">#ccc1e9</color>
+    <color name="tertiary40">#62597c</color>
+    <color name="tertiary30">#4a4263</color>
+    <color name="tertiary20">#332c4b</color>
+    <color name="tertiary10">#1e1635</color>
+    <!-- Error brand color -->
+    <color name="error100">#ffffff</color>
+    <color name="error90">#ffdad6</color>
+    <color name="error80">#ffb4ab</color>
+    <color name="error40">#ba1a1a</color>
+    <color name="error30">#93000a</color>
+    <color name="error20">#690005</color>
+    <color name="error10">#410002</color>
+    <!-- Surface brand color -->
+    <color name="neutral99">#fcfcff</color>
+    <color name="neutral90">#e2e2e5</color>
+    <color name="neutral80">#c5c6c9</color>
+    <color name="neutral10">#191c1e</color>
+    <!-- Surface-variant brand color -->
+    <color name="neutralVariant90">#dde3ea</color>
+    <color name="neutralVariant80">#c1c7ce</color>
+    <color name="neutralVariant60">#8b9198</color>
+    <color name="neutralVariant50">#71787e</color>
+    <color name="neutralVariant30">#41484d</color>
+    <!-- Basic colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Custom colors -->
     <color name="I_color">#31C7EF</color>
     <color name="J_color">#5A65AD</color>
     <color name="L_color">#EF7921</color>

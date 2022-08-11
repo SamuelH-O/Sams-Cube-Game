@@ -22,8 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Objects;
-
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
@@ -51,9 +49,6 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Hide the ActionBar
-        Objects.requireNonNull(getSupportActionBar()).hide();
 
         // Lock the screen rotation to portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

@@ -1,14 +1,14 @@
 package com.example.samscubegame;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MenuActivity extends AppCompatActivity {

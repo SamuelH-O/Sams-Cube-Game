@@ -1,16 +1,42 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.SamsCubeGame" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/burnt_sienna</item>
-        <item name="colorPrimaryVariant">@color/sandy_brown</item>
-        <item name="colorOnPrimary">@color/eerie_black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/charcoal</item>
-        <item name="colorSecondaryVariant">@color/persian_green</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.SamsCubeGame" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/primary40</item>
+        <item name="colorOnPrimary">@color/primary100</item>
+        <item name="colorPrimaryContainer">@color/primary90</item>
+        <item name="colorOnPrimaryContainer">@color/primary10</item>
+        <item name="colorPrimaryInverse">@color/primary80</item>
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/secondary40</item>
+        <item name="colorOnSecondary">@color/secondary100</item>
+        <item name="colorSecondaryContainer">@color/secondary90</item>
+        <item name="colorOnSecondaryContainer">@color/secondary10</item>
+        <!-- Tertiary Brand color -->
+        <item name="colorTertiary">@color/tertiary40</item>
+        <item name="colorOnTertiary">@color/tertiary100</item>
+        <item name="colorTertiaryContainer">@color/tertiary90</item>
+        <item name="colorOnTertiaryContainer">@color/tertiary10</item>
+        <!-- Error brand color -->
+        <item name="colorError">@color/error40</item>
+        <item name="colorOnError">@color/error100</item>
+        <item name="colorErrorContainer">@color/error90</item>
+        <item name="colorOnErrorContainer">@color/error10</item>
+        <!-- Surface brand color -->
+        <item name="colorSurface">@color/neutral99</item>
+        <item name="colorOnSurface">@color/neutral10</item>
+        <!-- Surface-variant brand color -->
+        <item name="colorSurfaceVariant">@color/neutralVariant90</item>
+        <item name="colorOnSurfaceVariant">@color/neutralVariant30</item>
+        <item name="colorSurfaceInverse">@color/neutralVariant30</item>
+        <item name="colorOnSurfaceInverse">@color/neutralVariant80</item>
+        <!-- Outline brand color -->
+        <item name="colorOutline">@color/neutralVariant50</item>
+        <!-- Background brand color -->
+        <item name="android:colorBackground">@color/neutral99</item>
+        <item name="colorOnBackground">@color/neutral10</item>
+        <!-- Status bar color -->
+        <!-- <item name="android:statusBarColor">@attr/colorPrimary</item> -->
+        <!-- Customize your theme here -->
     </style>
 </resources>
