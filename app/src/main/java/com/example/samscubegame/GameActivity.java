@@ -188,7 +188,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 drawFrame();
             }
         });
-        
+
         // Add OnClickListener to ImageViewMoveLeft (controls left)
         imgViewMoveLeft.setOnClickListener(view -> {
             this.animateImageView(imgViewMoveLeft);

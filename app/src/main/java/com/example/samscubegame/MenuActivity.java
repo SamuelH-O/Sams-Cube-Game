@@ -1,13 +1,11 @@
 package com.example.samscubegame;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,11 +29,7 @@ public class MenuActivity extends AppCompatActivity {
 
     /** Called when the user taps the settings button */
     public void openSettings(View view) {
-        Context context = getApplicationContext();
-        CharSequence text = "I don't know how to make a cool bottom sheet yet :(";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+        ModalBottomSheetFragment modalBottomSheetFragment = new ModalBottomSheetFragment();
+        modalBottomSheetFragment.show(getSupportFragmentManager(), "Modal BottomSheet");
     }
 }

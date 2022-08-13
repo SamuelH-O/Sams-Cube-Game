@@ -5,12 +5,15 @@
       <map>
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/drawable/double_down_chevron.xml" value="0.3425" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/drawable/down_chevron.xml" value="0.3425" />
+        <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/drawable/ic_bottom_sheet_grapple.xml" value="0.343" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/drawable/left_chevron.xml" value="0.3425" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/drawable/right_chevron.xml" value="0.3425" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/drawable/rotating_arrow.xml" value="0.3425" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/layout/activity_game.xml" value="0.5" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/layout/activity_menu.xml" value="0.3207070707070707" />
+        <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/layout/bottom_sheet_view.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Samuel/AndroidStudioProjects/SamsCubeGame/app/src/main/res/layout/bottom_sheet_view_settings.xml" value="0.365625" />
       </map>
     </option>
   </component>
