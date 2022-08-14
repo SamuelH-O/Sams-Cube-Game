@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
@@ -245,6 +246,27 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
             drawFrame();
         });
+        gameLoop();
+    }
+
+    private void gameLoop() {
+        double level = 1d;
+        double timeBtwnStep = Math.pow((0.8d-((level-1d)*0.007d)), (level-1d)) * 1000d;
+        Handler gameLoopHandler = new Handler();
+        Runnable r = new Runnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                // Move piece to the bottom if possible
+                if (currentPiece.canMoveBottom(grid) && i > 0) {
+                    currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
+                }
+                drawFrame();
+                i = i + 1;
+                gameLoopHandler.postDelayed(this, (long) timeBtwnStep);
+            }
+        };
+        gameLoopHandler.post(r);
     }
 
     private void drawFrame() {
