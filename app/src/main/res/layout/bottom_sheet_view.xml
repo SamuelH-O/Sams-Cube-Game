@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/bottomSheetGrapple"
@@ -46,23 +46,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/materialDividerSettings" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switchMaterialSettings"
+    <LinearLayout
+        android:id="@+id/linearLayoutSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/show_grid_option"
-        android:textSize="16sp"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/debugTitleSettings" />
+        app:layout_constraintTop_toBottomOf="@id/debugTitleSettings">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchShowGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/show_grid_option"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchMaterialSettings" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSettings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

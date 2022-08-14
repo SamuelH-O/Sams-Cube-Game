@@ -3,6 +3,8 @@ package com.example.samscubegame;
 import static android.graphics.Color.pack;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.BlendMode;
 import android.graphics.Canvas;
@@ -45,6 +47,9 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private float[] gridPoints;
 
+    SharedPreferences sharedPref;
+    boolean showGrid;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,9 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         imgViewMoveBottom = findViewById(R.id.imageViewMoveBottom);
 
         grid = new GridOfGame(squareSize, getResources());
+
+        sharedPref = this.getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
+        showGrid = sharedPref.getBoolean(getString(R.string.show_grid_key), false);
     }
 
     // TODO: create a start game method and a running game method & find the correct way to do it
@@ -274,19 +282,21 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         canvas.drawPaint(greyPaint);
 
         // Add debug grid & it's text
-        Paint whitePaint = new Paint();
-        whitePaint.setARGB(255, 255, 255, 255);
-        whitePaint.setBlendMode(BlendMode.DIFFERENCE);
-        whitePaint.setTextSize(canvas.getHeight() / 16f / 3f);
-        whitePaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawLines(gridPoints, whitePaint);
-        String str;
-        float xOffset = canvas.getWidth() / 10f, yOffset = canvas.getHeight() / 16f;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 16; j++) {
-                str = ("" + i + " " + j);
-                // ((whitePaint.descent() - whitePaint.ascent()) / 2) is the distance from the baseline to the center.
-                canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
+        if (showGrid) {
+            Paint whitePaint = new Paint();
+            whitePaint.setARGB(255, 255, 255, 255);
+            whitePaint.setBlendMode(BlendMode.DIFFERENCE);
+            whitePaint.setTextSize(canvas.getHeight() / 16f / 3f);
+            whitePaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawLines(gridPoints, whitePaint);
+            String str;
+            float xOffset = canvas.getWidth() / 10f, yOffset = canvas.getHeight() / 16f;
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 16; j++) {
+                    str = ("" + i + " " + j);
+                    // ((whitePaint.descent() - whitePaint.ascent()) / 2) is the distance from the baseline to the center.
+                    canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
+                }
             }
         }
     }
