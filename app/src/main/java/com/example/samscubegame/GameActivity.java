@@ -48,9 +48,15 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     ImageView imgViewSnap;
     ImageView imgViewMoveBottom;
 
+    long[] bgColors = new long[3];
+    LinearGradient bgGradient;
+    Paint gradientPaint = new Paint();
+    Paint greyPaint = new Paint();
+
     Piece currentPiece;
     Piece nextPiece;
     ArrayList<Piece> rndmBag;
+    Random rndm = new Random();
 
     private float[] gridPoints;
 
@@ -95,6 +101,22 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // Get the size of the squares by the smaller side of the canvas
         if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
         else this.squareSize = (float) canvas.getHeight() / 10;
+
+        // Create the colors for the gradient (TODO: add the option to modify them)
+        bgColors[0] = pack(0.847f, 0.035f, 0.494f, 1.0f);
+        bgColors[1] = pack(0.549f, 0.341f, 0.611f,1.0f);
+        bgColors[2] =  pack(0.141f, 0.274f, 0.556f,1.0f);
+
+        // Create the gradient from the top left to the bottom right (TODO: add the option to modify the direction)
+        bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
+
+        // Set the gradient to a paint with the right parameters
+        gradientPaint.setDither(true);
+        gradientPaint.setShader(bgGradient);
+
+        // Add a semi-transparent grey paint to help focus (TODO: add the ability to modify this)
+        greyPaint.setARGB(63, 61, 61, 61);
+        greyPaint.setBlendMode(BlendMode.DARKEN);
 
         // Measure debug grid points
         gridPoints = new float[64 + 40];
@@ -302,7 +324,6 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
         }
 
-        Random rndm = new Random();
         int rndmInt = rndm.nextInt(rndmBag.size());
         Piece ret = rndmBag.get(rndmInt);
         rndmBag.remove(rndmInt);
@@ -322,27 +343,9 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void setBackground(final Canvas canvas) {
-        // Create the colors for the gradient (TODO: add the option to modify them)
-        long[] bgColors = new long[3];
-        bgColors[0] = pack(0.847f, 0.035f, 0.494f, 1.0f);
-        bgColors[1] = pack(0.549f, 0.341f, 0.611f,1.0f);
-        bgColors[2] =  pack(0.141f, 0.274f, 0.556f,1.0f);
-
-        // Create the gradient from the top left to the bottom right (TODO: add the option to modify the direction)
-        LinearGradient bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
-
-        // Add the gradient to a paint with the right parameters
-        Paint gradientPaint = new Paint();
-        gradientPaint.setDither(true);
-        gradientPaint.setShader(bgGradient);
-
         // Add a fancy background
         canvas.drawPaint(gradientPaint);
 
-        // Add a semi-transparent grey paint to help focus (TODO: add the ability to modify this)
-        Paint greyPaint = new Paint();
-        greyPaint.setARGB(63, 61, 61, 61);
-        greyPaint.setBlendMode(BlendMode.DARKEN);
         canvas.drawPaint(greyPaint);
 
         // Add debug grid & it's text
