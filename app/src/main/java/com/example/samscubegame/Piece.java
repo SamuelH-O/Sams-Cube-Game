@@ -28,14 +28,14 @@ public class Piece {
             squares[i] = new Square(squareSize, t, resources);
         }
     }
-    
+
     void draw(final Canvas canvas) {
         for (Square i : squares) {
             i.draw(canvas);
         }
     }
-    
-    boolean canMoveLeft(GridOfGame grid) {
+
+    boolean canMoveLeft(final GridOfGame grid) {
         boolean ret;
         if (posX - 1 >= 0) {
             ret = true;
@@ -50,7 +50,7 @@ public class Piece {
         return ret;
     }
 
-    boolean canMoveRight(GridOfGame grid) {
+    boolean canMoveRight(final GridOfGame grid) {
         boolean ret;
         if (posX + this.getWidth() < 10) {
             ret = true;
@@ -65,12 +65,16 @@ public class Piece {
         return ret;
     }
 
-    boolean canMoveBottom(GridOfGame grid) {
+    boolean canMoveBottom(final GridOfGame grid) {
         boolean ret;
-        if (posX + this.getHeight() < 16) {
+        if (posX + this.getHeight() - 1 < 16) {
             ret = true;
             for (Square i : bottomSide) {
-                if (grid.isFilledAt(i.posX, (byte) (i.posY + 1))) {
+                if (i.posY < 15) {
+                    if (grid.isFilledAt(i.posX, (byte) (i.posY + 1))) {
+                        ret = false;
+                    }
+                } else {
                     ret = false;
                 }
             }
@@ -80,7 +84,7 @@ public class Piece {
         return ret;
     }
 
-    void drop(GridOfGame grid) {
+    void drop(final GridOfGame grid) {
         byte posYOfPieceDropped = 16;
         byte squareAbove, bestSquareAbove = 15;
         for (Square i : bottomSide) {
@@ -250,6 +254,7 @@ public class Piece {
         leftSide.clear();
         rightSide.clear();
         bottomSide.clear();
+        //Log.d("squares[0]", "null ? " + (squares[0] == null));
         switch (piece) {
             case I:
                 if (rotation % 2 == 0) {
@@ -257,9 +262,9 @@ public class Piece {
                     for (byte i = 0; i < 4; i++) {
                         squares[i].setPos((byte) (posX + i), posY);
                     }
-                    
+
                     leftSide.add(squares[0]);
-                    
+
                     rightSide.add(squares[3]);
 
                     bottomSide.addAll(Arrays.asList(squares));
@@ -273,9 +278,9 @@ public class Piece {
                     for (byte i = 0; i < 4; i++) {
                         squares[i].setPos(posX, (byte) (posY + i));
                     }
-                    
+
                     leftSide.addAll(Arrays.asList(squares));
-                    
+
                     rightSide.addAll(Arrays.asList(squares));
 
                     bottomSide.add(squares[3]);
@@ -292,10 +297,10 @@ public class Piece {
                         squares[1].setPos((byte) (posX + 1), posY);
                         squares[2].setPos((byte) (posX + 2), posY);
                         squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[3]);
-                        
+
                         rightSide.add(squares[2]);
                         rightSide.add(squares[3]);
 
@@ -313,11 +318,11 @@ public class Piece {
                         squares[1].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[2].setPos(posX, (byte) (posY + 2));
                         squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[2]);
-                        
+
                         rightSide.add(squares[0]);
                         rightSide.add(squares[1]);
                         rightSide.add(squares[3]);
@@ -334,10 +339,10 @@ public class Piece {
                         squares[1].setPos(posX, (byte) (posY + 1));
                         squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
-                        
+
                         rightSide.add(squares[0]);
                         rightSide.add(squares[3]);
 
@@ -355,7 +360,7 @@ public class Piece {
                         squares[1].setPos((byte) (posX + 1), posY);
                         squares[2].setPos(posX, (byte) (posY + 1));
                         squares[3].setPos(posX, (byte) (posY + 2));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[2]);
                         leftSide.add(squares[3]);
@@ -380,7 +385,7 @@ public class Piece {
                         squares[1].setPos(posX, (byte) (posY + 1));
                         squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
 
@@ -401,7 +406,7 @@ public class Piece {
                         squares[1].setPos(posX, (byte) (posY + 1));
                         squares[2].setPos(posX, (byte) (posY + 2));
                         squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[2]);
@@ -422,7 +427,7 @@ public class Piece {
                         squares[1].setPos((byte) (posX + 1), posY);
                         squares[2].setPos((byte) (posX + 2), posY);
                         squares[3].setPos(posX, (byte) (posY + 1));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[3]);
 
@@ -443,7 +448,7 @@ public class Piece {
                         squares[1].setPos((byte) (posX + 1), posY);
                         squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[2]);
                         leftSide.add(squares[3]);
@@ -466,7 +471,7 @@ public class Piece {
                 squares[1].setPos((byte) (posX + 1), posY);
                 squares[2].setPos(posX, (byte) (posY + 1));
                 squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
-                
+
                 leftSide.add(squares[0]);
                 leftSide.add(squares[2]);
 
@@ -486,7 +491,7 @@ public class Piece {
                     squares[1].setPos((byte) (posX + 2), posY);
                     squares[2].setPos(posX, (byte) (posY + 1));
                     squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
-                    
+
                     leftSide.add(squares[0]);
                     leftSide.add(squares[2]);
 
@@ -506,7 +511,7 @@ public class Piece {
                     squares[1].setPos(posX, (byte) (posY + 1));
                     squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                     squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
-                    
+
                     leftSide.add(squares[0]);
                     leftSide.add(squares[1]);
                     leftSide.add(squares[3]);
@@ -530,7 +535,7 @@ public class Piece {
                         squares[1].setPos(posX, (byte) (posY + 1));
                         squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
 
@@ -540,6 +545,7 @@ public class Piece {
                         bottomSide.add(squares[1]);
                         bottomSide.add(squares[2]);
                         bottomSide.add(squares[3]);
+                        break;
                     case 1:
                         /*
                          * T
@@ -550,7 +556,7 @@ public class Piece {
                         squares[1].setPos(posX, (byte) (posY + 1));
                         squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[3].setPos(posX, (byte) (posY + 2));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[3]);
@@ -571,7 +577,7 @@ public class Piece {
                         squares[1].setPos((byte) (posX + 1), posY);
                         squares[2].setPos((byte) (posX + 2), posY);
                         squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[3]);
 
@@ -592,7 +598,7 @@ public class Piece {
                         squares[1].setPos(posX, (byte) (posY + 1));
                         squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                         squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
-                        
+
                         leftSide.add(squares[0]);
                         leftSide.add(squares[1]);
                         leftSide.add(squares[3]);
@@ -616,7 +622,7 @@ public class Piece {
                     squares[1].setPos((byte) (posX + 1), posY);
                     squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                     squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
-                    
+
                     leftSide.add(squares[0]);
                     leftSide.add(squares[2]);
 
@@ -636,7 +642,7 @@ public class Piece {
                     squares[1].setPos(posX, (byte) (posY + 1));
                     squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
                     squares[3].setPos(posX, (byte) (posY + 2));
-                    
+
                     leftSide.add(squares[0]);
                     leftSide.add(squares[1]);
                     leftSide.add(squares[3]);

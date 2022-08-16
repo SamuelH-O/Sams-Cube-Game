@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+@RequiresApi(api = Build.VERSION_CODES.Q)
 class GridOfGame {
     // First number = columns | Second number = rows
     private final Square[][] grid = new Square[10][16];
@@ -20,12 +21,10 @@ class GridOfGame {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     void draw(final Canvas canvas) {
         for(byte i = 0; i < 10; i++) {
             for (byte j = 0; j < 16; j++) {
                 if (grid[i][j].type != PieceTypes.NULL) {
-                    grid[i][j].setPos(grid[i][j].posX, grid[i][j].posY);
                     grid[i][j].draw(canvas);
                 }
             }
@@ -74,12 +73,12 @@ class GridOfGame {
     @SuppressLint("InlinedApi")
     void printGridState() {
         StringBuilder str = new StringBuilder();
-        for(byte i = 0; i < 10; i++) {
-            for(byte j = 0; j < 16; j++) {
-                str.append("|").append(tetrominoTypeToString(grid[i][j].type));
+        for(byte i = 0; i < 16; i++) {
+            for(byte j = 0; j < 10; j++) {
+                str.append("|").append(tetrominoTypeToString(grid[j][i].type));
             }
             str.append("|\n").append("#####################\n");
         }
-        Log.i(GameActivity.TAG, "State of the grid :\n" + str);
+        Log.d("Grid", "State of the grid :\n" + str);
     }
 }

@@ -15,6 +15,7 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
@@ -25,14 +26,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Random;
+
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     SurfaceView gameSurfaceView;
 
     SurfaceHolder surfaceHolder;
-
-    static final String TAG = "SurfaceView";
 
     float squareSize;
 
@@ -45,6 +49,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     ImageView imgViewMoveBottom;
 
     Piece currentPiece;
+    Piece nextPiece;
+    ArrayList<Piece> rndmBag;
 
     private float[] gridPoints;
 
@@ -132,6 +138,14 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
         }
         surfaceHolder.unlockCanvasAndPost(canvas);
+
+        rndmBag = new ArrayList<>();
+        for (PieceTypes i : PieceTypes.values()) {
+            if (i != PieceTypes.NULL) {
+                rndmBag.add(new Piece(i, squareSize, getResources()));
+            }
+        }
+
         startGame();
     }
 
@@ -143,7 +157,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
     private void startGame() {
-        currentPiece = new Piece(PieceTypes.J, squareSize, getResources());
+        currentPiece = getRandomPiece();
+        nextPiece = getRandomPiece();
 
         // Get the radioGroup
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
@@ -257,9 +272,16 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             int i = 0;
             @Override
             public void run() {
-                // Move piece to the bottom if possible
+                // Move piece one step to the bottom if possible
                 if (currentPiece.canMoveBottom(grid) && i > 0) {
                     currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
+                } else if (i > 0) {
+                    currentPiece.placeInGrid(grid);
+                    currentPiece = nextPiece;
+
+                    nextPiece = getRandomPiece();
+
+                    currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
                 }
                 drawFrame();
                 i = i + 1;
@@ -267,6 +289,26 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
         };
         gameLoopHandler.post(r);
+    }
+
+    private Piece getRandomPiece() {
+        Instant start = Instant.now();// TODO: Optimize this
+        // Refill the bag if empty
+        if (rndmBag.isEmpty()) {
+            for (PieceTypes i : PieceTypes.values()) {
+                if (i != PieceTypes.NULL) {
+                    rndmBag.add(new Piece(i, squareSize, getResources()));
+                }
+            }
+        }
+
+        Random rndm = new Random();
+        int rndmInt = rndm.nextInt(rndmBag.size());
+        Piece ret = rndmBag.get(rndmInt);
+        rndmBag.remove(rndmInt);
+        Instant finish = Instant.now();
+        Log.d("Time Elapsed", "" + Duration.between(start, finish).toNanos());
+        return ret;
     }
 
     private void drawFrame() {

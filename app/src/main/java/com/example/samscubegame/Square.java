@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 public class Square {
@@ -18,6 +19,15 @@ public class Square {
 
     byte posX, posY;
 
+    int borderSize = 5;
+
+    float[] colorLightHSV = new float[3];
+    Paint lightPaint = new Paint();
+
+    float[] colorDarkHSV = new float[3];
+    Paint darkPaint = new Paint();
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     Square(float size, PieceTypes t, final Resources resources) {
         this.type = t;
         switch (t) {
@@ -43,34 +53,30 @@ public class Square {
                 this.paint.setColor(resources.getColor(R.color.Z_color, null));
                 break;
         }
+
+        this.paint.setBlendMode(BlendMode.SRC_OVER);
+
+        Color.colorToHSV(paint.getColor(), colorLightHSV);
+        colorLightHSV[2] = colorLightHSV[2] + 0.6f;
+        this.lightPaint.setColor(Color.HSVToColor(colorLightHSV));
+        this.lightPaint.setBlendMode(BlendMode.SRC_OVER);
+
+        Color.colorToHSV(paint.getColor(), colorDarkHSV);
+        colorDarkHSV[2] = colorDarkHSV[2] - 0.6f;
+        darkPaint.setColor(Color.HSVToColor(colorDarkHSV));
+        darkPaint.setBlendMode(BlendMode.SRC_OVER);
+
         this.size = size;
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     void draw(final Canvas canvas) {
-        this.paint.setBlendMode(BlendMode.SRC_OVER);
         // Draw the square
         canvas.drawRect(posX * size, posY * size, size + posX * size, size + posY * size, paint);
 
-        int borderSize = 5;
-
         // Draw the light border
-        float[] colorLightHSV = new float[3];
-        Color.colorToHSV(paint.getColor(), colorLightHSV);
-        colorLightHSV[2] = colorLightHSV[2] + 0.6f;
-        Paint lightPaint = new Paint();
-        lightPaint.setColor(Color.HSVToColor(colorLightHSV));
-        lightPaint.setBlendMode(BlendMode.SRC_OVER);
         canvas.drawRect(posX * size, posY * size, borderSize + posX * size, size + posY * size, lightPaint);
         canvas.drawRect(posX * size, posY * size, size + posX * size, borderSize + posY * size, lightPaint);
 
         // Draw the dark border
-        float[] colorDarkHSV = new float[3];
-        Color.colorToHSV(paint.getColor(), colorDarkHSV);
-        colorDarkHSV[2] = colorDarkHSV[2] - 0.6f;
-        Paint darkPaint = new Paint();
-        darkPaint.setColor(Color.HSVToColor(colorDarkHSV));
-        darkPaint.setBlendMode(BlendMode.SRC_OVER);
         canvas.drawRect(size + posX * size, posY * size, size + posX * size - borderSize, size + posY * size, darkPaint);
         canvas.drawRect(posX * size, size + posY * size, size + posX * size, size + posY * size - borderSize, darkPaint);
     }
@@ -78,5 +84,17 @@ public class Square {
     void setPos(byte posX, byte posY) {
         this.posX = posX;
         this.posY = posY;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Square{" +
+                "paint=" + paint +
+                ", size=" + size +
+                ", type=" + type +
+                ", posX=" + posX +
+                ", posY=" + posY +
+                '}';
     }
 }
