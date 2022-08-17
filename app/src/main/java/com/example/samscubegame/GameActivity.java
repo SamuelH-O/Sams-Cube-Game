@@ -9,7 +9,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.Build;
@@ -18,7 +17,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -40,11 +39,11 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private GridOfGame grid;
 
-    private ImageView imgViewMoveLeft;
-    private ImageView imgViewMoveRight;
-    private ImageView imgViewRotateRight;
-    private ImageView imgViewSnap;
-    private ImageView imgViewMoveBottom;
+    private Button buttonMoveLeft;
+    private Button buttonMoveRight;
+    private Button buttonRotateRight;
+    private Button buttonSnap;
+    private Button buttonMoveBottom;
 
     private final long[] bgColors = new long[3];
     private final Paint gradientPaint = new Paint();
@@ -68,6 +67,9 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Set the random seed to the current time
+        rndm.setSeed(Instant.now().toEpochMilli());
+
         // Lock the screen rotation to portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -79,11 +81,11 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         gameSurfaceView.getHolder().addCallback(this);
 
         // Initialize ImageViews (controls) with method findViewById()
-        imgViewMoveLeft = findViewById((R.id.imageViewMoveLeft));
-        imgViewMoveRight = findViewById(R.id.imageViewMoveRight);
-        imgViewRotateRight = findViewById(R.id.imageViewRotateRight);
-        imgViewSnap = findViewById(R.id.imageViewSnap);
-        imgViewMoveBottom = findViewById(R.id.imageViewMoveBottom);
+        buttonMoveLeft = findViewById(R.id.buttonMoveLeft);
+        buttonMoveRight = findViewById(R.id.buttonMoveRight);
+        buttonRotateRight = findViewById(R.id.buttonRotateRight);
+        buttonSnap = findViewById(R.id.buttonSnap);
+        buttonMoveBottom = findViewById(R.id.buttonMoveBottom);
 
         grid = new GridOfGame();
 
@@ -250,9 +252,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         });
 
         // Add OnClickListener to ImageViewMoveLeft (controls left)
-        imgViewMoveLeft.setOnClickListener(view -> {
-            this.animateImageView(imgViewMoveLeft);
-
+        buttonMoveLeft.setOnClickListener(view -> {
             // Move piece to the left if possible
             if (currentPiece.canMoveLeft(grid)) {
                 currentPiece.setPosAndRot((byte) (currentPiece.posX - 1), currentPiece.posY, currentPiece.rotation);
@@ -261,9 +261,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         });
 
         // Add OnClickListener to ImageViewMoveRight (controls right)
-        imgViewMoveRight.setOnClickListener(view -> {
-            this.animateImageView(imgViewMoveRight);
-
+        buttonMoveRight.setOnClickListener(view -> {
             // Move piece to the right if possible
             if (currentPiece.canMoveRight(grid)) {
                 currentPiece.setPosAndRot((byte) (currentPiece.posX + 1), currentPiece.posY, currentPiece.rotation);
@@ -272,25 +270,19 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         });
 
         // Add OnClickListener to ImageViewRotateRight (controls rotate)
-        imgViewRotateRight.setOnClickListener(view -> {
-            this.animateImageView(imgViewRotateRight);
-
+        buttonRotateRight.setOnClickListener(view -> {
             currentPiece.figureOutNextRotation(grid);
             drawFrame();
         });
 
         // Add OnClickListener to ImageViewSnap (controls snap)
-        imgViewSnap.setOnClickListener(view -> {
-            this.animateImageView(imgViewSnap);
-
+        buttonSnap.setOnClickListener(view -> {
             currentPiece.drop(grid);
             drawFrame();
         });
 
         // Add OnClickListener to ImageViewMoveBottom (controls bottom)
-        imgViewMoveBottom.setOnClickListener(view -> {
-            this.animateImageView(imgViewMoveBottom);
-
+        buttonMoveBottom.setOnClickListener(view -> {
             // Move piece to the bottom if possible
             if (currentPiece.canMoveBottom(grid)) {
                 currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
@@ -387,20 +379,5 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 }
             }
         }
-    }
-
-    private void animateImageView(ImageView imageView) {
-        // Create matrix to un-zoom inside the image
-        Matrix matrixZoom = new Matrix();
-        matrixZoom.setScale(0.9f, 0.9f);
-
-        // Apply the zoom
-        imageView.animateTransform(matrixZoom);
-
-        // After 100 milliseconds un-zoom
-        imageView.postDelayed(() -> {
-            matrixZoom.setScale(1f, 1f);
-            imageView.animateTransform(matrixZoom);
-        }, 100);
     }
 }
