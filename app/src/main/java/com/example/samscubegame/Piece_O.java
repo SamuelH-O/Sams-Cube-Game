@@ -14,17 +14,17 @@ public class Piece_O extends Piece {
         this.paint.setColor(resources.getColor(R.color.O_color, null));
     }
 
-    Piece_O(Piece_O pieceToCopy) {
+    private Piece_O(Piece_O pieceToCopy) {
         super(pieceToCopy);
         for (byte i = 0; i < 4; i++) {
             this.squares[i] = new Square(pieceToCopy.squares[0].size, pieceToCopy.paint);
         }
     }
 
+    @SuppressWarnings("RedundantThrows")
     @NonNull
     @Override
     protected Piece clone() throws CloneNotSupportedException {
-        super.clone();
         return new Piece_O(this);
     }
 

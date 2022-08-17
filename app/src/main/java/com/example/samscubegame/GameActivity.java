@@ -34,37 +34,34 @@ import java.util.Random;
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
-    SurfaceView gameSurfaceView;
-    SurfaceHolder gameSurfaceHolder;
+    private SurfaceHolder gameSurfaceHolder;
 
-    float squareSize;
+    private float squareSize;
 
-    GridOfGame grid;
+    private GridOfGame grid;
 
-    ImageView imgViewMoveLeft;
-    ImageView imgViewMoveRight;
-    ImageView imgViewRotateRight;
-    ImageView imgViewSnap;
-    ImageView imgViewMoveBottom;
+    private ImageView imgViewMoveLeft;
+    private ImageView imgViewMoveRight;
+    private ImageView imgViewRotateRight;
+    private ImageView imgViewSnap;
+    private ImageView imgViewMoveBottom;
 
-    long[] bgColors = new long[3];
-    LinearGradient bgGradient;
-    Paint gradientPaint = new Paint();
-    Paint greyPaint = new Paint();
+    private final long[] bgColors = new long[3];
+    private final Paint gradientPaint = new Paint();
+    private final Paint greyPaint = new Paint();
 
-    Runnable gameLoopRunnable;
+    private Runnable gameLoopRunnable;
 
-    Piece currentPiece = null;
-    Piece nextPiece = null;
+    private Piece currentPiece = null;
+    private Piece nextPiece = null;
 
-    ArrayList<Piece> fullBag = null;
-    ArrayList<Piece> rndmBag = null;
-    Random rndm = new Random();
+    private ArrayList<Piece> fullBag = null;
+    private ArrayList<Piece> rndmBag = null;
+    private final Random rndm = new Random();
 
     private float[] gridPoints;
 
-    SharedPreferences sharedPref;
-    boolean showGrid;
+    private boolean showGrid;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -77,7 +74,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         setContentView(R.layout.activity_game);
 
         // Get the SurfaceView
-        gameSurfaceView = findViewById(R.id.surfaceView);
+        SurfaceView gameSurfaceView = findViewById(R.id.surfaceView);
 
         gameSurfaceView.getHolder().addCallback(this);
 
@@ -90,7 +87,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         grid = new GridOfGame();
 
-        sharedPref = this.getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
         showGrid = sharedPref.getBoolean(getString(R.string.show_grid_key), false);
     }
 
@@ -120,7 +117,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         bgColors[2] =  pack(0.141f, 0.274f, 0.556f,1.0f);
 
         // Create the gradient from the top left to the bottom right (TODO: add the option to modify the direction)
-        bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
+        LinearGradient bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
 
         // Set the gradient to a paint with the right parameters
         gradientPaint.setDither(true);

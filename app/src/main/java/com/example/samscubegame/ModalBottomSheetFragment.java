@@ -19,8 +19,8 @@ import java.util.HashMap;
 
 public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
 
-    HashMap<CompoundButton, Integer> optionToKey;
-    SharedPreferences sharedPref;
+    private HashMap<CompoundButton, Integer> optionToKey;
+    private SharedPreferences sharedPref;
 
     @Nullable
     @Override
@@ -59,7 +59,7 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void changePref(CompoundButton compoundButton, boolean isChecked) {
+    private void changePref(CompoundButton compoundButton, boolean isChecked) {
         SharedPreferences.Editor editor = sharedPref.edit();
         Integer tmpInteger = optionToKey.get(compoundButton);
         String tmpStr;
