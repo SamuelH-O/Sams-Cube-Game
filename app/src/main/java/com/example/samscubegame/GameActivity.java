@@ -35,8 +35,7 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     SurfaceView gameSurfaceView;
-
-    SurfaceHolder surfaceHolder;
+    SurfaceHolder gameSurfaceHolder;
 
     float squareSize;
 
@@ -53,9 +52,13 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     Paint gradientPaint = new Paint();
     Paint greyPaint = new Paint();
 
-    Piece currentPiece;
-    Piece nextPiece;
-    ArrayList<Piece> rndmBag;
+    Runnable gameLoopRunnable;
+
+    Piece currentPiece = null;
+    Piece nextPiece = null;
+
+    ArrayList<Piece> fullBag = null;
+    ArrayList<Piece> rndmBag = null;
     Random rndm = new Random();
 
     private float[] gridPoints;
@@ -85,17 +88,26 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         imgViewSnap = findViewById(R.id.imageViewSnap);
         imgViewMoveBottom = findViewById(R.id.imageViewMoveBottom);
 
-        grid = new GridOfGame(squareSize, getResources());
+        grid = new GridOfGame();
 
         sharedPref = this.getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
         showGrid = sharedPref.getBoolean(getString(R.string.show_grid_key), false);
     }
 
-    // TODO: create a start game method and a running game method & find the correct way to do it
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        this.surfaceHolder = surfaceHolder;
+        this.gameSurfaceHolder = surfaceHolder;
         Canvas canvas = surfaceHolder.lockCanvas();
 
         // Get the size of the squares by the smaller side of the canvas
@@ -119,53 +131,77 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         greyPaint.setBlendMode(BlendMode.DARKEN);
 
         // Measure debug grid points
-        gridPoints = new float[64 + 40];
-        float linesYOffset = 0f, columnsXOffset = 0f;
-        boolean isFirstPoint = true;
-        for (int i = 0; i < 64 + 40; i++) {
-            if (i < 64) {// Is points for lines
-                if (isFirstPoint) {// Is first point
-                    if (i % 2 == 0) {// Is x
-                        gridPoints[i] = 0f;
-                    } else {// Is y
-                        gridPoints[i] = linesYOffset + (canvas.getHeight() / 16f);
-                        linesYOffset = linesYOffset + (canvas.getHeight() / 16f);
-                        isFirstPoint = false;
+        if (showGrid) {
+            gridPoints = new float[64 + 40];
+            float linesYOffset = 0f, columnsXOffset = 0f;
+            boolean isFirstPoint = true;
+            for (int i = 0; i < 64 + 40; i++) {
+                if (i < 64) {// Is points for lines
+                    if (isFirstPoint) {// Is first point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = 0f;
+                        } else {// Is y
+                            gridPoints[i] = linesYOffset + (canvas.getHeight() / 16f);
+                            linesYOffset = linesYOffset + (canvas.getHeight() / 16f);
+                            isFirstPoint = false;
+                        }
+                    } else {// Is second point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = canvas.getWidth();
+                        } else {// Is y
+                            gridPoints[i] = linesYOffset;
+                            isFirstPoint = true;
+                        }
                     }
-                } else {// Is second point
-                    if (i % 2 == 0) {// Is x
-                        gridPoints[i] = canvas.getWidth();
-                    } else {// Is y
-                        gridPoints[i] = linesYOffset;
-                        isFirstPoint = true;
-                    }
-                }
-            } else {// Is points for columns
-                if (isFirstPoint) {// Is first point
-                    if (i % 2 == 0) {// Is x
-                        gridPoints[i] = columnsXOffset + (canvas.getWidth() / 10f);
-                        columnsXOffset = columnsXOffset + (canvas.getWidth() / 10f);
-                    } else {// Is y
-                        gridPoints[i] = 0f;
-                        isFirstPoint = false;
-                    }
-                } else {// Is second point
-                    if (i % 2 == 0) {// Is x
-                        gridPoints[i] = columnsXOffset;
-                    } else {// Is y
-                        gridPoints[i] = canvas.getHeight();
-                        isFirstPoint = true;
+                } else {// Is points for columns
+                    if (isFirstPoint) {// Is first point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = columnsXOffset + (canvas.getWidth() / 10f);
+                            columnsXOffset = columnsXOffset + (canvas.getWidth() / 10f);
+                        } else {// Is y
+                            gridPoints[i] = 0f;
+                            isFirstPoint = false;
+                        }
+                    } else {// Is second point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = columnsXOffset;
+                        } else {// Is y
+                            gridPoints[i] = canvas.getHeight();
+                            isFirstPoint = true;
+                        }
                     }
                 }
             }
         }
         surfaceHolder.unlockCanvasAndPost(canvas);
 
-        rndmBag = new ArrayList<>();
-        for (PieceTypes i : PieceTypes.values()) {
-            if (i != PieceTypes.NULL) {
-                rndmBag.add(new Piece(i, squareSize, getResources()));
+        if (fullBag == null) {
+            fullBag = new ArrayList<>();
+            fullBag.add(new Piece_I(squareSize, getResources()));
+            fullBag.add(new Piece_J(squareSize, getResources()));
+            fullBag.add(new Piece_L(squareSize, getResources()));
+            fullBag.add(new Piece_O(squareSize, getResources()));
+            fullBag.add(new Piece_S(squareSize, getResources()));
+            fullBag.add(new Piece_T(squareSize, getResources()));
+            fullBag.add(new Piece_Z(squareSize, getResources()));
+        }
+
+        if (rndmBag == null) {
+            rndmBag = new ArrayList<>();
+            for (Piece i : fullBag) {
+                try {
+                    rndmBag.add(i.clone());
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+
+        if (currentPiece == null) {
+            currentPiece = getRandomPiece();
+            nextPiece = getRandomPiece();
+            // Place the first piece
+            currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
         }
 
         startGame();
@@ -179,28 +215,9 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
     private void startGame() {
-        currentPiece = getRandomPiece();
-        nextPiece = getRandomPiece();
-
         // Get the radioGroup
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.check(R.id.radioButton_J);
-
-        // Setup debug grid
-        Square s0 = new Square(squareSize, PieceTypes.O, getResources());
-        s0.setPos((byte) (9), (byte) (15));
-        grid.setSquare(s0);
-        Square s1 = new Square(squareSize, PieceTypes.O, getResources());
-        s1.setPos((byte) (8), (byte) (15));
-        grid.setSquare(s1);
-        Square s2 = new Square(squareSize, PieceTypes.I, getResources());
-        s2.setPos((byte) (9), (byte) (14));
-        grid.setSquare(s2);
-
-        // Draw first frame with background and piece
-        currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
-        drawFrame();
-
 
         // If the radio button of the selected piece change, redraw the piece at the top (debug)
         radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
@@ -209,25 +226,25 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             if (isChecked) {
                 switch (checkedRadioButton.getId()) {
                     case R.id.radioButton_I:
-                        currentPiece = new Piece(PieceTypes.I, squareSize, getResources());
+                        currentPiece = new Piece_I(squareSize, getResources());
                         break;
                     case R.id.radioButton_J:
-                        currentPiece = new Piece(PieceTypes.J, squareSize, getResources());
+                        currentPiece = new Piece_J(squareSize, getResources());
                         break;
                     case R.id.radioButton_L:
-                        currentPiece = new Piece(PieceTypes.L, squareSize, getResources());
+                        currentPiece = new Piece_L(squareSize, getResources());
                         break;
                     case R.id.radioButton_O:
-                        currentPiece = new Piece(PieceTypes.O, squareSize, getResources());
+                        currentPiece = new Piece_O(squareSize, getResources());
                         break;
                     case R.id.radioButton_S:
-                        currentPiece = new Piece(PieceTypes.S, squareSize, getResources());
+                        currentPiece = new Piece_S(squareSize, getResources());
                         break;
                     case R.id.radioButton_T:
-                        currentPiece = new Piece(PieceTypes.T, squareSize, getResources());
+                        currentPiece = new Piece_T(squareSize, getResources());
                         break;
                     case R.id.radioButton_Z:
-                        currentPiece = new Piece(PieceTypes.Z, squareSize, getResources());
+                        currentPiece = new Piece_Z(squareSize, getResources());
                         break;
                 }
                 currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
@@ -283,6 +300,11 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
             drawFrame();
         });
+
+        // Draw the first frame
+        drawFrame();
+
+        // start the game loop
         gameLoop();
     }
 
@@ -290,7 +312,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         double level = 1d;
         double timeBtwnStep = Math.pow((0.8d-((level-1d)*0.007d)), (level-1d)) * 1000d;
         Handler gameLoopHandler = new Handler();
-        Runnable r = new Runnable() {
+        gameLoopRunnable = new Runnable() {
             int i = 0;
             @Override
             public void run() {
@@ -310,16 +332,18 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 gameLoopHandler.postDelayed(this, (long) timeBtwnStep);
             }
         };
-        gameLoopHandler.post(r);
+        gameLoopHandler.post(gameLoopRunnable);
     }
 
     private Piece getRandomPiece() {
         Instant start = Instant.now();// TODO: Optimize this
         // Refill the bag if empty
         if (rndmBag.isEmpty()) {
-            for (PieceTypes i : PieceTypes.values()) {
-                if (i != PieceTypes.NULL) {
-                    rndmBag.add(new Piece(i, squareSize, getResources()));
+            for (Piece i : fullBag) {
+                try {
+                    rndmBag.add(i.clone());
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -333,13 +357,13 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void drawFrame() {
-        Canvas canvas = surfaceHolder.lockCanvas();
+        Canvas canvas = gameSurfaceHolder.lockCanvas();
 
         setBackground(canvas);
         grid.draw(canvas);
         currentPiece.draw(canvas);
 
-        surfaceHolder.unlockCanvasAndPost(canvas);
+        gameSurfaceHolder.unlockCanvasAndPost(canvas);
     }
 
     private void setBackground(final Canvas canvas) {
