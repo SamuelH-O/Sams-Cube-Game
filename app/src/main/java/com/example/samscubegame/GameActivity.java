@@ -107,7 +107,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         this.gameSurfaceHolder = surfaceHolder;
-        Canvas canvas = surfaceHolder.lockCanvas();
+        Canvas canvas = surfaceHolder.lockHardwareCanvas();
 
         // Get the size of the squares by the smaller side of the canvas
         if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
@@ -346,7 +346,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void drawFrame() {
-        Canvas canvas = gameSurfaceHolder.lockCanvas();
+        Canvas canvas = gameSurfaceHolder.lockHardwareCanvas();
 
         setBackground(canvas);
         grid.draw(canvas);
@@ -374,7 +374,6 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 16; j++) {
                     str = ("" + i + " " + j);
-                    // ((whitePaint.descent() - whitePaint.ascent()) / 2) is the distance from the baseline to the center.
                     canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
                 }
             }
