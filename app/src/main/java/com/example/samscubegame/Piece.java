@@ -93,15 +93,20 @@ public abstract class Piece {
     }
 
     void drop(final GridOfGame grid) {
-        byte posYOfPieceDropped = 16;
-        byte squareAbove, bestSquareAbove = 15;
-        for (Square i : bottomSide) {
-            if (bestSquareAbove >= (squareAbove = (byte) (grid.getFilledSquareBelow(i.posX, i.posY) - 1))) {
-                bestSquareAbove = squareAbove;
-                posYOfPieceDropped = (byte) (squareAbove - (i.posY - squares[0].posY));
+        byte offset = 0;
+        incrementLoop: while (true) {
+            for (Square j : bottomSide) {
+                if (j.posY + offset < 15) {
+                    if (grid.isFilledAt(j.posX, (byte) (j.posY + offset + 1))) {
+                        break incrementLoop;
+                    }
+                } else {
+                    break incrementLoop;
+                }
             }
+            offset = (byte) (offset + 1);
         }
-        setPosAndRot(posX, posYOfPieceDropped, rotation);
+        setPosAndRot(posX, (byte) (squares[0].posY + offset), rotation);
     }
 
     /*TODO: Make the piece stay centered during rotation*/

@@ -101,7 +101,6 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
