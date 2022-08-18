@@ -12,19 +12,19 @@ import java.util.HashSet;
 @RequiresApi(api = Build.VERSION_CODES.S)
 class GridOfGame {
     // First number = columns | Second number = rows
-    private final Square[][] grid = new Square[GameActivity.NB_COLUMNS][GameActivity.NB_ROWS];
+    private final Square[][] grid = new Square[GameSurfaceCallback.NB_COLUMNS][GameSurfaceCallback.NB_ROWS];
 
     GridOfGame() {
-        for(byte i = 0; i < GameActivity.NB_COLUMNS; i++) {
-            for(byte j = 0; j < GameActivity.NB_ROWS; j++) {
+        for(byte i = 0; i < GameSurfaceCallback.NB_COLUMNS; i++) {
+            for(byte j = 0; j < GameSurfaceCallback.NB_ROWS; j++) {
                 grid[i][j] = null;
             }
         }
     }
 
     void draw(final Canvas canvas) {
-        for (byte i = 0; i < GameActivity.NB_COLUMNS; i++) {
-            for (byte j = 0; j < GameActivity.NB_ROWS; j++) {
+        for (byte i = 0; i < GameSurfaceCallback.NB_COLUMNS; i++) {
+            for (byte j = 0; j < GameSurfaceCallback.NB_ROWS; j++) {
                 if (grid[i][j] != null) {
                     grid[i][j].draw(canvas);
                 }
@@ -43,16 +43,16 @@ class GridOfGame {
     void checkForLines() {
         byte nbFilledSquares;
         HashSet<Byte> rowsToRemove = new HashSet<>();
-        for (byte i = 0; i < GameActivity.NB_ROWS; i++) {
+        for (byte i = 0; i < GameSurfaceCallback.NB_ROWS; i++) {
             nbFilledSquares = 0;
-            for(byte j = 0; j < GameActivity.NB_COLUMNS; j++) {
+            for(byte j = 0; j < GameSurfaceCallback.NB_COLUMNS; j++) {
                 if (grid[j][i] == null) {
                     break;
                 } else {
                     nbFilledSquares = (byte) (nbFilledSquares + 1);
                 }
             }
-            if (nbFilledSquares == GameActivity.NB_COLUMNS) {
+            if (nbFilledSquares == GameSurfaceCallback.NB_COLUMNS) {
                 rowsToRemove.add(i);
             }
         }
@@ -63,8 +63,8 @@ class GridOfGame {
 
     private void removeRows(HashSet<Byte> rowsToRemove) {
         byte nbRowsToDrop = 0;
-        for (byte i = GameActivity.NB_ROWS - 1; i >= 0; i--) {
-            for (byte j = 0; j < GameActivity.NB_COLUMNS; j++) {
+        for (byte i = GameSurfaceCallback.NB_ROWS - 1; i >= 0; i--) {
+            for (byte j = 0; j < GameSurfaceCallback.NB_COLUMNS; j++) {
                 if (rowsToRemove.contains(i)) {
                     grid[j][i] = null;
                     if (j == 0) {
@@ -85,8 +85,8 @@ class GridOfGame {
     @SuppressLint("InlinedApi")
     void printGridState() {
         StringBuilder str = new StringBuilder();
-        for(byte i = 0; i < GameActivity.NB_ROWS; i++) {
-            for(byte j = 0; j < GameActivity.NB_COLUMNS; j++) {
+        for(byte i = 0; i < GameSurfaceCallback.NB_ROWS; i++) {
+            for(byte j = 0; j < GameSurfaceCallback.NB_COLUMNS; j++) {
                 if (grid[j][i] != null) {
                     str.append("|").append(grid[j][i].toString());
                 } else {

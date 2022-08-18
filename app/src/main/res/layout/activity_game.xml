@@ -98,7 +98,7 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="60sp"
         android:layout_height="60sp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/content_desc_down_button"
         android:insetLeft="0dp"
         android:insetTop="0dp"
@@ -114,98 +114,17 @@
         app:layout_constraintStart_toStartOf="@+id/buttonSnap" />
 
     <SurfaceView
-        android:id="@+id/surfaceView"
+        android:id="@+id/surfaceViewGame"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintDimensionRatio="H,10:16"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonMoveBottom"
+        app:layout_constraintDimensionRatio="H,10:16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/buttonMoveRight"
-        app:layout_constraintEnd_toStartOf="@+id/buttonMoveBottom"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surfaceView"
-        app:singleSelection="true"
-        tools:ignore="HardcodedText">
-
-        <RadioButton
-            android:id="@+id/radioButton_I"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/I_color"
-            android:text="I"
-            android:textColor="@color/I_color"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/radioButton_J"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/J_color"
-            android:text="J"
-            android:textColor="@color/J_color"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/radioButton_L"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/L_color"
-            android:text="L"
-            android:textColor="@color/L_color"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/radioButton_O"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/O_color"
-            android:text="O"
-            android:textColor="@color/O_color"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/radioButton_S"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/S_color"
-            android:text="S"
-            android:textColor="@color/S_color"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/radioButton_T"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/T_color"
-            android:text="T"
-            android:textColor="@color/T_color"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/radioButton_Z"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/Z_color"
-            android:text="Z"
-            android:textColor="@color/Z_color"
-            android:textStyle="bold" />
-
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,7 +60,7 @@ public abstract class Piece {
 
     boolean canMoveRight(final GridOfGame grid) {
         boolean ret;
-        if (posX + this.getWidth() < GameActivity.NB_COLUMNS) {
+        if (posX + this.getWidth() < GameSurfaceCallback.NB_COLUMNS) {
             ret = true;
             for (Square i : rightSide) {
                 if (grid.isFilledAt((byte) (i.posX + 1), i.posY)) {
@@ -75,7 +75,7 @@ public abstract class Piece {
 
     boolean canMoveBottom(final GridOfGame grid) {
         boolean ret;
-        if (posX + this.getHeight() - 1 < GameActivity.NB_ROWS) {
+        if (posX + this.getHeight() - 1 < GameSurfaceCallback.NB_ROWS) {
             ret = true;
             for (Square i : bottomSide) {
                 if (i.posY < 15) {
