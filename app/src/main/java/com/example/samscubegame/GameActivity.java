@@ -35,6 +35,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private SurfaceHolder gameSurfaceHolder;
 
+    static final byte NB_ROWS = 16, NB_COLUMNS = 10;
+
     private float squareSize;
 
     private GridOfGame grid;
@@ -109,8 +111,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
         Canvas canvas = surfaceHolder.lockHardwareCanvas();
 
         // Get the size of the squares by the smaller side of the canvas
-        if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / 10;
-        else this.squareSize = (float) canvas.getHeight() / 10;
+        if (canvas.getWidth() < canvas.getHeight()) this.squareSize = (float) canvas.getWidth() / NB_COLUMNS;
+        else this.squareSize = (float) canvas.getHeight() / NB_COLUMNS;
 
         // Create the colors for the gradient (TODO: add the option to modify them)
         bgColors[0] = pack(0.847f, 0.035f, 0.494f, 1.0f);
@@ -139,8 +141,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         if (i % 2 == 0) {// Is x
                             gridPoints[i] = 0f;
                         } else {// Is y
-                            gridPoints[i] = linesYOffset + (canvas.getHeight() / 16f);
-                            linesYOffset = linesYOffset + (canvas.getHeight() / 16f);
+                            gridPoints[i] = linesYOffset + (canvas.getHeight() / (float) NB_ROWS);
+                            linesYOffset = linesYOffset + (canvas.getHeight() / (float) NB_ROWS);
                             isFirstPoint = false;
                         }
                     } else {// Is second point
@@ -154,8 +156,8 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 } else {// Is points for columns
                     if (isFirstPoint) {// Is first point
                         if (i % 2 == 0) {// Is x
-                            gridPoints[i] = columnsXOffset + (canvas.getWidth() / 10f);
-                            columnsXOffset = columnsXOffset + (canvas.getWidth() / 10f);
+                            gridPoints[i] = columnsXOffset + (canvas.getWidth() / (float) NB_COLUMNS);
+                            columnsXOffset = columnsXOffset + (canvas.getWidth() / (float) NB_COLUMNS);
                         } else {// Is y
                             gridPoints[i] = 0f;
                             isFirstPoint = false;
@@ -315,6 +317,7 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                     currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
                 }
+                grid.checkForLines();
                 drawFrame();
                 i = i + 1;
                 gameLoopHandler.postDelayed(this, (long) timeBtwnStep);
@@ -365,13 +368,13 @@ public class GameActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Paint whitePaint = new Paint();
             whitePaint.setARGB(255, 255, 255, 255);
             whitePaint.setBlendMode(BlendMode.DIFFERENCE);
-            whitePaint.setTextSize(canvas.getHeight() / 16f / 3f);
+            whitePaint.setTextSize(canvas.getHeight() / (float) NB_ROWS / 3f);
             whitePaint.setTextAlign(Paint.Align.CENTER);
             canvas.drawLines(gridPoints, whitePaint);
             String str;
-            float xOffset = canvas.getWidth() / 10f, yOffset = canvas.getHeight() / 16f;
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 16; j++) {
+            float xOffset = canvas.getWidth() / (float) NB_COLUMNS, yOffset = canvas.getHeight() / (float) NB_ROWS;
+            for (int i = 0; i < NB_COLUMNS; i++) {
+                for (int j = 0; j < NB_ROWS; j++) {
                     str = ("" + i + " " + j);
                     canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
                 }

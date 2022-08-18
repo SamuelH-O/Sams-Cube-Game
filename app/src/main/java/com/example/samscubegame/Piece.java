@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
-@RequiresApi(api = Build.VERSION_CODES.Q)
+@RequiresApi(api = Build.VERSION_CODES.S)
 public abstract class Piece {
     Paint paint;
 
@@ -60,7 +60,7 @@ public abstract class Piece {
 
     boolean canMoveRight(final GridOfGame grid) {
         boolean ret;
-        if (posX + this.getWidth() < 10) {
+        if (posX + this.getWidth() < GameActivity.NB_COLUMNS) {
             ret = true;
             for (Square i : rightSide) {
                 if (grid.isFilledAt((byte) (i.posX + 1), i.posY)) {
@@ -75,7 +75,7 @@ public abstract class Piece {
 
     boolean canMoveBottom(final GridOfGame grid) {
         boolean ret;
-        if (posX + this.getHeight() - 1 < 16) {
+        if (posX + this.getHeight() - 1 < GameActivity.NB_ROWS) {
             ret = true;
             for (Square i : bottomSide) {
                 if (i.posY < 15) {
