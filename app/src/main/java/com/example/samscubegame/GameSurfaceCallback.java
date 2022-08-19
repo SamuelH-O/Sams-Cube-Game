@@ -1,67 +1,44 @@
 package com.example.samscubegame;
 
-import static android.graphics.Color.pack;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.BlendMode;
 import android.graphics.Canvas;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Random;
-
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class GameSurfaceCallback implements SurfaceHolder.Callback {
 
-    private SurfaceHolder surfaceHolder;
-
     private final GameActivity gameActivity;
 
-    static final byte NB_ROWS = 16, NB_COLUMNS = 10;
+    private SurfaceHolder surfaceHolder;
 
-    private final GridOfGame grid;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final byte NB_ROWS = 16, NB_COLUMNS = 10;
 
-    private final long[] bgColors = new long[3];
-    private final Paint gradientPaint = new Paint();
-    private final Paint greyPaint = new Paint();
+    private GridOfSurfaces grid;
 
     private Runnable gameLoopRunnable;
 
     private Piece currentPiece = null;
-    private Piece nextPiece = null;
 
-    private ArrayList<Piece> fullBag = null;
-    private ArrayList<Piece> rndmBag = null;
-    private final Random rndm = new Random();
+    private final PreviewSurfaceCallback previewSurfaceCallback;
+
+    private float squareSize;
 
     private float[] gridPoints;
 
     private final boolean showGrid;
 
-    GameSurfaceCallback(GameActivity gameActivity) {
+    GameSurfaceCallback(GameActivity gameActivity, final boolean showGrid, PreviewSurfaceCallback previewSurfaceCallback) {
         this.gameActivity = gameActivity;
+        this.showGrid = showGrid;
+        this.previewSurfaceCallback = previewSurfaceCallback;
 
-        // Set the random seed to the current time
-        rndm.setSeed(Instant.now().toEpochMilli());
-
-        grid = new GridOfGame();
-
-        SharedPreferences sharedPref = gameActivity.getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
-        showGrid = sharedPref.getBoolean(gameActivity.getResources().getString(R.string.show_grid_key), false);
     }
 
     @Override
@@ -70,33 +47,16 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
         Canvas canvas = surfaceHolder.lockHardwareCanvas();
 
         // Get the size of the squares by the smaller side of the canvas
-        float squareSize;
         if (canvas.getWidth() < canvas.getHeight()) squareSize = (float) canvas.getWidth() / NB_COLUMNS;
         else squareSize = (float) canvas.getHeight() / NB_COLUMNS;
 
-        // Create the colors for the gradient (TODO: add the option to modify them)
-        bgColors[0] = pack(0.847f, 0.035f, 0.494f, 1.0f);
-        bgColors[1] = pack(0.549f, 0.341f, 0.611f,1.0f);
-        bgColors[2] =  pack(0.141f, 0.274f, 0.556f,1.0f);
-
-        // Create the gradient from the top left to the bottom right (TODO: add the option to modify the direction)
-        LinearGradient bgGradient = new LinearGradient(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), bgColors, null, Shader.TileMode.CLAMP);
-
-        // Set the gradient to a paint with the right parameters
-        gradientPaint.setDither(true);
-        gradientPaint.setShader(bgGradient);
-
-        // Add a semi-transparent grey paint to help focus (TODO: add the ability to modify this)
-        greyPaint.setARGB(63, 61, 61, 61);
-        greyPaint.setBlendMode(BlendMode.DARKEN);
-
         // Measure debug grid points
         if (showGrid) {
-            gridPoints = new float[64 + 40];
+            gridPoints = new float[(4 * NB_ROWS) + (4 * NB_COLUMNS)];
             float linesYOffset = 0f, columnsXOffset = 0f;
             boolean isFirstPoint = true;
-            for (int i = 0; i < 64 + 40; i++) {
-                if (i < 64) {// Is points for lines
+            for (int i = 0; i < (4 * NB_ROWS) + (4 * NB_COLUMNS); i++) {
+                if (i < (4 * NB_ROWS)) {// Is points for lines
                     if (isFirstPoint) {// Is first point
                         if (i % 2 == 0) {// Is x
                             gridPoints[i] = 0f;
@@ -133,36 +93,10 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
                 }
             }
         }
+
+        grid = new GridOfSurfaces(NB_COLUMNS, NB_ROWS, canvas, showGrid, gridPoints);
+
         surfaceHolder.unlockCanvasAndPost(canvas);
-
-        if (fullBag == null) {
-            fullBag = new ArrayList<>();
-            fullBag.add(new Piece_I(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_J(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_L(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_O(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_S(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_T(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_Z(squareSize, gameActivity.getResources()));
-        }
-
-        if (rndmBag == null) {
-            rndmBag = new ArrayList<>();
-            for (Piece i : fullBag) {
-                try {
-                    rndmBag.add(i.clone());
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (currentPiece == null) {
-            currentPiece = getRandomPiece();
-            nextPiece = getRandomPiece();
-            // Place the first piece
-            currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
-        }
 
         startGame();
     }
@@ -175,6 +109,13 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
 
     @SuppressLint("NonConstantResourceId") // TODO: Remove once the debugs options are removed
     private void startGame() {
+        if (currentPiece == null) {
+            currentPiece = previewSurfaceCallback.getNextPiece();
+            currentPiece.setSquareSize(squareSize);
+            // Place the first piece
+            currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
+        }
+
         // Initialize controls with method findViewById()
         Button buttonMoveLeft = gameActivity.findViewById(R.id.buttonMoveLeft);
         Button buttonMoveRight = gameActivity.findViewById(R.id.buttonMoveRight);
@@ -240,10 +181,9 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
                 if (currentPiece.canMoveBottom(grid) && i > 0) {
                     currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
                 } else if (i > 0) {
-                    currentPiece.placeInGrid(grid);
-                    currentPiece = nextPiece;
-
-                    nextPiece = getRandomPiece();
+                    currentPiece.addToWall(grid);
+                    currentPiece = previewSurfaceCallback.getNextPiece();
+                    currentPiece.setSquareSize(squareSize);
 
                     currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
 
@@ -257,59 +197,13 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
         gameLoopHandler.post(gameLoopRunnable);
     }
 
-    private Piece getRandomPiece() {
-        Instant start = Instant.now();// TODO: Optimize this
-        // Refill the bag if empty
-        if (rndmBag.isEmpty()) {
-            for (Piece i : fullBag) {
-                try {
-                    rndmBag.add(i.clone());
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        int rndmInt = rndm.nextInt(rndmBag.size());
-        Piece ret = rndmBag.get(rndmInt);
-        rndmBag.remove(rndmInt);
-        Instant finish = Instant.now();
-        Log.d("Time Elapsed", "" + Duration.between(start, finish).toNanos());
-        return ret;
-    }
-
     private void drawFrame() {
         Canvas canvas = surfaceHolder.lockHardwareCanvas();
 
-        setBackground(canvas);
+        grid.setBackground(canvas);
         grid.draw(canvas);
         currentPiece.draw(canvas);
 
         surfaceHolder.unlockCanvasAndPost(canvas);
-    }
-
-    private void setBackground(final Canvas canvas) {
-        // Add a fancy background
-        canvas.drawPaint(gradientPaint);
-
-        canvas.drawPaint(greyPaint);
-
-        // Add debug grid & it's text
-        if (showGrid) {
-            Paint whitePaint = new Paint();
-            whitePaint.setARGB(255, 255, 255, 255);
-            whitePaint.setBlendMode(BlendMode.DIFFERENCE);
-            whitePaint.setTextSize(canvas.getHeight() / (float) NB_ROWS / 3f);
-            whitePaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawLines(gridPoints, whitePaint);
-            String str;
-            float xOffset = canvas.getWidth() / (float) NB_COLUMNS, yOffset = canvas.getHeight() / (float) NB_ROWS;
-            for (int i = 0; i < NB_COLUMNS; i++) {
-                for (int j = 0; j < NB_ROWS; j++) {
-                    str = ("" + i + " " + j);
-                    canvas.drawText(str, (xOffset * i) + (xOffset / 2f), (yOffset * j) + (yOffset / 2f) + ((whitePaint.descent() - whitePaint.ascent()) / 2), whitePaint);
-                }
-            }
-        }
     }
 }

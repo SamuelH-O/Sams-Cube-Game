@@ -43,7 +43,7 @@ public abstract class Piece {
         }
     }
 
-    boolean canMoveLeft(final GridOfGame grid) {
+    boolean canMoveLeft(final GridOfSurfaces grid) {
         boolean ret;
         if (posX - 1 >= 0) {
             ret = true;
@@ -58,9 +58,9 @@ public abstract class Piece {
         return ret;
     }
 
-    boolean canMoveRight(final GridOfGame grid) {
+    boolean canMoveRight(final GridOfSurfaces grid) {
         boolean ret;
-        if (posX + this.getWidth() < GameSurfaceCallback.NB_COLUMNS) {
+        if (posX + this.getWidth() < GridOfSurfaces.NB_COLUMNS) {
             ret = true;
             for (Square i : rightSide) {
                 if (grid.isFilledAt((byte) (i.posX + 1), i.posY)) {
@@ -73,9 +73,9 @@ public abstract class Piece {
         return ret;
     }
 
-    boolean canMoveBottom(final GridOfGame grid) {
+    boolean canMoveBottom(final GridOfSurfaces grid) {
         boolean ret;
-        if (posX + this.getHeight() - 1 < GameSurfaceCallback.NB_ROWS) {
+        if (posX + this.getHeight() - 1 < GridOfSurfaces.NB_ROWS) {
             ret = true;
             for (Square i : bottomSide) {
                 if (i.posY < 15) {
@@ -92,7 +92,7 @@ public abstract class Piece {
         return ret;
     }
 
-    void drop(final GridOfGame grid) {
+    void drop(final GridOfSurfaces grid) {
         byte offset = 0;
         incrementLoop: while (true) {
             for (Square j : bottomSide) {
@@ -110,9 +110,9 @@ public abstract class Piece {
     }
 
     /*TODO: Make the piece stay centered during rotation*/
-    abstract void figureOutNextRotation(final GridOfGame grid);
+    abstract void figureOutNextRotation(final GridOfSurfaces grid);
 
-    void applyRotation(final GridOfGame grid, byte posX, byte posY, byte rotation) {
+    void applyRotation(final GridOfSurfaces grid, byte posX, byte posY, byte rotation) {
         boolean shouldGoUp;
         goUp: do {
             shouldGoUp = false;
@@ -133,9 +133,15 @@ public abstract class Piece {
 
     abstract void setPosAndRot(byte posX, byte posY, byte rotation);
 
-    void placeInGrid(GridOfGame grid) {
+    void addToWall(GridOfSurfaces grid) {
         for (byte i = 0; i < 4; i++) {
             grid.setSquare(squares[i]);
+        }
+    }
+
+    void setSquareSize(float squareSize) {
+        for (Square i : squares) {
+            i.setSize(squareSize);
         }
     }
 

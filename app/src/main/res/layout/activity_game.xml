@@ -113,6 +113,19 @@
         app:layout_constraintEnd_toEndOf="@+id/buttonSnap"
         app:layout_constraintStart_toStartOf="@+id/buttonSnap" />
 
+    <!--Must Be higher than surfaceViewGame-->
+    <SurfaceView
+        android:id="@+id/surfaceViewPreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonMoveLeft"
+        app:layout_constraintDimensionRatio="H,4:6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/surfaceViewGame" />
+
     <SurfaceView
         android:id="@+id/surfaceViewGame"
         android:layout_width="0dp"

@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi;
 class Square {
     private final Paint paint;
 
-    final float size;
+    float size;
 
     byte posX, posY;
 
@@ -20,7 +20,7 @@ class Square {
 
     private final Paint darkPaint = new Paint();
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @RequiresApi(api = Build.VERSION_CODES.S)
     Square(float size, Paint paint) {
         this.paint = paint;
 
@@ -58,6 +58,10 @@ class Square {
     void setPos(byte posX, byte posY) {
         this.posX = posX;
         this.posY = posY;
+    }
+
+    void setSize(float size) {
+        this.size = size;
     }
 
     @NonNull

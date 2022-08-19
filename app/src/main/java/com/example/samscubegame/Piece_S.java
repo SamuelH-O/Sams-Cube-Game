@@ -6,7 +6,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-@RequiresApi(api = Build.VERSION_CODES.Q)
+@RequiresApi(api = Build.VERSION_CODES.S)
 public class Piece_S extends Piece {
 
     Piece_S(float squareSize, Resources resources) {
@@ -29,7 +29,7 @@ public class Piece_S extends Piece {
     }
 
     @Override
-    void figureOutNextRotation(final GridOfGame grid) {
+    void figureOutNextRotation(final GridOfSurfaces grid) {
         byte[] values = {posX, posY, rotation};
 
         if (rotation % 2 == 0) {
