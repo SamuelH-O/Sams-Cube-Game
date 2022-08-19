@@ -34,23 +34,49 @@ public class Piece_I extends Piece{
     void figureOutNextRotation(final GridOfSurfaces grid) {
         byte[] values = {posX, posY, rotation};
 
-        if (rotation % 2 == 0) {
-            // I I I I [0] | Next -> [1]
-            if (posY + 3 >= 16) {
-                values[1] = 16 - 4;
-            }
-            values[2] = 1;
-        } else {
-            /*
-             * I [1] | Next -> [0]
-             * I
-             * I
-             * I
-             * */
-            if (posX + 3 >= 10) {
-                values[0] = 10 - 4;
-            }
-            values[2] = 0;
+        switch (rotation) {
+            case 0:
+            case 2:
+                // I I I I [0] | Next -> [1]
+                // I I I I [2] | Next -> [3]
+                if (posY - 3 <= 0) {
+                    values[1] = (byte) (2);
+                }
+                if (posY + 3 >= GridOfSurfaces.NB_ROWS) {
+                    values[1] = (byte) (GridOfSurfaces.NB_ROWS - 2);
+                }
+                values[2] = (byte) (values[2] + 1);
+                break;
+            case 1:
+                /*
+                 * I [1] | Next -> [2]
+                 * I
+                 * I
+                 * I
+                 * */
+                if (posX - 3 <= 0) {
+                    values[0] = (byte) (2);
+                }
+                if (posX + 3 >= GridOfSurfaces.NB_COLUMNS) {
+                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
+                }
+                values[2] = (byte) (values[2] + 1);
+                break;
+            case 3:
+                /*
+                 * I [3] | Next -> [0]
+                 * I
+                 * I
+                 * I
+                 * */
+                if (posX - 2 <= 0) {
+                    values[0] = (byte) (2);
+                }
+                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
+                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
+                }
+                values[2] = 0;
+                break;
         }
 
         super.applyRotation(grid, values[0], values[1], values[2]);
@@ -66,33 +92,69 @@ public class Piece_I extends Piece{
         rightSide.clear();
         bottomSide.clear();
 
-        if (rotation % 2 == 0) {
-            // I I I I
-            for (byte i = 0; i < 4; i++) {
-                squares[i].setPos((byte) (posX + i), posY);
-            }
+        switch (rotation) {
+            case 0:
+                // I I I I
+                squares[0].setPos((byte) (posX - 2), (byte) (posY - 1));
+                squares[1].setPos((byte) (posX - 1), (byte) (posY - 1));
+                squares[2].setPos(posX, (byte) (posY - 1));
+                squares[3].setPos((byte) (posX + 1), (byte) (posY - 1));
 
-            leftSide.add(squares[0]);
+                leftSide.add(squares[0]);
 
-            rightSide.add(squares[3]);
+                rightSide.add(squares[3]);
 
-            bottomSide.addAll(Arrays.asList(squares));
-        } else {
-            /*
-             * I
-             * I
-             * I
-             * I
-             * */
-            for (byte i = 0; i < 4; i++) {
-                squares[i].setPos(posX, (byte) (posY + i));
-            }
+                bottomSide.addAll(Arrays.asList(squares));
+                break;
+            case 1:
+                /*
+                 * I
+                 * I
+                 * I
+                 * I
+                 * */
+                squares[0].setPos(posX, (byte) (posY - 2));
+                squares[1].setPos(posX, (byte) (posY - 1));
+                squares[2].setPos(posX, posY);
+                squares[3].setPos(posX, (byte) (posY + 1));
 
-            leftSide.addAll(Arrays.asList(squares));
+                leftSide.addAll(Arrays.asList(squares));
 
-            rightSide.addAll(Arrays.asList(squares));
+                rightSide.addAll(Arrays.asList(squares));
 
-            bottomSide.add(squares[3]);
+                bottomSide.add(squares[3]);
+                break;
+            case 2:
+                // I I I I
+                squares[0].setPos((byte) (posX - 2), posY);
+                squares[1].setPos((byte) (posX - 1), posY);
+                squares[2].setPos(posX, posY);
+                squares[3].setPos((byte) (posX + 1), posY);
+
+                leftSide.add(squares[0]);
+
+                rightSide.add(squares[3]);
+
+                bottomSide.addAll(Arrays.asList(squares));
+                break;
+            case 3:
+                /*
+                 * I [3] | Next -> [0]
+                 * I
+                 * I
+                 * I
+                 * */
+                squares[0].setPos((byte) (posX - 1), (byte) (posY - 2));
+                squares[1].setPos((byte) (posX - 1), (byte) (posY - 1));
+                squares[2].setPos((byte) (posX - 1), posY);
+                squares[3].setPos((byte) (posX - 1), (byte) (posY + 1));
+
+                leftSide.addAll(Arrays.asList(squares));
+
+                rightSide.addAll(Arrays.asList(squares));
+
+                bottomSide.add(squares[3]);
+                break;
         }
     }
 

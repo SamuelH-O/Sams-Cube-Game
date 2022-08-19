@@ -31,7 +31,6 @@ public class Piece_O extends Piece {
     @Override
     void figureOutNextRotation(final GridOfSurfaces grid) {
         byte[] values = {posX, posY, rotation};
-
         /*
          * O O
          * O O
@@ -57,10 +56,10 @@ public class Piece_O extends Piece {
          * O O
          * O O
          * */
-        squares[0].setPos(posX, posY);
-        squares[1].setPos((byte) (posX + 1), posY);
-        squares[2].setPos(posX, (byte) (posY + 1));
-        squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
+        squares[0].setPos((byte) (posX - 1), (byte) (posY - 1));
+        squares[1].setPos(posX, (byte) (posY - 1));
+        squares[2].setPos((byte) (posX - 1), posY);
+        squares[3].setPos(posX, posY);
 
         leftSide.add(squares[0]);
         leftSide.add(squares[2]);

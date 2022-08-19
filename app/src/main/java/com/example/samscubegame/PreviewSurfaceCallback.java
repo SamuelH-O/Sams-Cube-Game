@@ -137,7 +137,7 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
 
     }
 
-    Piece getRandomPiece() {
+    private Piece getRandomPiece() {
         // Refill the bag if empty
         if (rndmBag.isEmpty()) {
             for (Piece i : fullBag) {
@@ -158,7 +158,11 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
     Piece getNextPiece() {
         Piece tmp = nextPiece;
         nextPiece = getRandomPiece();
-        nextPiece.setPosAndRot((byte) (1), (byte) (1) , (byte) (0));
+        if (!(nextPiece.getWidth() % 2 == 0)) {
+            nextPiece.setPosAndRot((byte) ((NB_COLUMNS / 2) - 1), (byte) ((NB_ROWS / 2)), (byte) (0));
+        } else {
+            nextPiece.setPosAndRot((byte) (NB_COLUMNS / 2), (byte) (NB_ROWS / 2), (byte) (0));
+        }
         drawFrame();
         return tmp;
     }

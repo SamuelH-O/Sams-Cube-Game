@@ -113,7 +113,11 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
             currentPiece = previewSurfaceCallback.getNextPiece();
             currentPiece.setSquareSize(squareSize);
             // Place the first piece
-            currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
+            if (!(currentPiece.getWidth() % 2 == 0)) {
+                currentPiece.setPosAndRot((byte) ((NB_COLUMNS / 2) - 1), (byte) (2), (byte) (0));
+            } else {
+                currentPiece.setPosAndRot((byte) (NB_COLUMNS / 2), (byte) (2), (byte) (0));
+            }
         }
 
         // Initialize controls with method findViewById()
@@ -185,7 +189,11 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
                     currentPiece = previewSurfaceCallback.getNextPiece();
                     currentPiece.setSquareSize(squareSize);
 
-                    currentPiece.setPosAndRot((byte) (4), (byte) (0), (byte) (0));
+                    if (!(currentPiece.getWidth() % 2 == 0)) {
+                        currentPiece.setPosAndRot((byte) ((NB_COLUMNS / 2) - 1), (byte) (2), (byte) (0));
+                    } else {
+                        currentPiece.setPosAndRot((byte) (NB_COLUMNS / 2), (byte) (2), (byte) (0));
+                    }
 
                     grid.checkForLines();
                 }

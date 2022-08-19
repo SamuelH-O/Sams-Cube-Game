@@ -42,8 +42,8 @@ public class Piece_T extends Piece {
                  * T T T [2] | Next -> [3]
                  *   T
                  * */
-                if (posY + 2 >= 16) {
-                    values[1] = 16 - 3;
+                if (posY + 2 >= GridOfSurfaces.NB_ROWS) {
+                    values[1] = (byte) (GridOfSurfaces.NB_ROWS - 2);
                 }
                 values[2] = (byte) (values[2] + 1);
                 break;
@@ -53,8 +53,11 @@ public class Piece_T extends Piece {
                  * T T
                  * T
                  * */
-                if (posX + 2 >= 10) {
-                    values[0] = 10 - 3;
+                if (posX - 1 <= 0) {
+                    values[0] = (byte) (1);
+                }
+                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
+                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
                 }
                 values[2] = (byte) (values[2] + 1);
                 break;
@@ -64,8 +67,8 @@ public class Piece_T extends Piece {
                  * T T
                  *   T
                  * */
-                if (posX + 2 >= 10) {
-                    values[0] = 10 - 3;
+                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
+                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
                 }
                 values[2] = 0;
                 break;
@@ -90,10 +93,10 @@ public class Piece_T extends Piece {
                  *   T
                  * T T T
                  * */
-                squares[0].setPos((byte) (posX + 1), posY);
-                squares[1].setPos(posX, (byte) (posY + 1));
-                squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
-                squares[3].setPos((byte) (posX + 2), (byte) (posY + 1));
+                squares[0].setPos(posX, (byte) (posY - 1));
+                squares[1].setPos((byte) (posX - 1), posY);
+                squares[2].setPos(posX, posY);
+                squares[3].setPos((byte) (posX + 1), posY);
 
                 leftSide.add(squares[0]);
                 leftSide.add(squares[1]);
@@ -111,10 +114,10 @@ public class Piece_T extends Piece {
                  * T T
                  * T
                  * */
-                squares[0].setPos(posX, posY);
-                squares[1].setPos(posX, (byte) (posY + 1));
-                squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
-                squares[3].setPos(posX, (byte) (posY + 2));
+                squares[0].setPos(posX, (byte) (posY - 1));
+                squares[1].setPos(posX, posY);
+                squares[2].setPos((byte) (posX + 1), posY);
+                squares[3].setPos(posX, (byte) (posY + 1));
 
                 leftSide.add(squares[0]);
                 leftSide.add(squares[1]);
@@ -132,10 +135,10 @@ public class Piece_T extends Piece {
                  * T T T
                  *   T
                  * */
-                squares[0].setPos(posX, posY);
-                squares[1].setPos((byte) (posX + 1), posY);
-                squares[2].setPos((byte) (posX + 2), posY);
-                squares[3].setPos((byte) (posX + 1), (byte) (posY + 1));
+                squares[0].setPos((byte) (posX - 1), posY);
+                squares[1].setPos(posX, posY);
+                squares[2].setPos((byte) (posX + 1), posY);
+                squares[3].setPos(posX, (byte) (posY + 1));
 
                 leftSide.add(squares[0]);
                 leftSide.add(squares[3]);
@@ -153,10 +156,10 @@ public class Piece_T extends Piece {
                  * T T
                  *   T
                  * */
-                squares[0].setPos((byte) (posX + 1), posY);
-                squares[1].setPos(posX, (byte) (posY + 1));
-                squares[2].setPos((byte) (posX + 1), (byte) (posY + 1));
-                squares[3].setPos((byte) (posX + 1), (byte) (posY + 2));
+                squares[0].setPos(posX, (byte) (posY - 1));
+                squares[1].setPos((byte) (posX - 1), posY);
+                squares[2].setPos(posX, posY);
+                squares[3].setPos(posX, (byte) (posY + 1));
 
                 leftSide.add(squares[0]);
                 leftSide.add(squares[1]);

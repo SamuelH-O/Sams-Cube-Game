@@ -44,31 +44,29 @@ public abstract class Piece {
     }
 
     boolean canMoveLeft(final GridOfSurfaces grid) {
-        boolean ret;
-        if (posX - 1 >= 0) {
-            ret = true;
-            for (Square i : leftSide) {
+        boolean ret = true;
+        for (Square i : leftSide) {
+            if (i.posX - 1 >= 0) {
                 if (grid.isFilledAt((byte) (i.posX - 1), i.posY)) {
                     ret = false;
                 }
+            } else {
+                ret = false;
             }
-        } else {
-            ret = false;
         }
         return ret;
     }
 
     boolean canMoveRight(final GridOfSurfaces grid) {
-        boolean ret;
-        if (posX + this.getWidth() < GridOfSurfaces.NB_COLUMNS) {
-            ret = true;
-            for (Square i : rightSide) {
+        boolean ret = true;
+        for (Square i : rightSide) {
+            if (i.posX + 1 < GridOfSurfaces.NB_COLUMNS) {
                 if (grid.isFilledAt((byte) (i.posX + 1), i.posY)) {
                     ret = false;
                 }
+            } else {
+                ret = false;
             }
-        } else {
-            ret = false;
         }
         return ret;
     }
@@ -106,7 +104,7 @@ public abstract class Piece {
             }
             offset = (byte) (offset + 1);
         }
-        setPosAndRot(posX, (byte) (squares[0].posY + offset), rotation);
+        setPosAndRot(posX, (byte) (posY + offset), rotation);
     }
 
     /*TODO: Make the piece stay centered during rotation*/
