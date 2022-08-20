@@ -38,8 +38,8 @@ public class Piece_Z extends Piece {
                  * Z Z   [0] | Next -> [1]
                  *   Z Z
                  * */
-                if (posY + 1 >= GridOfSurfaces.NB_ROWS) {
-                    values[1] = (byte) (GridOfSurfaces.NB_ROWS - 2);
+                if (posY + 1 >= grid.getNbRows()) {
+                    values[1] = (byte) (grid.getNbRows() - 2);
                 }
                 values[2] = (byte) (values[2] + 1);
                 break;
@@ -52,8 +52,8 @@ public class Piece_Z extends Piece {
                 if (posX - 1 <= 0) {
                     values[0] = (byte) (1);
                 }
-                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
-                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
+                if (posX + 2 >= grid.getNbColumns()) {
+                    values[0] = (byte) (grid.getNbColumns() - 2);
                 }
                 values[2] = (byte) (values[2] + 1);
                 break;
@@ -70,8 +70,8 @@ public class Piece_Z extends Piece {
                  * Z Z
                  * Z
                  * */
-                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
-                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
+                if (posX + 2 >= grid.getNbColumns()) {
+                    values[0] = (byte) (grid.getNbColumns() - 2);
                 }
                 values[2] = 0;
                 break;

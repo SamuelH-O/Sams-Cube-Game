@@ -42,8 +42,8 @@ public class Piece_T extends Piece {
                  * T T T [2] | Next -> [3]
                  *   T
                  * */
-                if (posY + 2 >= GridOfSurfaces.NB_ROWS) {
-                    values[1] = (byte) (GridOfSurfaces.NB_ROWS - 2);
+                if (posY + 2 >= grid.getNbRows()) {
+                    values[1] = (byte) (grid.getNbRows() - 2);
                 }
                 values[2] = (byte) (values[2] + 1);
                 break;
@@ -56,8 +56,8 @@ public class Piece_T extends Piece {
                 if (posX - 1 <= 0) {
                     values[0] = (byte) (1);
                 }
-                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
-                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
+                if (posX + 2 >= grid.getNbColumns()) {
+                    values[0] = (byte) (grid.getNbColumns() - 2);
                 }
                 values[2] = (byte) (values[2] + 1);
                 break;
@@ -67,8 +67,8 @@ public class Piece_T extends Piece {
                  * T T
                  *   T
                  * */
-                if (posX + 2 >= GridOfSurfaces.NB_COLUMNS) {
-                    values[0] = (byte) (GridOfSurfaces.NB_COLUMNS - 2);
+                if (posX + 2 >= grid.getNbColumns()) {
+                    values[0] = (byte) (grid.getNbColumns() - 2);
                 }
                 values[2] = 0;
                 break;

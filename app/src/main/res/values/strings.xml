@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">Sam\'s Cube Game</string>
     <string name="button_start">Start A New Game</string>
+    <string name="drag_handle">Drag handle</string>
     <string name="button_settings">Settings</string>
     <string name="debug_settings">Debug</string>
     <string name="show_grid_option">Show Grid</string>
+    <string name="show_grid_key">show_grid_key</string>
+    <string name="show_grid_numbers_option">Show Grid Numbers</string>
+    <string name="show_grid_numbers_key">show_grid_numbers_key</string>
+    <string name="pref_file">com.example.samscubegame.prefs</string>
     <string name="content_desc_left_button">Left</string>
     <string name="content_desc_right_button">Right</string>
     <string name="content_desc_rotate_button">Rotate clockwise</string>
     <string name="content_desc_fast_down_button">Fast down</string>
     <string name="content_desc_down_button">Down</string>
-    <string name="drag_handle">Drag handle</string>
-    <string name="pref_file">com.example.samscubegame.prefs</string>
-    <string name="show_grid_key">Show_grid_key</string>
 </resources>

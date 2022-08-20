@@ -17,7 +17,7 @@ import java.util.HashSet;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
 class GridOfSurfaces {
-    static byte NB_COLUMNS, NB_ROWS;
+    private final byte NB_COLUMNS, NB_ROWS;
 
     private final Paint gradientPaint = new Paint();
     private final Paint greyPaint = new Paint();
@@ -25,20 +25,72 @@ class GridOfSurfaces {
     // First number = columns | Second number = rows
     private final Square[][] grid;
 
-    private final boolean showGrid;
+    private final boolean showGrid, showGridNumbers;
 
-    private final float[] gridPoints;
+    private float[] gridPoints;
 
-    GridOfSurfaces(final byte nbColumns, final byte nbRows, final Canvas canvas, final boolean showGrid, final float[] gridPoints) {
+    private final Paint whitePaint = new Paint();
+
+    GridOfSurfaces(final byte nbColumns, final byte nbRows, final Canvas canvas, final boolean showGrid, final boolean showGridNumbers) {
         NB_COLUMNS = nbColumns;
         NB_ROWS = nbRows;
         grid = new Square[NB_COLUMNS][NB_ROWS];
         this.showGrid = showGrid;
-        this.gridPoints = gridPoints;
+        this.showGridNumbers = showGridNumbers;
 
         for(byte i = 0; i < NB_COLUMNS; i++) {
             for(byte j = 0; j < NB_ROWS; j++) {
                 grid[i][j] = null;
+            }
+        }
+
+        // Create the paint of the debug grid
+        whitePaint.setARGB(255, 255, 255, 255);
+        whitePaint.setBlendMode(BlendMode.SRC_OVER);
+        whitePaint.setTextSize(canvas.getHeight() / (float) NB_ROWS / 3f);
+        whitePaint.setTextAlign(Paint.Align.CENTER);
+
+        // Measure debug grid points
+        if (showGrid) {
+            gridPoints = new float[(4 * NB_ROWS) + (4 * NB_COLUMNS)];
+            float linesYOffset = 0f, columnsXOffset = 0f;
+            boolean isFirstPoint = true;
+            for (int i = 0; i < (4 * NB_ROWS) + (4 * NB_COLUMNS); i++) {
+                if (i < (4 * NB_ROWS)) {// Is points for lines
+                    if (isFirstPoint) {// Is first point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = 0f;
+                        } else {// Is y
+                            gridPoints[i] = linesYOffset + (canvas.getHeight() / (float) NB_ROWS);
+                            linesYOffset = linesYOffset + (canvas.getHeight() / (float) NB_ROWS);
+                            isFirstPoint = false;
+                        }
+                    } else {// Is second point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = canvas.getWidth();
+                        } else {// Is y
+                            gridPoints[i] = linesYOffset;
+                            isFirstPoint = true;
+                        }
+                    }
+                } else {// Is points for columns
+                    if (isFirstPoint) {// Is first point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = columnsXOffset + (canvas.getWidth() / (float) NB_COLUMNS);
+                            columnsXOffset = columnsXOffset + (canvas.getWidth() / (float) NB_COLUMNS);
+                        } else {// Is y
+                            gridPoints[i] = 0f;
+                            isFirstPoint = false;
+                        }
+                    } else {// Is second point
+                        if (i % 2 == 0) {// Is x
+                            gridPoints[i] = columnsXOffset;
+                        } else {// Is y
+                            gridPoints[i] = canvas.getHeight();
+                            isFirstPoint = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -140,16 +192,16 @@ class GridOfSurfaces {
         // Add a fancy background
         canvas.drawPaint(gradientPaint);
 
+        // Add a grey layer to the background
         canvas.drawPaint(greyPaint);
 
-        // Add debug grid & it's text
+        // Add debug grid
         if (showGrid) {
-            Paint whitePaint = new Paint();
-            whitePaint.setARGB(255, 255, 255, 255);
-            whitePaint.setBlendMode(BlendMode.DIFFERENCE);
-            whitePaint.setTextSize(canvas.getHeight() / (float) NB_ROWS / 3f);
-            whitePaint.setTextAlign(Paint.Align.CENTER);
             canvas.drawLines(gridPoints, whitePaint);
+        }
+
+        // Add debug numbers
+        if (showGridNumbers) {
             String str;
             float xOffset = canvas.getWidth() / (float) NB_COLUMNS, yOffset = canvas.getHeight() / (float) NB_ROWS;
             for (int i = 0; i < NB_COLUMNS; i++) {
@@ -159,5 +211,13 @@ class GridOfSurfaces {
                 }
             }
         }
+    }
+
+    Byte getNbColumns() {
+        return NB_COLUMNS;
+    }
+
+    Byte getNbRows() {
+        return NB_COLUMNS;
     }
 }

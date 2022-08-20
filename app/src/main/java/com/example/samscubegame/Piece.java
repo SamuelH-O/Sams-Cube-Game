@@ -60,7 +60,7 @@ public abstract class Piece {
     boolean canMoveRight(final GridOfSurfaces grid) {
         boolean ret = true;
         for (Square i : rightSide) {
-            if (i.posX + 1 < GridOfSurfaces.NB_COLUMNS) {
+            if (i.posX + 1 < grid.getNbColumns()) {
                 if (grid.isFilledAt((byte) (i.posX + 1), i.posY)) {
                     ret = false;
                 }
@@ -73,7 +73,7 @@ public abstract class Piece {
 
     boolean canMoveBottom(final GridOfSurfaces grid) {
         boolean ret;
-        if (posX + this.getHeight() - 1 < GridOfSurfaces.NB_ROWS) {
+        if (posX + this.getHeight() - 1 < grid.getNbRows()) {
             ret = true;
             for (Square i : bottomSide) {
                 if (i.posY < 15) {

@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,35 +40,36 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
         // Create a HashMap of settings elements and their keys
         optionToKey = new HashMap<>();
         optionToKey.put(view.findViewById(R.id.switchShowGrid), R.string.show_grid_key);
+        optionToKey.put(view.findViewById(R.id.switchShowGridNumbers), R.string.show_grid_numbers_key);
 
         // Group of settings elements
-        View linearLayoutSettings = view.findViewById(R.id.linearLayoutSettings);
+        View linearLayoutSettings = view.findViewById(R.id.linearLayoutDebugSettings);
 
-        // Loop through all settings elements and set them up
-        for(int index = 0; index < ((ViewGroup) linearLayoutSettings).getChildCount(); index++) {
-            CompoundButton currentChild = (CompoundButton) ((ViewGroup) linearLayoutSettings).getChildAt(index);
-            currentChild.setChecked(sharedPref.getBoolean(getString(R.string.show_grid_key), false));
+        // Loop through all debug settings elements and set them up
+        for(int i = 0; i < ((ViewGroup) linearLayoutSettings).getChildCount(); i++) {
+            CompoundButton currentButton = (CompoundButton) ((ViewGroup) linearLayoutSettings).getChildAt(i);
+            Integer keyOfCurrentButton = optionToKey.get(currentButton);
+            if (keyOfCurrentButton != null) {
+                currentButton.setChecked(sharedPref.getBoolean(getString(keyOfCurrentButton), false));
+            } else {
+                throw new NullPointerException();
+            }
 
-            Log.d("show_grid_value", "" + sharedPref.getBoolean(getString(R.string.show_grid_key), false));
-            Log.d("btn", "" + currentChild.isChecked());
-
-            currentChild.setOnCheckedChangeListener(this::changePref);
+            currentButton.setOnCheckedChangeListener(this::changePref);
         }
-
         super.onViewCreated(view, savedInstanceState);
     }
 
     private void changePref(CompoundButton compoundButton, boolean isChecked) {
         SharedPreferences.Editor editor = sharedPref.edit();
-        Integer tmpInteger = optionToKey.get(compoundButton);
+        Integer keyOfButton = optionToKey.get(compoundButton);
         String tmpStr;
-        if (tmpInteger != null) {
-            if (optionToKey.containsKey(compoundButton) && sharedPref.getBoolean(tmpStr = getString(tmpInteger), false) != isChecked) {
+        if (keyOfButton != null) {
+            if (optionToKey.containsKey(compoundButton) && sharedPref.getBoolean(tmpStr = getString(keyOfButton), false) != isChecked) {
                 editor.putBoolean(tmpStr, isChecked);
             }
             editor.apply();
         } else {
-            Log.e("changePref", "" + compoundButton.getId());
             throw new NullPointerException();
         }
     }

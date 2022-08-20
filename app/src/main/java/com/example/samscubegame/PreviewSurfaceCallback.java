@@ -1,5 +1,6 @@
 package com.example.samscubegame;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.Log;
@@ -29,16 +30,14 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
 
     private Piece nextPiece = null;
 
-    private final boolean showGrid;
+    private final SharedPreferences sharedPref;
 
-    private float[] gridPoints;
-
-    PreviewSurfaceCallback(GameActivity gameActivity, final boolean showGrid) {
+    PreviewSurfaceCallback(GameActivity gameActivity, final SharedPreferences sharedPref) {
         // Set the random seed to the current time
         rndm.setSeed(Instant.now().toEpochMilli());
 
         this.gameActivity = gameActivity;
-        this.showGrid = showGrid;
+        this.sharedPref = sharedPref;
     }
 
     @Override
@@ -47,50 +46,9 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
         Canvas canvas = surfaceHolder.lockHardwareCanvas();
 
         // Measure debug grid points
-        if (showGrid) {
-            gridPoints = new float[(4 * NB_ROWS) + (4 * NB_COLUMNS)];
-            float linesYOffset = 0f, columnsXOffset = 0f;
-            boolean isFirstPoint = true;
-            for (int i = 0; i < (4 * NB_ROWS) + (4 * NB_COLUMNS); i++) {
-                if (i < (4 * NB_ROWS)) {// Is points for lines
-                    if (isFirstPoint) {// Is first point
-                        if (i % 2 == 0) {// Is x
-                            gridPoints[i] = 0f;
-                        } else {// Is y
-                            gridPoints[i] = linesYOffset + (canvas.getHeight() / (float) NB_ROWS);
-                            linesYOffset = linesYOffset + (canvas.getHeight() / (float) NB_ROWS);
-                            isFirstPoint = false;
-                        }
-                    } else {// Is second point
-                        if (i % 2 == 0) {// Is x
-                            gridPoints[i] = canvas.getWidth();
-                        } else {// Is y
-                            gridPoints[i] = linesYOffset;
-                            isFirstPoint = true;
-                        }
-                    }
-                } else {// Is points for columns
-                    if (isFirstPoint) {// Is first point
-                        if (i % 2 == 0) {// Is x
-                            gridPoints[i] = columnsXOffset + (canvas.getWidth() / (float) NB_COLUMNS);
-                            columnsXOffset = columnsXOffset + (canvas.getWidth() / (float) NB_COLUMNS);
-                        } else {// Is y
-                            gridPoints[i] = 0f;
-                            isFirstPoint = false;
-                        }
-                    } else {// Is second point
-                        if (i % 2 == 0) {// Is x
-                            gridPoints[i] = columnsXOffset;
-                        } else {// Is y
-                            gridPoints[i] = canvas.getHeight();
-                            isFirstPoint = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        grid = new GridOfSurfaces(NB_COLUMNS, NB_ROWS, canvas, showGrid, gridPoints);
+        boolean showGrid= sharedPref.getBoolean(gameActivity.getResources().getString(R.string.show_grid_key), false);
+        boolean showGridNumbers = sharedPref.getBoolean(gameActivity.getResources().getString(R.string.show_grid_numbers_key), false);
+        grid = new GridOfSurfaces(NB_COLUMNS, NB_ROWS, canvas, showGrid, showGridNumbers);
 
         // Get the size of the squares by the smaller side of the canvas
         float squareSize;
@@ -123,7 +81,6 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
 
         if (nextPiece == null) {
             nextPiece = getRandomPiece();
-            drawFrame();
         }
     }
 
