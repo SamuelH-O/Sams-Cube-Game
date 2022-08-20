@@ -6,23 +6,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-class Square {
-    private final Paint paint;
-
-    float size;
-
-    byte posX, posY;
-
+@RequiresApi(api = Build.VERSION_CODES.S)
+class BlockColor extends Block {
     private final Paint lightPaint = new Paint();
 
     private final Paint darkPaint = new Paint();
 
-    @RequiresApi(api = Build.VERSION_CODES.S)
-    Square(float size, Paint paint) {
-        this.paint = paint;
+    BlockColor(float size, Paint paint) {
+        super(size, paint);
 
         this.paint.setBlendMode(BlendMode.SRC_OVER);
 
@@ -37,12 +30,16 @@ class Square {
         colorDarkHSV[2] = colorDarkHSV[2] - 0.6f;
         darkPaint.setColor(Color.HSVToColor(colorDarkHSV));
         darkPaint.setBlendMode(BlendMode.SRC_OVER);
+    }
 
+    @Override
+    void setSize(float size) {
         this.size = size;
     }
 
+    @Override
     void draw(final Canvas canvas) {
-        // Draw the square
+        // Draw the block
         canvas.drawRect(posX * size, posY * size, size + posX * size, size + posY * size, paint);
 
         // Draw the light border
@@ -53,25 +50,5 @@ class Square {
         // Draw the dark border
         canvas.drawRect(size + posX * size, posY * size, size + posX * size - borderSize, size + posY * size, darkPaint);
         canvas.drawRect(posX * size, size + posY * size, size + posX * size, size + posY * size - borderSize, darkPaint);
-    }
-
-    void setPos(byte posX, byte posY) {
-        this.posX = posX;
-        this.posY = posY;
-    }
-
-    void setSize(float size) {
-        this.size = size;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Square{" +
-                "paint=" + paint +
-                ", size=" + size +
-                ", posX=" + posX +
-                ", posY=" + posY +
-                '}';
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dropdown_block_settings">
+        <item name="colored_blocks">Colored Blocks</item>
+        <item name="monochrome_blocks">Monochrome Blocks</item>
+    </string-array>
+</resources>

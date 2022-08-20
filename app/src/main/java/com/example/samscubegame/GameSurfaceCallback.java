@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.Button;
 
@@ -29,7 +30,7 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
 
     private final PreviewSurfaceCallback previewSurfaceCallback;
 
-    private float squareSize;
+    private float blockSize;
 
     private final SharedPreferences sharedPref;
 
@@ -45,9 +46,9 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
         this.surfaceHolder = surfaceHolder;
         Canvas canvas = surfaceHolder.lockHardwareCanvas();
 
-        // Get the size of the squares by the smaller side of the canvas
-        if (canvas.getWidth() < canvas.getHeight()) squareSize = (float) canvas.getWidth() / NB_COLUMNS;
-        else squareSize = (float) canvas.getHeight() / NB_COLUMNS;
+        // Get the size of the blocks by the smaller side of the canvas
+        if (canvas.getWidth() < canvas.getHeight()) blockSize = (float) canvas.getWidth() / NB_COLUMNS;
+        else blockSize = (float) canvas.getHeight() / NB_COLUMNS;
 
         boolean showGrid = sharedPref.getBoolean(gameActivity.getResources().getString(R.string.show_grid_key), false);
         boolean showGridNumbers = sharedPref.getBoolean(gameActivity.getResources().getString(R.string.show_grid_numbers_key), false);
@@ -68,7 +69,7 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
     private void startGame() {
         if (currentPiece == null) {
             currentPiece = previewSurfaceCallback.getNextPiece();
-            currentPiece.setSquareSize(squareSize);
+            currentPiece.setBlockSize(blockSize);
             // Place the first piece
             if (!(currentPiece.getWidth() % 2 == 0)) {
                 currentPiece.setPosAndRot((byte) ((NB_COLUMNS / 2) - 1), (byte) (2), (byte) (0));
@@ -139,9 +140,10 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
                 if (currentPiece.canMoveBottom(grid) && i > 0) {
                     currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
                 } else if (i > 0) {
+                    Log.d("CanMoveBot", "" + currentPiece.canMoveBottom(grid));
                     currentPiece.addToWall(grid);
                     currentPiece = previewSurfaceCallback.getNextPiece();
-                    currentPiece.setSquareSize(squareSize);
+                    currentPiece.setBlockSize(blockSize);
 
                     if (!(currentPiece.getWidth() % 2 == 0)) {
                         currentPiece.setPosAndRot((byte) ((NB_COLUMNS / 2) - 1), (byte) (2), (byte) (0));

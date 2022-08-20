@@ -11,15 +11,21 @@ import java.util.Arrays;
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class Piece_I extends Piece{
 
-    Piece_I(float squareSize, Resources resources) {
-        super(squareSize, resources);
+    Piece_I(float blockSize, final Resources resources, byte blockDesign) {
+        super(blockSize, resources, blockDesign);
         this.paint.setColor(resources.getColor(R.color.I_color, null));
     }
 
     private Piece_I(Piece_I pieceToCopy) {
         super(pieceToCopy);
-        for (byte i = 0; i < 4; i++) {
-            this.squares[i] = new Square(pieceToCopy.squares[0].size, pieceToCopy.paint);
+        if (pieceToCopy.blockDesign == 0) {
+            for (byte i = 0; i < 4; i++) {
+                this.blocks[i] = new BlockColor(pieceToCopy.blocks[0].size, pieceToCopy.paint);
+            }
+        } else if (pieceToCopy.blockDesign  == 1) {
+            for (byte i = 0; i < 4; i++) {
+                this.blocks[i] = new BlockMono(pieceToCopy.blocks[0].size, pieceToCopy.paint);
+            }
         }
     }
 
@@ -95,16 +101,16 @@ public class Piece_I extends Piece{
         switch (rotation) {
             case 0:
                 // I I I I
-                squares[0].setPos((byte) (posX - 2), (byte) (posY - 1));
-                squares[1].setPos((byte) (posX - 1), (byte) (posY - 1));
-                squares[2].setPos(posX, (byte) (posY - 1));
-                squares[3].setPos((byte) (posX + 1), (byte) (posY - 1));
+                blocks[0].setPos((byte) (posX - 2), (byte) (posY - 1));
+                blocks[1].setPos((byte) (posX - 1), (byte) (posY - 1));
+                blocks[2].setPos(posX, (byte) (posY - 1));
+                blocks[3].setPos((byte) (posX + 1), (byte) (posY - 1));
 
-                leftSide.add(squares[0]);
+                leftSide.add(blocks[0]);
 
-                rightSide.add(squares[3]);
+                rightSide.add(blocks[3]);
 
-                bottomSide.addAll(Arrays.asList(squares));
+                bottomSide.addAll(Arrays.asList(blocks));
                 break;
             case 1:
                 /*
@@ -113,29 +119,29 @@ public class Piece_I extends Piece{
                  * I
                  * I
                  * */
-                squares[0].setPos(posX, (byte) (posY - 2));
-                squares[1].setPos(posX, (byte) (posY - 1));
-                squares[2].setPos(posX, posY);
-                squares[3].setPos(posX, (byte) (posY + 1));
+                blocks[0].setPos(posX, (byte) (posY - 2));
+                blocks[1].setPos(posX, (byte) (posY - 1));
+                blocks[2].setPos(posX, posY);
+                blocks[3].setPos(posX, (byte) (posY + 1));
 
-                leftSide.addAll(Arrays.asList(squares));
+                leftSide.addAll(Arrays.asList(blocks));
 
-                rightSide.addAll(Arrays.asList(squares));
+                rightSide.addAll(Arrays.asList(blocks));
 
-                bottomSide.add(squares[3]);
+                bottomSide.add(blocks[3]);
                 break;
             case 2:
                 // I I I I
-                squares[0].setPos((byte) (posX - 2), posY);
-                squares[1].setPos((byte) (posX - 1), posY);
-                squares[2].setPos(posX, posY);
-                squares[3].setPos((byte) (posX + 1), posY);
+                blocks[0].setPos((byte) (posX - 2), posY);
+                blocks[1].setPos((byte) (posX - 1), posY);
+                blocks[2].setPos(posX, posY);
+                blocks[3].setPos((byte) (posX + 1), posY);
 
-                leftSide.add(squares[0]);
+                leftSide.add(blocks[0]);
 
-                rightSide.add(squares[3]);
+                rightSide.add(blocks[3]);
 
-                bottomSide.addAll(Arrays.asList(squares));
+                bottomSide.addAll(Arrays.asList(blocks));
                 break;
             case 3:
                 /*
@@ -144,16 +150,16 @@ public class Piece_I extends Piece{
                  * I
                  * I
                  * */
-                squares[0].setPos((byte) (posX - 1), (byte) (posY - 2));
-                squares[1].setPos((byte) (posX - 1), (byte) (posY - 1));
-                squares[2].setPos((byte) (posX - 1), posY);
-                squares[3].setPos((byte) (posX - 1), (byte) (posY + 1));
+                blocks[0].setPos((byte) (posX - 1), (byte) (posY - 2));
+                blocks[1].setPos((byte) (posX - 1), (byte) (posY - 1));
+                blocks[2].setPos((byte) (posX - 1), posY);
+                blocks[3].setPos((byte) (posX - 1), (byte) (posY + 1));
 
-                leftSide.addAll(Arrays.asList(squares));
+                leftSide.addAll(Arrays.asList(blocks));
 
-                rightSide.addAll(Arrays.asList(squares));
+                rightSide.addAll(Arrays.asList(blocks));
 
-                bottomSide.add(squares[3]);
+                bottomSide.add(blocks[3]);
                 break;
         }
     }

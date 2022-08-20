@@ -23,7 +23,7 @@ class GridOfSurfaces {
     private final Paint greyPaint = new Paint();
     
     // First number = columns | Second number = rows
-    private final Square[][] grid;
+    private final Block[][] grid;
 
     private final boolean showGrid, showGridNumbers;
 
@@ -34,7 +34,7 @@ class GridOfSurfaces {
     GridOfSurfaces(final byte nbColumns, final byte nbRows, final Canvas canvas, final boolean showGrid, final boolean showGridNumbers) {
         NB_COLUMNS = nbColumns;
         NB_ROWS = nbRows;
-        grid = new Square[NB_COLUMNS][NB_ROWS];
+        grid = new Block[NB_COLUMNS][NB_ROWS];
         this.showGrid = showGrid;
         this.showGridNumbers = showGridNumbers;
 
@@ -126,23 +126,23 @@ class GridOfSurfaces {
         return (grid[posX][posY] != null);
     }
 
-    void setSquare(Square square) {
-        grid[square.posX][square.posY] = square;
+    void setBlock(Block block) {
+        grid[block.posX][block.posY] = block;
     }
 
     void checkForLines() {
-        byte nbFilledSquares;
+        byte nbFilledBlocks;
         HashSet<Byte> rowsToRemove = new HashSet<>();
         for (byte i = 0; i < NB_ROWS; i++) {
-            nbFilledSquares = 0;
+            nbFilledBlocks = 0;
             for(byte j = 0; j < NB_COLUMNS; j++) {
                 if (grid[j][i] == null) {
                     break;
                 } else {
-                    nbFilledSquares = (byte) (nbFilledSquares + 1);
+                    nbFilledBlocks = (byte) (nbFilledBlocks + 1);
                 }
             }
-            if (nbFilledSquares == NB_COLUMNS) {
+            if (nbFilledBlocks == NB_COLUMNS) {
                 rowsToRemove.add(i);
             }
         }
@@ -162,9 +162,9 @@ class GridOfSurfaces {
                     }
                 } else if (nbRowsToDrop > 0) {
                     if (grid[j][i] != null) {
-                        Square tmp = grid[j][i];
+                        Block tmp = grid[j][i];
                         tmp.setPos(j, (byte) (i + nbRowsToDrop));
-                        setSquare(tmp);
+                        setBlock(tmp);
                     }
                     grid[j][i] = null;
                 }

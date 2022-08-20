@@ -3,7 +3,6 @@ package com.example.samscubegame;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Build;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import androidx.annotation.NonNull;
@@ -11,6 +10,7 @@ import androidx.annotation.RequiresApi;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
@@ -32,12 +32,22 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
 
     private final SharedPreferences sharedPref;
 
+    private byte blockDesign;
+
     PreviewSurfaceCallback(GameActivity gameActivity, final SharedPreferences sharedPref) {
         // Set the random seed to the current time
         rndm.setSeed(Instant.now().toEpochMilli());
 
         this.gameActivity = gameActivity;
         this.sharedPref = sharedPref;
+
+        // Stores the chosen block design in a char
+        String[] blockDesignModes = gameActivity.getResources().getStringArray(R.array.dropdown_block_settings);
+        if (Objects.equals(sharedPref.getString(gameActivity.getResources().getString(R.string.block_dropdown_key), blockDesignModes[0]), blockDesignModes[0])) {
+            blockDesign = 0;
+        } else if (Objects.equals(sharedPref.getString(gameActivity.getResources().getString(R.string.block_dropdown_key), blockDesignModes[0]), blockDesignModes[1])) {
+            blockDesign = 1;
+        }
     }
 
     @Override
@@ -50,21 +60,21 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
         boolean showGridNumbers = sharedPref.getBoolean(gameActivity.getResources().getString(R.string.show_grid_numbers_key), false);
         grid = new GridOfSurfaces(NB_COLUMNS, NB_ROWS, canvas, showGrid, showGridNumbers);
 
-        // Get the size of the squares by the smaller side of the canvas
-        float squareSize;
-        squareSize = (float) canvas.getWidth() / NB_COLUMNS;
+        // Get the size of the blocks by the smaller side of the canvas
+        float blockSize;
+        blockSize = (float) canvas.getWidth() / NB_COLUMNS;
 
         surfaceHolder.unlockCanvasAndPost(canvas);
 
         if (fullBag == null) {
             fullBag = new ArrayList<>();
-            fullBag.add(new Piece_I(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_J(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_L(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_O(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_S(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_T(squareSize, gameActivity.getResources()));
-            fullBag.add(new Piece_Z(squareSize, gameActivity.getResources()));
+            fullBag.add(new Piece_I(blockSize, gameActivity.getResources(), blockDesign));
+            fullBag.add(new Piece_J(blockSize, gameActivity.getResources(), blockDesign));
+            fullBag.add(new Piece_L(blockSize, gameActivity.getResources(), blockDesign));
+            fullBag.add(new Piece_O(blockSize, gameActivity.getResources(), blockDesign));
+            fullBag.add(new Piece_S(blockSize, gameActivity.getResources(), blockDesign));
+            fullBag.add(new Piece_T(blockSize, gameActivity.getResources(), blockDesign));
+            fullBag.add(new Piece_Z(blockSize, gameActivity.getResources(), blockDesign));
         }
 
         if (rndmBag == null) {
@@ -72,7 +82,6 @@ public class PreviewSurfaceCallback implements SurfaceHolder.Callback {
             for (Piece i : fullBag) {
                 try {
                     rndmBag.add(i.clone());
-                    Log.d("cloned", "" + i);
                 } catch (CloneNotSupportedException e) {
                     e.printStackTrace();
                 }

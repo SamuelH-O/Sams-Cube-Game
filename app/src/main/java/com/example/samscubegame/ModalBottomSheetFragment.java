@@ -4,15 +4,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.HashMap;
 
@@ -37,30 +40,45 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedPref = requireActivity().getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
 
-        // Create a HashMap of settings elements and their keys
+        // Set the value of the dropdown to be the one of the preferences
+        TextInputLayout blockDropdown = view.findViewById(R.id.dropdownBlocksSettings);
+        AutoCompleteTextView  blockDropdownTextView = (AutoCompleteTextView) blockDropdown.getEditText();
+        String[] arrayOfBlockStyles = getResources().getStringArray(R.array.dropdown_block_settings);
+        assert blockDropdownTextView != null;
+        blockDropdownTextView.setText(sharedPref.getString(getString(R.string.block_dropdown_key), arrayOfBlockStyles[1]), false);
+
+        // Change the pref on click of the item of the dropdown
+        blockDropdownTextView.setOnItemClickListener((adapterView, view1, i, l) -> {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.block_dropdown_key), String.valueOf(blockDropdownTextView.getText()));
+            Log.d("test", "" + blockDropdownTextView.getText());
+            editor.apply();
+        });
+
+        // Create a HashMap of debug settings elements and their keys
         optionToKey = new HashMap<>();
         optionToKey.put(view.findViewById(R.id.switchShowGrid), R.string.show_grid_key);
         optionToKey.put(view.findViewById(R.id.switchShowGridNumbers), R.string.show_grid_numbers_key);
 
-        // Group of settings elements
+        // Group of debug settings elements
         View linearLayoutSettings = view.findViewById(R.id.linearLayoutDebugSettings);
 
         // Loop through all debug settings elements and set them up
         for(int i = 0; i < ((ViewGroup) linearLayoutSettings).getChildCount(); i++) {
-            CompoundButton currentButton = (CompoundButton) ((ViewGroup) linearLayoutSettings).getChildAt(i);
-            Integer keyOfCurrentButton = optionToKey.get(currentButton);
+            CompoundButton currentSwitch = (CompoundButton) ((ViewGroup) linearLayoutSettings).getChildAt(i);
+            Integer keyOfCurrentButton = optionToKey.get(currentSwitch);
             if (keyOfCurrentButton != null) {
-                currentButton.setChecked(sharedPref.getBoolean(getString(keyOfCurrentButton), false));
+                currentSwitch.setChecked(sharedPref.getBoolean(getString(keyOfCurrentButton), false));
             } else {
                 throw new NullPointerException();
             }
 
-            currentButton.setOnCheckedChangeListener(this::changePref);
+            currentSwitch.setOnCheckedChangeListener(this::changeDebugPref);
         }
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void changePref(CompoundButton compoundButton, boolean isChecked) {
+    private void changeDebugPref(CompoundButton compoundButton, boolean isChecked) {
         SharedPreferences.Editor editor = sharedPref.edit();
         Integer keyOfButton = optionToKey.get(compoundButton);
         String tmpStr;

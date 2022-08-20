@@ -12,24 +12,34 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
-public abstract class Piece {
+abstract class Piece {
     Paint paint;
 
     byte posX, posY, rotation;
 
-    final Square[] squares = new Square[4];
+    final Block[] blocks = new Block[4];
 
-    final ArrayList<Square> leftSide = new ArrayList<>(), rightSide = new ArrayList<>(), bottomSide = new ArrayList<>();
+    final ArrayList<Block> leftSide = new ArrayList<>(), rightSide = new ArrayList<>(), bottomSide = new ArrayList<>();
 
-    Piece(float squareSize, final Resources resources) {
+    byte blockDesign;
+
+    Piece(float blockSize, final Resources resources, byte blockDesign) {
         this.paint = new Paint();
-        for (byte i = 0; i < 4; i++) {
-            squares[i] = new Square(squareSize, paint);
+        this.blockDesign = blockDesign;
+        if (blockDesign == 0) {
+            for (byte i = 0; i < 4; i++) {
+                this.blocks[i] = new BlockColor(blockSize, paint);
+            }
+        } else if (blockDesign == 1) {
+            for (byte i = 0; i < 4; i++) {
+                this.blocks[i] = new BlockMono(blockSize, paint);
+            }
         }
     }
 
     @SuppressWarnings("CopyConstructorMissesField")
-    Piece(Piece pieceToCopy) {}
+    Piece(Piece pieceToCopy) {
+    }
 
     @NonNull
     @Override
@@ -38,14 +48,14 @@ public abstract class Piece {
     }
 
     void draw(final Canvas canvas) {
-        for (Square i : squares) {
+        for (Block i : blocks) {
             i.draw(canvas);
         }
     }
 
     boolean canMoveLeft(final GridOfSurfaces grid) {
         boolean ret = true;
-        for (Square i : leftSide) {
+        for (Block i : leftSide) {
             if (i.posX - 1 >= 0) {
                 if (grid.isFilledAt((byte) (i.posX - 1), i.posY)) {
                     ret = false;
@@ -59,7 +69,7 @@ public abstract class Piece {
 
     boolean canMoveRight(final GridOfSurfaces grid) {
         boolean ret = true;
-        for (Square i : rightSide) {
+        for (Block i : rightSide) {
             if (i.posX + 1 < grid.getNbColumns()) {
                 if (grid.isFilledAt((byte) (i.posX + 1), i.posY)) {
                     ret = false;
@@ -73,9 +83,11 @@ public abstract class Piece {
 
     boolean canMoveBottom(final GridOfSurfaces grid) {
         boolean ret;
-        if (posX + this.getHeight() - 1 < grid.getNbRows()) {
+        Log.d("1", "" + (posX + this.getHeight() - 1 < grid.getNbRows()));
+        if (posX + this.getHeight() - 1 < grid.getNbRows()) {// Bug since commit 55b727dadc640d02751b1d8900f28b5ce8e22f59 
             ret = true;
-            for (Square i : bottomSide) {
+            for (Block i : bottomSide) {
+                Log.d("2", "" + (i.posY < 15));
                 if (i.posY < 15) {
                     if (grid.isFilledAt(i.posX, (byte) (i.posY + 1))) {
                         ret = false;
@@ -93,7 +105,7 @@ public abstract class Piece {
     void drop(final GridOfSurfaces grid) {
         byte offset = 0;
         incrementLoop: while (true) {
-            for (Square j : bottomSide) {
+            for (Block j : bottomSide) {
                 if (j.posY + offset < 15) {
                     if (grid.isFilledAt(j.posX, (byte) (j.posY + offset + 1))) {
                         break incrementLoop;
@@ -115,7 +127,7 @@ public abstract class Piece {
         goUp: do {
             shouldGoUp = false;
             setPosAndRot(posX, posY, rotation);
-            for (Square i : squares) {
+            for (Block i : blocks) {
                 if (grid.isFilledAt(i.posX, i.posY)) {
                     shouldGoUp = true;
                     if (posY - 1 >= 0) {
@@ -133,13 +145,13 @@ public abstract class Piece {
 
     void addToWall(GridOfSurfaces grid) {
         for (byte i = 0; i < 4; i++) {
-            grid.setSquare(squares[i]);
+            grid.setBlock(blocks[i]);
         }
     }
 
-    void setSquareSize(float squareSize) {
-        for (Square i : squares) {
-            i.setSize(squareSize);
+    void setBlockSize(float blockSize) {
+        for (Block i : blocks) {
+            i.setSize(blockSize);
         }
     }
 
