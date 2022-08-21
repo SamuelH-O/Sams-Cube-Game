@@ -18,10 +18,14 @@
     <string name="show_grid_numbers_key">show_grid_numbers_key</string>
     <string name="pref_file">com.example.samscubegame.prefs</string>
 
-    <!-- Controls -->
+    <!-- Game -->
     <string name="content_desc_left_button">Left</string>
     <string name="content_desc_right_button">Right</string>
     <string name="content_desc_rotate_button">Rotate clockwise</string>
     <string name="content_desc_fast_down_button">Fast down</string>
     <string name="content_desc_down_button">Down</string>
+    <string name="text_score">Score: </string>
+    <string name="text_high_score">High Score: </string>
+    <string name="text_score_number" />
+    <string name="text_high_score_number" />
 </resources>

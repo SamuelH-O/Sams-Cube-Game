@@ -40,7 +40,7 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
         sharedPref = requireActivity().getSharedPreferences(String.valueOf(R.string.pref_file), Context.MODE_PRIVATE);
 
         // Set the value of the dropdown to be the one of the preferences
-        TextInputLayout blockDropdown = view.findViewById(R.id.dropdownBlocksSettings);
+        TextInputLayout blockDropdown = view.findViewById(R.id.dropdown_blocks);
         AutoCompleteTextView  blockDropdownTextView = (AutoCompleteTextView) blockDropdown.getEditText();
         String[] arrayOfBlockStyles = getResources().getStringArray(R.array.dropdown_block_settings);
         assert blockDropdownTextView != null;
@@ -55,11 +55,11 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
 
         // Create a HashMap of debug settings elements and their keys
         optionToKey = new HashMap<>();
-        optionToKey.put(view.findViewById(R.id.switchShowGrid), R.string.show_grid_key);
-        optionToKey.put(view.findViewById(R.id.switchShowGridNumbers), R.string.show_grid_numbers_key);
+        optionToKey.put(view.findViewById(R.id.switch_show_grid), R.string.show_grid_key);
+        optionToKey.put(view.findViewById(R.id.switch_show_grid_numbers), R.string.show_grid_numbers_key);
 
         // Group of debug settings elements
-        View linearLayoutSettings = view.findViewById(R.id.linearLayoutDebugSettings);
+        View linearLayoutSettings = view.findViewById(R.id.linearLayout_debug_settings);
 
         // Loop through all debug settings elements and set them up
         for(int i = 0; i < ((ViewGroup) linearLayoutSettings).getChildCount(); i++) {

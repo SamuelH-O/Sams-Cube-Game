@@ -7,7 +7,7 @@
     tools:context=".GameActivity">
 
     <Button
-        android:id="@+id/buttonMoveLeft"
+        android:id="@+id/button_move_left"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="60sp"
         android:layout_height="60sp"
@@ -24,13 +24,13 @@
         app:iconSize="60sp"
         app:iconTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonMoveRight"
+        app:layout_constraintEnd_toStartOf="@+id/button_move_right"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonMoveRight"
+        android:id="@+id/button_move_right"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="60sp"
         android:layout_height="60sp"
@@ -46,12 +46,12 @@
         app:iconSize="60sp"
         app:iconTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonRotateRight"
+        app:layout_constraintEnd_toStartOf="@+id/button_rotate_right"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonMoveLeft" />
+        app:layout_constraintStart_toEndOf="@+id/button_move_left" />
 
     <Button
-        android:id="@+id/buttonRotateRight"
+        android:id="@+id/button_rotate_right"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="60sp"
         android:layout_height="60sp"
@@ -67,12 +67,12 @@
         app:iconSize="60sp"
         app:iconTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonSnap"
+        app:layout_constraintEnd_toStartOf="@+id/button_snap"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonMoveRight" />
+        app:layout_constraintStart_toEndOf="@+id/button_move_right" />
 
     <Button
-        android:id="@+id/buttonSnap"
+        android:id="@+id/button_snap"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="60sp"
         android:layout_height="60sp"
@@ -91,10 +91,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonRotateRight" />
+        app:layout_constraintStart_toEndOf="@+id/button_rotate_right" />
 
     <Button
-        android:id="@+id/buttonMoveBottom"
+        android:id="@+id/button_move_bottom"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="60sp"
         android:layout_height="60sp"
@@ -109,35 +109,83 @@
         app:iconPadding="0dp"
         app:iconSize="60sp"
         app:iconTint="?colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSnap"
-        app:layout_constraintEnd_toEndOf="@+id/buttonSnap"
-        app:layout_constraintStart_toStartOf="@+id/buttonSnap" />
+        app:layout_constraintBottom_toTopOf="@+id/button_snap"
+        app:layout_constraintEnd_toEndOf="@+id/button_snap"
+        app:layout_constraintStart_toStartOf="@+id/button_snap" />
 
     <!--Must Be higher than surfaceViewGame-->
     <SurfaceView
-        android:id="@+id/surfaceViewPreview"
+        android:id="@+id/surfaceView_preview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonMoveLeft"
+        app:layout_constraintBottom_toTopOf="@+id/button_move_left"
         app:layout_constraintDimensionRatio="H,4:6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surfaceViewGame" />
+        app:layout_constraintTop_toBottomOf="@+id/surfaceView_game" />
 
     <SurfaceView
-        android:id="@+id/surfaceViewGame"
+        android:id="@+id/surfaceView_game"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonMoveBottom"
+        app:layout_constraintBottom_toTopOf="@+id/button_move_bottom"
         app:layout_constraintDimensionRatio="H,10:16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="@string/text_score"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/textView_high_score"
+        app:layout_constraintStart_toEndOf="@+id/surfaceView_preview"
+        app:layout_constraintTop_toTopOf="@+id/surfaceView_preview" />
+
+    <TextView
+        android:id="@+id/textView_score_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="@string/text_score_number"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_score"
+        app:layout_constraintStart_toEndOf="@+id/textView_score"
+        app:layout_constraintTop_toTopOf="@+id/textView_score" />
+
+    <TextView
+        android:id="@+id/textView_high_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:maxLines="1"
+        android:text="@string/text_high_score"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/surfaceView_preview"
+        app:layout_constraintStart_toStartOf="@+id/textView_score" />
+
+    <TextView
+        android:id="@+id/textView_high_score_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="@string/text_high_score_number"
+        android:textAlignment="textEnd"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_high_score"
+        app:layout_constraintStart_toEndOf="@+id/textView_high_score"
+        app:layout_constraintTop_toTopOf="@+id/textView_high_score" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

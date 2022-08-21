@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/bottomSheetGrapple"
+        android:id="@+id/bottomSheet_grapple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -17,7 +17,7 @@
         android:contentDescription="@string/drag_handle" />
 
     <TextView
-        android:id="@+id/textViewSettings"
+        android:id="@+id/textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
@@ -26,10 +26,10 @@
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottomSheetGrapple" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomSheet_grapple" />
 
     <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/materialDividerSettings"
+        android:id="@+id/materialDivider_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -37,10 +37,10 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewSettings" />
+        app:layout_constraintTop_toBottomOf="@id/textView_title" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dropdownBlocksSettings"
+        android:id="@+id/dropdown_blocks"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,22 +48,22 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
         android:hint="@string/block_dropdown_option"
-        android:labelFor="@+id/dropdownBlocksSettings"
+        android:labelFor="@+id/dropdown_blocks"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialDividerSettings">
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider_settings">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            android:labelFor="@+id/dropdownBlocksSettings"
+            android:labelFor="@+id/dropdown_blocks"
             app:simpleItems="@array/dropdown_block_settings"
             tools:ignore="LabelFor" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/debugTitleSettings"
+        android:id="@+id/textView_debug_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -71,10 +71,10 @@
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dropdownBlocksSettings" />
+        app:layout_constraintTop_toBottomOf="@id/dropdown_blocks" />
 
     <LinearLayout
-        android:id="@+id/linearLayoutDebugSettings"
+        android:id="@+id/linearLayout_debug_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -83,10 +83,10 @@
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/debugTitleSettings">
+        app:layout_constraintTop_toBottomOf="@id/textView_debug_title">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchShowGrid"
+            android:id="@+id/switch_show_grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -97,7 +97,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchShowGridNumbers"
+            android:id="@+id/switch_show_grid_numbers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -105,7 +105,7 @@
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchShowGrid" />
+            app:layout_constraintTop_toBottomOf="@+id/switch_show_grid" />
 
     </LinearLayout>
 
@@ -114,6 +114,6 @@
         android:layout_height="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutDebugSettings" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_debug_settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

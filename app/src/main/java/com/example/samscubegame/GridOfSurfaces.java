@@ -31,6 +31,10 @@ class GridOfSurfaces {
 
     private final Paint whitePaint = new Paint();
 
+    int level = 1;
+
+    private byte nbLinesCleared = 0;
+
     GridOfSurfaces(final byte nbColumns, final byte nbRows, final Canvas canvas, final boolean showGrid, final boolean showGridNumbers) {
         NB_COLUMNS = nbColumns;
         NB_ROWS = nbRows;
@@ -130,8 +134,9 @@ class GridOfSurfaces {
         grid[block.posX][block.posY] = block;
     }
 
-    void checkForLines() {
+    long checkForLines() {
         byte nbFilledBlocks;
+        boolean isPerfect = true;
         HashSet<Byte> rowsToRemove = new HashSet<>();
         for (byte i = 0; i < NB_ROWS; i++) {
             nbFilledBlocks = 0;
@@ -144,11 +149,52 @@ class GridOfSurfaces {
             }
             if (nbFilledBlocks == NB_COLUMNS) {
                 rowsToRemove.add(i);
+            } else if (nbFilledBlocks > 0) {
+                isPerfect = false;
             }
         }
+
+        // Calculate score
+        long score = 0;
+        if (isPerfect) {
+            switch (rowsToRemove.size()) {
+                case 1:
+                    score = 800L * level;
+                    break;
+                case 2:
+                    score = 1200L * level;
+                    break;
+                case 3:
+                    score = 1800L * level;
+                    break;
+                case 4:
+                    score = 2000L * level;
+                    break;
+            }
+        } else {
+            switch (rowsToRemove.size()) {
+                case 1:
+                    score = 100L * level;
+                    break;
+                case 2:
+                    score = 300L * level;
+                    break;
+                case 3:
+                    score = 500L * level;
+                    break;
+                case 4:
+                    score = 800L * level;
+                    break;
+            }
+        }
+
+        nbLinesCleared = (byte) (nbLinesCleared + rowsToRemove.size());
+
         if (!rowsToRemove.isEmpty()) {
             removeRows(rowsToRemove);
         }
+
+        return score;
     }
 
     private void removeRows(HashSet<Byte> rowsToRemove) {
