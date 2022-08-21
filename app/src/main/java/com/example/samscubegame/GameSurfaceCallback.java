@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.Button;
 
@@ -140,7 +139,6 @@ public class GameSurfaceCallback implements SurfaceHolder.Callback {
                 if (currentPiece.canMoveBottom(grid) && i > 0) {
                     currentPiece.setPosAndRot(currentPiece.posX, (byte) (currentPiece.posY + 1), currentPiece.rotation);
                 } else if (i > 0) {
-                    Log.d("CanMoveBot", "" + currentPiece.canMoveBottom(grid));
                     currentPiece.addToWall(grid);
                     currentPiece = previewSurfaceCallback.getNextPiece();
                     currentPiece.setBlockSize(blockSize);

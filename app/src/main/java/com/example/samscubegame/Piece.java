@@ -83,12 +83,10 @@ abstract class Piece {
 
     boolean canMoveBottom(final GridOfSurfaces grid) {
         boolean ret;
-        Log.d("1", "" + (posX + this.getHeight() - 1 < grid.getNbRows()));
-        if (posX + this.getHeight() - 1 < grid.getNbRows()) {// Bug since commit 55b727dadc640d02751b1d8900f28b5ce8e22f59 
+        if (posY + this.getHeight() / 2 < grid.getNbRows()) {// Bug since commit 55b727dadc640d02751b1d8900f28b5ce8e22f59
             ret = true;
             for (Block i : bottomSide) {
-                Log.d("2", "" + (i.posY < 15));
-                if (i.posY < 15) {
+                if (i.posY + 1 < grid.getNbRows()) {
                     if (grid.isFilledAt(i.posX, (byte) (i.posY + 1))) {
                         ret = false;
                     }
@@ -106,7 +104,7 @@ abstract class Piece {
         byte offset = 0;
         incrementLoop: while (true) {
             for (Block j : bottomSide) {
-                if (j.posY + offset < 15) {
+                if (j.posY + offset < grid.getNbRows() - 1) {
                     if (grid.isFilledAt(j.posX, (byte) (j.posY + offset + 1))) {
                         break incrementLoop;
                     }

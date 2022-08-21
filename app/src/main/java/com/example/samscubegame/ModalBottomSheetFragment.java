@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,6 @@ public class ModalBottomSheetFragment extends BottomSheetDialogFragment {
         blockDropdownTextView.setOnItemClickListener((adapterView, view1, i, l) -> {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(getString(R.string.block_dropdown_key), String.valueOf(blockDropdownTextView.getText()));
-            Log.d("test", "" + blockDropdownTextView.getText());
             editor.apply();
         });
 

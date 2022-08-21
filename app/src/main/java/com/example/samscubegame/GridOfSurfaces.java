@@ -218,6 +218,6 @@ class GridOfSurfaces {
     }
 
     Byte getNbRows() {
-        return NB_COLUMNS;
+        return NB_ROWS;
     }
 }
